@@ -1,18 +1,25 @@
 <?php
-    /**
-     * Created by JetBrains PhpStorm.
-     * User: Julien
-     * Date: 21/06/13
-     * Time: 14:12
-     * To change this template use File | Settings | File Templates.
-     */
     namespace Sohoa\Framework {
+        /**
+         * Class Bootstrap
+         *
+         * @package Sohoa\Framework
+         */
         class Bootstrap
         {
+            /**
+             * @var array
+             */
             private $_file = array();
 
+            /**
+             * @var Bootstrap
+             */
             private static $_instance = null;
 
+            /**
+             * @return Bootstrap
+             */
             public static function getInstance()
             {
                 if (self::$_instance === null)
@@ -21,7 +28,12 @@
                 return self::$_instance;
             }
 
-            public function load($file = null, $namespace = '\\' , Application &$_this)
+            /**
+             * @param string      $file
+             * @param string      $namespace
+             * @param Application $_this
+             */
+            public function load($file = null, $namespace = '\\', Application &$_this = null)
             {
                 if ($file !== null and is_file($file) and !in_array($file, $this->_file)) {
                     require $file;
@@ -29,7 +41,7 @@
                     $name          = substr($file, strrpos($file, '/'), strrpos($file, '.'));
                     $name          = ucfirst($name);
                     $className     = $namespace . $name;
-                    $object        = dnew($className , array($_this));
+                    $object        = dnew($className, array($_this));
                     $reflection    = new \ReflectionClass($className);
                     $methods       = array();
 
