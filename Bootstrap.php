@@ -38,7 +38,8 @@
                 if ($file !== null and is_file($file) and !in_array($file, $this->_file)) {
                     require $file;
                     $this->_file[] = $file;
-                    $name          = substr($file, strrpos($file, '/'), strrpos($file, '.'));
+                    $name          = substr($file, strrpos($file, '/'));
+                    $name          = substr($name, 0, strpos($name, '.'));
                     $name          = ucfirst($name);
                     $className     = $namespace . $name;
                     $object        = dnew($className, array($_this));
