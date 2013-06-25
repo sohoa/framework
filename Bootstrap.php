@@ -3,6 +3,11 @@
         from('Hoa')->import('File.Read');
     }
     namespace Sohoa\Framework {
+        /**
+         * Class Bootstrap
+         *
+         * @package Sohoa\Framework
+         */
         class Bootstrap implements \Hoa\Core\Parameter\Parameterizable
         {
             /**
@@ -12,6 +17,9 @@
              */
             protected $_parameters = null;
 
+            /**
+             * @param array $parameter
+             */
             public function __construct(Array $parameter = array())
             {
                 try {
@@ -27,6 +35,9 @@
 
             }
 
+            /**
+             * @param string $file
+             */
             protected function loadConfigurationFiles($file = null)
             {
 
