@@ -1,72 +1,68 @@
 <?php
+    namespace {
+        from('Hoa')->import('File.Read');
+    }
     namespace Sohoa\Framework {
-        /**
-         * Class Bootstrap
-         *
-         * @package Sohoa\Framework
-         */
-        class Bootstrap
+        class Bootstrap implements \Hoa\Core\Parameter\Parameterizable
         {
             /**
-             * @var array
+             * Parameters.
+             *
+             * @var \Hoa\Core\Parameter object
              */
-            private $_file = array();
+            protected $_parameters = null;
 
-            /**
-             * @var Bootstrap
-             */
-            private static $_instance = null;
-
-            /**
-             * @return Bootstrap
-             */
-            public static function getInstance()
+            public function __construct(Array $parameter = array())
             {
-                if (self::$_instance === null)
-                    self::$_instance = new Bootstrap();
+                try {
+                    $this->_parameters = new \Hoa\Core\Parameter($this, array(), array(
+                        'bootstrap.configfile' => 'hoa://Application/Public/config.json'
+                    ));
+                    $this->_parameters->setParameters($parameter);
+                    $this->loadConfigurationFiles();
 
-                return self::$_instance;
-            }
-
-            /**
-             * @param string      $file
-             * @param string      $namespace
-             * @param Application $_this
-             */
-            public function load($file = null, $namespace = '\\', Application &$_this = null)
-            {
-                if ($file !== null and is_file($file) and !in_array($file, $this->_file)) {
-                    require $file;
-                    $this->_file[] = $file;
-                    $name          = substr($file, strrpos($file, '/'));
-                    $name          = substr($name, 0, strpos($name, '.'));
-                    $name          = ucfirst($name);
-                    $className     = $namespace . $name;
-                    $object        = dnew($className, array($_this));
-                    $reflection    = new \ReflectionClass($className);
-                    $methods       = array();
-
-                    if ($reflection->hasProperty('stack')) {
-                        $stack = $reflection->getProperty('stack');
-                        if ($stack->isPublic() === true) {
-                            $array = $stack->getValue($object);
-                            foreach ($array as $method)
-                                $methods[] = new \ReflectionMethod($className, $method);
-
-                        }
-
-                    } else {
-                        $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
-                    }
-
-                    foreach ($methods as $method)
-                        if ($method->getDeclaringClass()->getName() === $name)
-                            $method->invoke($object);
-
-
+                } catch (\Hoa\Core\Exception $e) {
+                    var_dump($e->getFormattedMessage());
                 }
+
             }
 
+            protected function loadConfigurationFiles($file = null)
+            {
 
+                $config = ($file === null) ? $this->_parameters->getParameter('bootstrap.configfile') : $file;
+                if (is_array($config))
+                    foreach ($config as $file)
+                        $this->loadConfigurationFiles($file);
+
+                if (!is_string($config))
+                    return;
+
+                $file = new \Hoa\File\Read($config);
+                if ($file->isFile() === true) {
+                    $file = $file->readAll();
+                    if ($file !== '') {
+                        $json = json_decode($file, true);
+                        foreach ($json as $key => $value)
+                            if ($key === 'require')
+                                $this->loadConfigurationFiles($value);
+                            else
+                                $this->_parameters->setParameter($key, $value);
+                    }
+                }
+
+                return;
+            }
+
+            /**
+             * Get Default parameters.
+             *
+             * @access  public
+             * @return  \Hoa\Core\Parameter
+             */
+            public function getParameters()
+            {
+                return $this->_parameters;
+            }
         }
     }
