@@ -1,20 +1,5 @@
 {
     "name": "sohoa/framework",
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "hoa/registry",
-                "version": "dev-master",
-                "source": {
-                    "url": "https://github.com/hoaproject/Registry",
-                    "type": "git",
-                    "reference": "596ef95d707e4fd7d2fed50592b1fe33fc5e6c10"
-                }
-            }
-        }
-    ],
-
     "require": {
         "php": ">=5.3.0",
         "hoa/core": "dev-master",
@@ -22,8 +7,7 @@
         "hoa/router": "dev-master",
         "hoa/view": "dev-master",
         "hoa/dispatcher": "dev-master",
-        "hoa/session": "dev-master",
-        "hoa/registry": "dev-master"
+        "hoa/session": "dev-master"
 
     },
     "minimum-stability": "dev"
