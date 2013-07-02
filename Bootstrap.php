@@ -49,16 +49,18 @@
                 if (!is_string($config))
                     return;
 
-                $file = new \Hoa\File\Read($config);
-                if ($file->isFile() === true) {
-                    $file = $file->readAll();
-                    if ($file !== '') {
-                        $json = json_decode($file, true);
-                        foreach ($json as $key => $value)
-                            if ($key === 'require')
-                                $this->loadConfigurationFiles($value);
-                            else
-                                $this->_parameters->setParameter($key, $value);
+                if (file_exists($config)) {
+                    $file = new \Hoa\File\Read($config);
+                    if ($file->isFile() === true) {
+                        $file = $file->readAll();
+                        if ($file !== '') {
+                            $json = json_decode($file, true);
+                            foreach ($json as $key => $value)
+                                if ($key === 'require')
+                                    $this->loadConfigurationFiles($value);
+                                else
+                                    $this->_parameters->setParameter($key, $value);
+                        }
                     }
                 }
 
