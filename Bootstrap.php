@@ -1,8 +1,12 @@
 <?php
     namespace {
-        from('Hoa')->import('File.Read');
+        from('Hoa')
+            ->import('File.Read')
+            ->import('Router.Http')
+            ->import('Dispatcher.Basic');
     }
     namespace Sohoa\Framework {
+
         /**
          * Class Bootstrap
          *
@@ -18,6 +22,21 @@
             protected $_parameters = null;
 
             /**
+             * @var \Hoa\Router\Router object
+             */
+            public $router = null;
+
+            /**
+             * @var \Hoa\Dispatcher\Dispatcher
+             */
+            public $dispatcher = null;
+
+            /**
+             * @var \Hoa\View\Viewable
+             */
+            public $view = null;
+
+            /**
              * @param array $parameter
              */
             public function __construct(Array $parameter = array())
@@ -28,6 +47,14 @@
                     ));
                     $this->_parameters->setParameters($parameter);
                     $this->loadConfigurationFiles();
+
+
+                    $router           = $this->_parameters->getParameter('bootstrap.router.handler');
+                    $router           = ($router === null) ? '\Hoa\Router\Http' : $router;
+                    $this->router     = dnew($router);
+                    $dispatcher       = $this->_parameters->getParameter('bootstrap.dispatcher.handler');
+                    $dispatcher       = ($dispatcher === null) ? '\Hoa\Dispatcher\Basic' : $dispatcher;
+                    $this->dispatcher = dnew($dispatcher);
 
                 } catch (\Hoa\Core\Exception $e) {
                     var_dump($e->getFormattedMessage());
@@ -63,7 +90,6 @@
                         }
                     }
                 }
-
                 return;
             }
 
@@ -77,5 +103,17 @@
             {
                 return $this->_parameters;
             }
+
+            public function run()
+            {
+                try {
+                    $this->dispatcher->dispatch($this->router, $this->view);
+
+                } catch (\Hoa\Core\Exception $e) {
+                    var_dump($e->getFormattedMessage());
+                }
+
+            }
+
         }
     }
