@@ -7,7 +7,9 @@
         "hoa/router": "dev-master",
         "hoa/view": "dev-master",
         "hoa/dispatcher": "dev-master",
-        "hoa/session": "dev-master"
+        "hoa/session": "dev-master",
+        "hoa/file": "dev-master",
+        "hoa/registry": "dev-master"
 
     },
     "minimum-stability": "dev"
