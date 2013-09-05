@@ -9,6 +9,7 @@
             ->import('Framework.Configuration');
     }
     namespace Sohoa\Framework {
+        use Hoa\Core\Exception\Exception;
 
         /**
          * Class Framework
@@ -55,9 +56,9 @@
             {
                 try {
                     $this->_parameters = new Configuration($parameter);
-                    $router            = $this->_parameters->getParameter('bootstrap.router.handler');
+                    $router            = $this->_parameters->getParameters()->getParameter('bootstrap.router.handler');
                     $this->router      = ($router === null) ? '\Hoa\Router\Http' : $router;
-                    $dispatcher        = $this->_parameters->getParameter('bootstrap.dispatcher.handler');
+                    $dispatcher        = $this->_parameters->getParameters()->getParameter('bootstrap.dispatcher.handler');
                     $this->dispatcher  = ($dispatcher === null) ? '\Hoa\Dispatcher\Basic' : $dispatcher;
 
 
@@ -105,6 +106,18 @@
                     var_dump($e->getFormattedMessage());
                 }
 
+            }
+
+            public static function service($id, $instance = null)
+            {
+                if (empty($id))
+                    throw new \Exception('Identifier cant be empty');
+
+                if ($instance === null)
+                    return \Hoa\Registry\Registry::get($id);
+
+
+                \Hoa\Registry\Registry::set($id, $instance);
             }
 
         }
