@@ -12,7 +12,7 @@
             /**
              * @var \Hoa\Core\Parameter
              */
-            private $_parameter = null;
+            private $_parameters = null;
 
             public function __construct(Array $parameter = array())
             {
@@ -31,7 +31,7 @@
              */
             public function getParameters()
             {
-                return $this->_parameter;
+                return $this->_parameters;
             }
 
             /**
