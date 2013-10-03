@@ -12,5 +12,9 @@
         "hoa/registry": "dev-master"
 
     },
+    "autoload":
+    {
+        "classmap": [ "Classes/" ]
+    },
     "minimum-stability": "dev"
 }
