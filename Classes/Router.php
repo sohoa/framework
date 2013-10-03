@@ -20,7 +20,7 @@ class Router extends \Hoa\Router\Http {
 
   const ROUTE_URI_PATTERN = 2;
 
-  private static $_restful_routes = array(
+  private static $_restfulRoutes = array(
     array(self::ROUTE_ACTION => 'index',    self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/'),
     array(self::ROUTE_ACTION => 'show',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/<id>'),
     array(self::ROUTE_ACTION => 'new',      self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/new'),
@@ -61,7 +61,7 @@ class Router extends \Hoa\Router\Http {
 
   public function resource($name, $args = array()) {
 
-    $routes = Router::$_restful_routes;
+    $routes = Router::$_restfulRoutes;
 
     // TODO handle except/only arguments
 
@@ -69,7 +69,7 @@ class Router extends \Hoa\Router\Http {
     foreach($routes as $route) {
 
       // TODO decide if we pluralize/singularize resource name
-      $this->addRule($route[self::ROUTE_ACTION].'_'.$name,
+      $this->addRule($route[self::ROUTE_ACTION]. ucfirst(strtolower($name)),
                      array($route[self::ROUTE_VERB]),
                      '/' . $name . $route[self::ROUTE_URI_PATTERN],
                      ucfirst(strtolower($name)) . 'Controller',

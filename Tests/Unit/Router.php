@@ -57,11 +57,11 @@ class Router extends \atoum\test {
     $router->resource('vehicles');
 
     $this->array($router->getRules())
-         ->hasKeys(array('index_vehicles',
-                         'show_vehicles',
-                         'create_vehicles',
-                         'edit_vehicles',
-                         'update_vehicles',
-                         'destroy_vehicles'));
+         ->hasKeys(array('indexVehicles',
+                         'showVehicles',
+                         'createVehicles',
+                         'editVehicles',
+                         'updateVehicles',
+                         'destroyVehicles'));
   }
 }
