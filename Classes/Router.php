@@ -63,7 +63,22 @@ class Router extends \Hoa\Router\Http {
 
     $routes = Router::$_restfulRoutes;
 
-    // TODO handle except/only arguments
+    $routes = array_filter($routes, function($route) use(&$args) {
+
+      $accept = true;
+
+      if(isset($args['only'])) {
+
+        $accept = in_array($route[Router::ROUTE_ACTION], $args['only']);
+      }
+
+      if(isset($args['except']) and !isset($args['only'])) {
+
+        $accept = !in_array($route[Router::ROUTE_ACTION], $args['except']);
+      }
+
+      return $accept;
+    });
 
     // write route for each HTTP verb
     foreach($routes as $route) {

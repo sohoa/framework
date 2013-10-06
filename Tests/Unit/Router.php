@@ -64,4 +64,41 @@ class Router extends \atoum\test {
                          'updateVehicles',
                          'destroyVehicles'));
   }
+
+  public function testResourceWithOnly() {
+
+    $router = new \Sohoa\Router;
+    $router->resource('vehicles', array('only' => array('index', 'show')));
+
+    $this->array($router->getRules())
+         ->hasSize(2)
+         ->notHasKeys(array('createVehicles',
+                            'editVehicles',
+                            'updateVehicles',
+                            'destroyVehicles'));
+  }
+
+  public function testResourceWithExcept() {
+
+    $router = new \Sohoa\Router;
+    $router->resource('vehicles', array('except' => array('destroy')));
+
+    $this->array($router->getRules())
+         ->hasSize(6)
+         ->notHasKeys(array('destroyVehicles'));
+  }
+
+  public function testResourceWithOnlyAndExcept() {
+
+    $router = new \Sohoa\Router;
+    $router->resource('vehicles', array('only'   => array('index', 'show'),
+                                        'except' => array('destroy')));
+
+    $this->array($router->getRules())
+         ->hasSize(2)
+         ->notHasKeys(array('createVehicles',
+                            'editVehicles',
+                            'updateVehicles',
+                            'destroyVehicles'));
+  }
 }
