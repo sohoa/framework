@@ -1,14 +1,7 @@
 <?php
-namespace {
-    from('Hoa')
-        ->import('File.Read')
-        ->import('Router.Http')
-        ->import('Dispatcher.Basic');
 
-    from('Sohoa')
-        ->import('Framework.Configuration');
-}
 namespace Sohoa\Framework {
+    use Hoa\Core\Parameter\Parameter;
 
     /**
      * Class Framework
@@ -65,8 +58,8 @@ namespace Sohoa\Framework {
 
                 if ($parameter instanceof Parameter) {
 
-                    $parameter->setParameter('protocol.Application', '(:cwd:h:)/Application');
-                    $parameter->setParameter('protocol.Public', '(:%root.application:)/Public');
+                    $parameter->setParameter('protocol.Application', '(:cwd:h:)/Application/');
+                    $parameter->setParameter('protocol.Public', '(:%root.application:)/Public/');
                     $parameter->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
 
                 }
