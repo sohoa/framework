@@ -2,7 +2,7 @@
 
 namespace Sohoa\Framework\Tests\Unit;
 
-require_once __DIR__ . '/runner.php';
+require_once __DIR__ . '/Runner.php';
 
 class Router extends \atoum\test {
 
