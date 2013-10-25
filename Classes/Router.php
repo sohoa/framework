@@ -10,7 +10,7 @@ from('Hoa')
 /**
  * Se mettre d'accord sur la doc
  */
-namespace Sohoa {
+namespace Sohoa\Framework {
 
 class Router extends \Hoa\Router\Http {
 

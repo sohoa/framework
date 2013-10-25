@@ -1,6 +1,6 @@
 <?php
 
-namespace Sohoa\Tests\Unit;
+namespace Sohoa\Framework\Tests\Unit;
 
 require_once __DIR__ . '/runner.php';
 
@@ -8,7 +8,7 @@ class Router extends \atoum\test {
 
   public function testGet() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->get('/test', array('as' => 'test'));
 
     $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
@@ -17,7 +17,7 @@ class Router extends \atoum\test {
 
   public function testPost() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->post('/test', array('as' => 'test'));
 
     $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
@@ -26,7 +26,7 @@ class Router extends \atoum\test {
 
   public function testPut() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->put('/test', array('as' => 'test'));
 
     $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
@@ -35,7 +35,7 @@ class Router extends \atoum\test {
 
   public function testDelete() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->delete('/test', array('as' => 'test'));
 
     $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
@@ -44,7 +44,7 @@ class Router extends \atoum\test {
 
   public function testAny() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->any('/test', array('as' => 'test'));
 
     $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
@@ -53,7 +53,7 @@ class Router extends \atoum\test {
 
   public function testResource() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->resource('vehicles');
 
     $this->array($router->getRules())
@@ -67,7 +67,7 @@ class Router extends \atoum\test {
 
   public function testResourceWithOnly() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->resource('vehicles', array('only' => array('index', 'show')));
 
     $this->array($router->getRules())
@@ -80,7 +80,7 @@ class Router extends \atoum\test {
 
   public function testResourceWithExcept() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->resource('vehicles', array('except' => array('destroy')));
 
     $this->array($router->getRules())
@@ -90,7 +90,7 @@ class Router extends \atoum\test {
 
   public function testResourceWithOnlyAndExcept() {
 
-    $router = new \Sohoa\Router;
+    $router = new \Sohoa\Framework\Router;
     $router->resource('vehicles', array('only'   => array('index', 'show'),
                                         'except' => array('destroy')));
 

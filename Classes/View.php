@@ -11,7 +11,7 @@ namespace {
         ->import('Router.Http');
 }
 
-namespace Sohoa {
+namespace Sohoa\Framework {
 
 
     class View implements \Hoa\View\Viewable

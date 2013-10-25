@@ -1,6 +1,6 @@
 <?php
 
-namespace Sohoa\Tests\Unit;
+namespace Sohoa\Framework\Tests\Unit;
 
 require __DIR__ . '/mageekguy.atoum.phar';
 
