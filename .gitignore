@@ -3,3 +3,4 @@ vendor/*
 composer.lock
 *.sqlite
 *.db
+composer.phar

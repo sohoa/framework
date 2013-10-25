@@ -12,6 +12,9 @@
         "hoa/registry": "dev-master"
 
     },
+    "require-dev": {
+        "atoum/atoum": "dev-master"
+    },
     "autoload":
     {
         "classmap": [ "Classes/" ]
