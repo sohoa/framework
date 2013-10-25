@@ -11,7 +11,8 @@ class Router extends \atoum\test {
     $router = new \Sohoa\Framework\Router;
     $router->get('/test', array('as' => 'test'));
 
-    $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
+    $rule = $router->getRule('test');
+    $this->array($rule[\Hoa\Router::RULE_METHODS])
          ->strictlyContainsValues(array('get'));
   }
 
@@ -20,7 +21,8 @@ class Router extends \atoum\test {
     $router = new \Sohoa\Framework\Router;
     $router->post('/test', array('as' => 'test'));
 
-    $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
+    $rule = $router->getRule('test');
+    $this->array($rule[\Hoa\Router::RULE_METHODS])
          ->strictlyContainsValues(array('post'));
   }
 
@@ -29,7 +31,8 @@ class Router extends \atoum\test {
     $router = new \Sohoa\Framework\Router;
     $router->put('/test', array('as' => 'test'));
 
-    $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
+    $rule = $router->getRule('test');
+    $this->array($rule[\Hoa\Router::RULE_METHODS])
          ->strictlyContainsValues(array('put'));
   }
 
@@ -38,7 +41,8 @@ class Router extends \atoum\test {
     $router = new \Sohoa\Framework\Router;
     $router->delete('/test', array('as' => 'test'));
 
-    $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
+    $rule = $router->getRule('test');
+    $this->array($rule[\Hoa\Router::RULE_METHODS])
          ->strictlyContainsValues(array('delete'));
   }
 
@@ -47,7 +51,8 @@ class Router extends \atoum\test {
     $router = new \Sohoa\Framework\Router;
     $router->any('/test', array('as' => 'test'));
 
-    $this->array($router->getRule('test')[\Hoa\Router::RULE_METHODS])
+    $rule = $router->getRule('test');
+    $this->array($rule[\Hoa\Router::RULE_METHODS])
          ->strictlyContainsValues(array('get', 'post', 'put', 'delete'));
   }
 
