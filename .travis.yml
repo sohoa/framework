@@ -6,11 +6,10 @@ php:
   - 5.5
 
 before_script:
-  - wget http://getcomposer.org/composer.phar
+  - curl -s https://getcomposer.org/installer | php
   - php composer.phar install
-  - wget -P Tests/Unit/ http://downloads.atoum.org/nightly/mageekguy.atoum.phar
 
-script: php Tests/Unit/mageekguy.atoum.phar -d Tests/Unit/
+script: php vendor/bin/atoum -d Tests/Unit/
 
 notifications:
   disabled: true
