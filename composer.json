@@ -12,11 +12,9 @@
         "hoa/registry": "dev-master"
 
     },
-    "target-dir" : "Sohoa/Framework",
-    "autoload" : {
-        "psr-0" : {
-            "Sohoa\\Framework" : "."
-        }
+    "autoload":
+    {
+        "classmap": [ "Classes/" ]
     },
     "minimum-stability": "dev"
 }
