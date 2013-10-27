@@ -4,15 +4,11 @@
  * Se mettre d'accord sur la doc.
  */
 
-namespace {
-    from('Hoa')
-        ->import('View.~able')
-        ->import('Http.Response')
-        ->import('Router.Http');
-}
-
 namespace Sohoa\Framework {
 
+    use Hoa\View\Viewable;
+    use Hoa\Http\Response;
+    use Hoa\Router\Http;
 
     class View implements \Hoa\View\Viewable
     {

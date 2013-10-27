@@ -1,18 +1,12 @@
 <?php
 
-namespace {
-
-from('Hoa')
-->import('Router.Http');
-
-}
-
 /**
  * Se mettre d'accord sur la doc
  */
 namespace Sohoa\Framework {
 
 class Router extends \Hoa\Router\Http {
+    use Hoa\Router\Http;
 
   const ROUTE_ACTION = 0;
 
