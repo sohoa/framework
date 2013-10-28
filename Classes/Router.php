@@ -1,96 +1,91 @@
 <?php
 
-namespace {
-
-from('Hoa')
-->import('Router.Http');
-
-}
-
 /**
  * Se mettre d'accord sur la doc
  */
 namespace Sohoa\Framework {
 
-class Router extends \Hoa\Router\Http {
+    use Hoa\Router\Http;
 
-  const ROUTE_ACTION = 0;
+    class Router extends \Hoa\Router\Http {
 
-  const ROUTE_VERB = 1;
+        const ROUTE_ACTION = 0;
 
-  const ROUTE_URI_PATTERN = 2;
+        const ROUTE_VERB = 1;
 
-  private static $_restfulRoutes = array(
-    array(self::ROUTE_ACTION => 'index',    self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/'),
-    array(self::ROUTE_ACTION => 'show',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/<id>'),
-    array(self::ROUTE_ACTION => 'new',      self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/new'),
-    array(self::ROUTE_ACTION => 'create',   self::ROUTE_VERB => 'post',   self::ROUTE_URI_PATTERN => '/'),
-    array(self::ROUTE_ACTION => 'edit',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/<id>/edit'),
-    array(self::ROUTE_ACTION => 'update',   self::ROUTE_VERB => 'patch',  self::ROUTE_URI_PATTERN => '/<id>'),
-    array(self::ROUTE_ACTION => 'destroy',  self::ROUTE_VERB => 'delete', self::ROUTE_URI_PATTERN => '/<id>'),
-  );
+        const ROUTE_URI_PATTERN = 2;
 
-  public function __construct() {
-    parent::__construct();
-  }
+        private static $_restfulRoutes = array(
+            array(self::ROUTE_ACTION => 'index',    self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/'),
+            array(self::ROUTE_ACTION => 'show',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/<id>'),
+            array(self::ROUTE_ACTION => 'new',      self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/new'),
+            array(self::ROUTE_ACTION => 'create',   self::ROUTE_VERB => 'post',   self::ROUTE_URI_PATTERN => '/'),
+            array(self::ROUTE_ACTION => 'edit',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/<id>/edit'),
+            array(self::ROUTE_ACTION => 'update',   self::ROUTE_VERB => 'patch',  self::ROUTE_URI_PATTERN => '/<id>'),
+            array(self::ROUTE_ACTION => 'destroy',  self::ROUTE_VERB => 'delete', self::ROUTE_URI_PATTERN => '/<id>'),
+        );
 
-  public function get($path, $args) {
+        public function __construct() {
 
-    $this->addRule($args['as'], array('get'), $path);
-  }
+            parent::__construct();
+        }
 
-  public function post($path, $args) {
+        public function get($path, $args) {
 
-    $this->addRule($args['as'], array('post'), $path);
-  }
+            $this->addRule($args['as'], array('get'), $path);
+        }
 
-  public function put($path, $args) {
+        public function post($path, $args) {
 
-    $this->addRule($args['as'], array('put'), $path);
-  }
+            $this->addRule($args['as'], array('post'), $path);
+        }
 
-  public function delete($path, $args) {
+        public function put($path, $args) {
 
-    $this->addRule($args['as'], array('delete'), $path);
-  }
+            $this->addRule($args['as'], array('put'), $path);
+        }
 
-  public function any($path, $args) {
+        public function delete($path, $args) {
 
-    $this->addRule($args['as'], array('get', 'post', 'put', 'delete'), $path);
-  }
+            $this->addRule($args['as'], array('delete'), $path);
+        }
 
-  public function resource($name, $args = array()) {
+        public function any($path, $args) {
 
-    $routes = Router::$_restfulRoutes;
+            $this->addRule($args['as'], array('get', 'post', 'put', 'delete'), $path);
+        }
 
-    $routes = array_filter($routes, function($route) use(&$args) {
+        public function resource($name, $args = array()) {
 
-      $accept = true;
+            $routes = Router::$_restfulRoutes;
 
-      if(isset($args['only'])) {
+            $routes = array_filter($routes, function($route) use(&$args) {
 
-        $accept = in_array($route[Router::ROUTE_ACTION], $args['only']);
-      }
+                $accept = true;
 
-      if(isset($args['except']) and !isset($args['only'])) {
+                if (isset($args['only'])) {
 
-        $accept = !in_array($route[Router::ROUTE_ACTION], $args['except']);
-      }
+                    $accept = in_array($route[Router::ROUTE_ACTION], $args['only']);
+                }
 
-      return $accept;
-    });
+                if (isset($args['except']) and !isset($args['only'])) {
 
-    // write route for each HTTP verb
-    foreach($routes as $route) {
+                    $accept = !in_array($route[Router::ROUTE_ACTION], $args['except']);
+                }
 
-      // TODO decide if we pluralize/singularize resource name
-      $this->addRule($route[self::ROUTE_ACTION]. ucfirst(strtolower($name)),
-                     array($route[self::ROUTE_VERB]),
-                     '/' . $name . $route[self::ROUTE_URI_PATTERN],
-                     ucfirst(strtolower($name)) . 'Controller',
-                     $route[self::ROUTE_ACTION]);
+                return $accept;
+            });
+
+            // write route for each HTTP verb
+            foreach($routes as $route) {
+
+                // TODO decide if we pluralize/singularize resource name
+                $this->addRule($route[self::ROUTE_ACTION]. ucfirst(strtolower($name)),
+                               array($route[self::ROUTE_VERB]),
+                               '/' . $name . $route[self::ROUTE_URI_PATTERN],
+                               ucfirst(strtolower($name)) . 'Controller',
+                               $route[self::ROUTE_ACTION]);
+            }
+        }
     }
-  }
-}
-
 }

@@ -1,16 +1,16 @@
 <?php
 
 namespace Sohoa\Framework {
+
     use Hoa\Core\Parameter\Parameter;
 
     /**
-     * Class Framework
-     *
-     * @package Sohoa\Framework
-     */
+    * Class Framework
+    *
+    * @package Sohoa\Framework
+    */
     class Framework
     {
-
         /**
          * @var Configuration object
          */
@@ -44,9 +44,10 @@ namespace Sohoa\Framework {
          *
          * @param array $parameter
          */
-        public function __construct(Array $parameter = array())
-        {
+        public function __construct(Array $parameter = array()) {
+
             try {
+
                 $this->_parameters = new Configuration($parameter);
                 $core              = \Hoa\Core\Core::getInstance();
                 $parameter         = $core->getParameters();
@@ -55,27 +56,20 @@ namespace Sohoa\Framework {
                 $dispatcher        = $this->getParameters()->getParameter('bootstrap.dispatcher.handler');
                 $this->dispatcher  = ($dispatcher === null) ? '\Hoa\Dispatcher\Basic' : $dispatcher;
 
-
                 if ($parameter instanceof Parameter) {
 
-                    $parameter->setParameter('protocol.Application', '(:cwd:h:)/Application/');
-                    $parameter->setParameter('protocol.Public', '(:%root.application:)/Public/');
-                    $parameter->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
-
+                  $parameter->setParameter('protocol.Application', '(:cwd:h:)/Application/');
+                  $parameter->setParameter('protocol.Public', '(:%root.application:)/Public/');
+                  $parameter->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
                 }
                 $core->setProtocol();
 
 
             } catch (\Hoa\Core\Exception $e) {
+
                 var_dump($e->getFormattedMessage());
             }
-
         }
-
-        /**
-         * @param string $file
-         */
-
 
         /**
          * Get Default parameters.
@@ -83,13 +77,13 @@ namespace Sohoa\Framework {
          * @access  public
          * @return  \Hoa\Core\Parameter
          */
-        public function getParameters()
-        {
+        public function getParameters() {
+
             return $this->_parameters->getParameters();
         }
 
-        public function run()
-        {
+        public function run() {
+
             try {
 
                 $dispatcher = $this->dispatcher;
@@ -107,10 +101,9 @@ namespace Sohoa\Framework {
                 $dispatcher->dispatch($router, $view);
 
             } catch (\Hoa\Core\Exception $e) {
+
                 var_dump($e->getFormattedMessage());
             }
-
         }
-
     }
 }
