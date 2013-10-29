@@ -30,29 +30,30 @@ namespace Sohoa\Framework {
             parent::__construct();
         }
 
-        public function get($path, $args) {
+        public function __call($name, $arguments) {
 
-            $this->addRule($args['as'], array('get'), $path);
-        }
+            $args = $arguments[1];
 
-        public function post($path, $args) {
+            if(!isset($args['as']))
+                throw new Exception('Missing as !');
 
-            $this->addRule($args['as'], array('post'), $path);
-        }
+            if(!isset($args['to']))
+                throw new Exception('Missing to !');
 
-        public function put($path, $args) {
+            if($name == 'any') {
+                $methods = self::$_methods;
+            }
+            else {
+                $methods = array($name);
+            }
 
-            $this->addRule($args['as'], array('put'), $path);
-        }
+            $to = explode('#', $args['to']);
+            $call = $to[0];
+            $able = $to[1];
 
-        public function delete($path, $args) {
+            $arguments = array($args['as'], $methods, $arguments[0], $call, $able);
 
-            $this->addRule($args['as'], array('delete'), $path);
-        }
-
-        public function any($path, $args) {
-
-            $this->addRule($args['as'], array('get', 'post', 'put', 'delete'), $path);
+            return call_user_func_array(array($this, 'addRule'), $arguments);
         }
 
         public function resource($name, $args = array()) {
