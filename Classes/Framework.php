@@ -5,6 +5,7 @@ namespace Sohoa\Framework {
 
     use Hoa\Core\Core;
     use Hoa\Dispatcher\Basic;
+    use Hoa\Registry\Registry;
 
 
     /**
@@ -48,6 +49,8 @@ namespace Sohoa\Framework {
                 $this->router     = new Router();
                 $this->dispatcher = new Basic();
 
+                self::services('router' , $this->router);
+
                 if ($parameter instanceof Parameter) {
 
                     $parameter->setParameter('protocol.Application', '(:cwd:h:)/Application/');
@@ -68,7 +71,6 @@ namespace Sohoa\Framework {
         public function run()
         {
 
-
             try {
 
                 $this->dispatcher->dispatch($this->router, $this->view);
@@ -76,6 +78,18 @@ namespace Sohoa\Framework {
 
                 var_dump($e->getFormattedMessage());
             }
+        }
+
+        public static function services($identifier, $object = null)
+        {
+            if (empty($identifier))
+                throw new \Exception('Identifier cant be empty');
+
+
+            if ($object === null)
+                return Registry::get($identifier);
+
+            Registry::set($identifier, $object);
         }
     }
 }

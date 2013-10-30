@@ -19,4 +19,13 @@ class Framework extends \atoum\test
         $this->object($dispatcher)
             ->isInstanceOf('\Hoa\Dispatcher\Basic');
     }
+
+    public function testServices()
+    {
+        $fwk    = new \Sohoa\Framework\Framework();
+        $router = \Sohoa\Framework\Framework::services('router');
+
+        $this->object($router)
+            ->isInstanceOf('\Sohoa\Framework\Router');
+    }
 }
