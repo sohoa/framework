@@ -45,18 +45,16 @@ namespace Sohoa\Framework {
 
             try {
                 $core             = Core::getInstance();
-                $parameter        = $core->getParameters();
+                $parameters       = $core->getParameters();
                 $this->router     = new Router();
                 $this->dispatcher = new Basic();
 
                 self::services('router' , $this->router);
 
-                if ($parameter instanceof Parameter) {
+                $parameters->setParameter('protocol.Application', '(:cwd:h:)/Application/');
+                $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
+                $parameters->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
 
-                    $parameter->setParameter('protocol.Application', '(:cwd:h:)/Application/');
-                    $parameter->setParameter('protocol.Public', '(:%root.application:)/Public/');
-                    $parameter->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
-                }
                 $core->setProtocol();
 
                 if (file_exists('hoa://Application/Config/Route.php')) {
