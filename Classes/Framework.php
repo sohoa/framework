@@ -2,11 +2,9 @@
 
 namespace Sohoa\Framework {
 
-
     use Hoa\Core\Core;
     use Hoa\Dispatcher\Basic;
     use Hoa\Registry\Registry;
-
 
     /**
      * Class Framework
@@ -58,6 +56,7 @@ namespace Sohoa\Framework {
                 $core->setProtocol();
 
                 if (file_exists('hoa://Application/Config/Route.php')) {
+
                     require_once 'hoa://Application/Config/Route.php';
                 }
             } catch (\Hoa\Core\Exception $e) {
@@ -82,7 +81,6 @@ namespace Sohoa\Framework {
         {
             if (empty($identifier))
                 throw new \Exception('Identifier cant be empty');
-
 
             if ($object === null)
                 return Registry::get($identifier);

@@ -3,10 +3,10 @@ namespace Sohoa\Framework {
 
     class Kit extends \Hoa\Dispatcher\Kit
     {
+
         protected $_path = 'hoa://Application/View/%s/%s.xyl';
 
-        public function setDefaultPath($path = 'hoa://Application/View/%s/%s.xyl')
-        {
+        public function setDefaultPath($path = 'hoa://Application/View/%s/%s.xyl') {
 
             $old         = $this->_path;
             $this->_path = $path;
@@ -14,14 +14,12 @@ namespace Sohoa\Framework {
             return $old;
         }
 
-        public function getDefaultPath()
-        {
+        public function getDefaultPath() {
 
             return $this->_path;
         }
 
-        public function render($data = null)
-        {
+        public function render($data = null) {
 
             $controller = null;
             $action     = null;
@@ -49,8 +47,7 @@ namespace Sohoa\Framework {
             return $this->renderRoute($controller, $action);
         }
 
-        protected function renderOverlay($filename)
-        {
+        protected function renderOverlay($filename) {
 
             $this->view->addOverlay($filename);
             $this->view->render();
@@ -58,8 +55,7 @@ namespace Sohoa\Framework {
             return $filename;
         }
 
-        protected function renderRoute($controller, $action, $path = null)
-        {
+        protected function renderRoute($controller, $action, $path = null) {
 
             if ($path === null)
                 $path = $this->getDefaultPath();
