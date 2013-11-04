@@ -6,7 +6,7 @@ use Hoa\Dispatcher\Basic;
 use Hoa\Router\Http;
 use Sohoa\Framework\Kit as _Kit;
 
-require_once __DIR__ . '/Runner.php';
+require_once __DIR__ . '/../Runner.php';
 
 class myView implements \Hoa\View\Viewable {
 

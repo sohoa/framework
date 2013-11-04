@@ -2,58 +2,84 @@
 
 namespace Sohoa\Framework\Tests\Unit;
 
-require_once __DIR__ . '/Runner.php';
+require_once __DIR__ . '/../Runner.php';
 
 class Router extends \atoum\test {
+
+    public function beforeTestMethod($testMethod) {
+
+        $this->define->rule = '\Sohoa\Framework\Tests\Unit\Asserters\Rule';
+    }
+
+    public function testGetWithoutTo() {
+
+        $router = new \Sohoa\Framework\Router;
+
+        $this->exception(function() use($router) {
+            $router->get('/test', array('as' => 'test'));
+        })
+             ->hasMessage('Missing to !');
+    }
 
     public function testGet() {
 
         $router = new \Sohoa\Framework\Router;
-        $router->get('/test', array('as' => 'test'));
+        $router->get('/test', array('as' => 'test', 'to' => 'Test#index'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('get'));
+        $this->rule($rule)
+             ->methodIsEqualTo(array('get'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('index');
     }
 
     public function testPost() {
 
         $router = new \Sohoa\Framework\Router;
-        $router->post('/test', array('as' => 'test'));
+        $router->post('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('post'));
+        $this->rule($rule)
+             ->methodIsEqualTo(array('post'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testPut() {
 
         $router = new \Sohoa\Framework\Router;
-        $router->put('/test', array('as' => 'test'));
+        $router->put('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('put'));
+        $this->rule($rule)
+             ->methodIsEqualTo(array('put'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testDelete() {
 
         $router = new \Sohoa\Framework\Router;
-        $router->delete('/test', array('as' => 'test'));
+        $router->delete('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('delete'));
+        $this->rule($rule)
+             ->methodIsEqualTo(array('delete'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testAny() {
 
         $router = new \Sohoa\Framework\Router;
-        $router->any('/test', array('as' => 'test'));
+        $router->any('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('get', 'post', 'put', 'delete'));
+        $rule = $router->getRule('test');
+        $this->rule($rule)
+             ->methodIsEqualTo(array('get', 'post', 'put', 'delete'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testResource() {

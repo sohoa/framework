@@ -2,7 +2,7 @@
 
 namespace Sohoa\Framework\Tests\Unit;
 
-require_once __DIR__ . '/Runner.php';
+require_once __DIR__ . '/../Runner.php';
 
 class Framework extends \atoum\test {
 
