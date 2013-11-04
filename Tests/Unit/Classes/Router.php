@@ -2,9 +2,14 @@
 
 namespace Sohoa\Framework\Tests\Unit;
 
-require_once __DIR__ . '/Runner.php';
+require_once __DIR__ . '/../Runner.php';
 
 class Router extends \atoum\test {
+
+    public function beforeTestMethod($testMethod) {
+
+        $this->define->rule = '\Sohoa\Framework\Tests\Unit\Asserters\Rule';
+    }
 
     public function testGetWithoutTo() {
 
@@ -22,12 +27,10 @@ class Router extends \atoum\test {
         $router->get('/test', array('as' => 'test', 'to' => 'Test#index'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('get'));
-        $this->string($rule[\Hoa\Router::RULE_CALL])
-             ->isEqualTo('Test');
-        $this->string($rule[\Hoa\Router::RULE_ABLE])
-             ->isEqualTo('index');
+        $this->rule($rule)
+             ->methodIsEqualTo(array('get'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('index');
     }
 
     public function testPost() {
@@ -36,12 +39,10 @@ class Router extends \atoum\test {
         $router->post('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('post'));
-        $this->string($rule[\Hoa\Router::RULE_CALL])
-             ->isEqualTo('Test');
-        $this->string($rule[\Hoa\Router::RULE_ABLE])
-             ->isEqualTo('test');
+        $this->rule($rule)
+             ->methodIsEqualTo(array('post'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testPut() {
@@ -50,12 +51,10 @@ class Router extends \atoum\test {
         $router->put('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('put'));
-        $this->string($rule[\Hoa\Router::RULE_CALL])
-             ->isEqualTo('Test');
-        $this->string($rule[\Hoa\Router::RULE_ABLE])
-             ->isEqualTo('test');
+        $this->rule($rule)
+             ->methodIsEqualTo(array('put'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testDelete() {
@@ -64,12 +63,10 @@ class Router extends \atoum\test {
         $router->delete('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('delete'));
-        $this->string($rule[\Hoa\Router::RULE_CALL])
-             ->isEqualTo('Test');
-        $this->string($rule[\Hoa\Router::RULE_ABLE])
-             ->isEqualTo('test');
+        $this->rule($rule)
+             ->methodIsEqualTo(array('delete'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testAny() {
@@ -78,12 +75,11 @@ class Router extends \atoum\test {
         $router->any('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $this->array($rule[\Hoa\Router::RULE_METHODS])
-             ->strictlyContainsValues(array('get', 'post', 'put', 'delete'));
-        $this->string($rule[\Hoa\Router::RULE_CALL])
-             ->isEqualTo('Test');
-        $this->string($rule[\Hoa\Router::RULE_ABLE])
-             ->isEqualTo('test');
+        $rule = $router->getRule('test');
+        $this->rule($rule)
+             ->methodIsEqualTo(array('get', 'post', 'put', 'delete'))
+             ->callIsEqualTo('Test')
+             ->ableIsEqualTo('test');
     }
 
     public function testResource() {
