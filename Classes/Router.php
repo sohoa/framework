@@ -32,28 +32,35 @@ namespace Sohoa\Framework {
 
         public function __call($name, $arguments) {
 
-            $args = $arguments[1];
+            // private rules added by Hoa\Xyl should be handle by Hoa\Router itself
+            if('_' == $name[0]) {
 
-            if(!isset($args['as']))
-                throw new Exception('Missing as !');
-
-            if(!isset($args['to']))
-                throw new Exception('Missing to !');
-
-            if($name == 'any') {
-                $methods = self::$_methods;
+                parent::__call($name, $arguments);
             }
             else {
-                $methods = array($name);
+                $args = $arguments[1];
+
+                if(!isset($args['as']))
+                    throw new Exception('Missing as !');
+
+                if(!isset($args['to']))
+                    throw new Exception('Missing to !');
+
+                if($name == 'any') {
+                    $methods = self::$_methods;
+                }
+                else {
+                    $methods = array($name);
+                }
+
+                $to = explode('#', $args['to']);
+                $call = $to[0];
+                $able = $to[1];
+
+                $arguments = array($args['as'], $methods, $arguments[0], $call, $able);
+
+                return call_user_func_array(array($this, 'addRule'), $arguments);
             }
-
-            $to = explode('#', $args['to']);
-            $call = $to[0];
-            $able = $to[1];
-
-            $arguments = array($args['as'], $methods, $arguments[0], $call, $able);
-
-            return call_user_func_array(array($this, 'addRule'), $arguments);
         }
 
         public function resource($name, $args = array()) {
