@@ -1,69 +1,53 @@
 <?php
 namespace Sohoa\Framework {
 
+    use Sohoa\Framework\Kit\Kitable;
+
     class Kit extends \Hoa\Dispatcher\Kit
     {
+        static private $_kits = array();
+        static private $_kitInit = array();
 
-        protected $_path = 'hoa://Application/View/%s/%s.xyl';
-
-        public function setDefaultPath($path = 'hoa://Application/View/%s/%s.xyl') {
-
-            $old         = $this->_path;
-            $this->_path = $path;
-
-            return $old;
+        public static function add($name, Kitable $instance)
+        {
+            static::$_kits[$name] = $instance;
         }
 
-        public function getDefaultPath() {
-
-            return $this->_path;
+        public static function set(Array $array)
+        {
+            foreach ($array as $name => $instance)
+                static::add($name, $instance);
         }
 
-        public function render($data = null) {
+        public function getAllKits()
+        {
+            return static::$_kits;
+        }
 
-            $controller = null;
-            $action     = null;
-
-            if (is_string($data))
-                return $this->renderOverlay($data);
-
-            if (is_array($data)) {
-                if (array_key_exists('controller', $data))
-                    $controller = $data['controller'];
-                if (array_key_exists(0, $data))
-                    $controller = $data[0];
-                if (array_key_exists('action', $data))
-                    $action = $data['action'];
-                if (array_key_exists(1, $data))
-                    $action = $data[1];
+        protected function init($name, Kitable $instance)
+        {
+            if (!in_array($name, static::$_kitInit)) {
+                $instance->setRouter($this->router);
+                $instance->setView($this->view);
+                static::$_kitInit[] = $name;
             }
-
-            if ($controller === null or $action === null) {
-                $route      = $this->router->getTheRule();
-                $controller = $route[4];
-                $action     = $route[5];
-            }
-
-            return $this->renderRoute($controller, $action);
+            return $instance;
         }
 
-        protected function renderOverlay($filename) {
-
-            $this->view->addOverlay($filename);
-            $this->view->render();
-
-            return $filename;
+        public function kit($name)
+        {
+            if (array_key_exists($name, static::$_kits))
+                if (in_array($name, static::$_kitInit))
+                    return static::$_kits[$name];
+                else
+                    return $this->init($name, static::$_kits[$name]);
+            else
+                throw new Exception('You must add the kit with \Sohoa\Framework\Kit::add() before use it');
         }
 
-        protected function renderRoute($controller, $action, $path = null) {
-
-            if ($path === null)
-                $path = $this->getDefaultPath();
-
-            $path = sprintf($path, $controller, $action);
-
-            return $this->renderOverlay($path);
+        public function __get($key)
+        {
+            return $this->kit($key);
         }
     }
 }
-
