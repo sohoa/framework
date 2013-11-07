@@ -75,7 +75,6 @@ class Router extends \atoum\test {
         $router->any('/test', array('as' => 'test', 'to' => 'Test#test'));
 
         $rule = $router->getRule('test');
-        $rule = $router->getRule('test');
         $this->rule($rule)
              ->methodIsEqualTo(array('get', 'post', 'put', 'delete'))
              ->callIsEqualTo('Test')
@@ -131,5 +130,20 @@ class Router extends \atoum\test {
                                 'editVehicles',
                                 'updateVehicles',
                                 'destroyVehicles'));
+    }
+
+    /**
+     * Hoa\Xyl add private rule to the router beginning with "_" so Sohoa\Router
+     * must be compatible with this behavior
+     */
+
+    public function testAddingAPrivateRule() {
+
+        $router = new \Sohoa\Framework\Router;
+        $router->_any('_resource', '/(?)/(?)');
+
+        $rule = $router->getRule('_resource');
+        $this->rule($rule)
+             ->methodIsEqualTo(array('get'));
     }
 }
