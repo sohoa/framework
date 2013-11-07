@@ -10,6 +10,13 @@ namespace Sohoa\Framework {
 
         public static function add($name, Kitable $instance)
         {
+            if (in_array($name, static::$_kitInit)) {
+                $key = array_keys(static::$_kitInit, $name);
+                $key = $key[0];
+
+                unset(static::$_kitInit[$key]);
+            }
+
             static::$_kits[$name] = $instance;
         }
 

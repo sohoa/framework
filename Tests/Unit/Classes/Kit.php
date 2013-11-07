@@ -34,5 +34,33 @@ namespace Sohoa\Framework\Tests\Unit {
             $this->variable($kit->getView())->isNull();
 
         }
+        public function testLimitless()
+        {
+            _Kit::add('xyl', new Xyl());
+
+            $kit = new _Kit(new Http(), new Basic());
+
+            $this->sizeof($kit->getAllKits())->isEqualto(1);
+
+            $this->object($kit->kit('xyl'))->isInstanceOf('\Sohoa\Framework\Tests\Unit\Xyl');
+
+            $kit = $kit->kit('xyl');
+
+            $this->object($kit->getRouter())->isInstanceOf('\Hoa\Router\Http');
+            $this->variable($kit->getView())->isNull();
+
+
+            _Kit::add('xyl', new Xyl());
+            $kit = new _Kit(new Http(), new Basic());
+            $this->sizeof($kit->getAllKits())->isEqualto(1);
+
+            $this->object($kit->kit('xyl'))->isInstanceOf('\Sohoa\Framework\Tests\Unit\Xyl');
+
+            $kit = $kit->kit('xyl');
+
+            $this->object($kit->getRouter())->isInstanceOf('\Hoa\Router\Http');
+            $this->variable($kit->getView())->isNull();
+
+        }
     }
 }
