@@ -5,8 +5,8 @@ namespace Sohoa\Framework {
 
     class Kit extends \Hoa\Dispatcher\Kit
     {
-        static private $_kits = array();
-        static private $_kitInit = array();
+        static protected  $_kits = array();
+        static protected  $_kitInit = array();
 
         public static function add($name, Kitable $instance)
         {
