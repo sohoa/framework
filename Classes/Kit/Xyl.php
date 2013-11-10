@@ -6,6 +6,14 @@ namespace Sohoa\Framework\Kit {
 
         protected $_path = 'hoa://Application/View/%s/%s.xyl';
 
+		public $data;
+
+		public function setView($view)
+		{
+			parent::setView($view);
+			$this->data = $this->view->getData();
+		}
+
         public function setDefaultPath($path = 'hoa://Application/View/%s/%s.xyl')
         {
 
@@ -71,4 +79,3 @@ namespace Sohoa\Framework\Kit {
         }
     }
 }
- 
