@@ -71,3 +71,4 @@ namespace Sohoa\Framework\Kit {
         }
     }
 }
+
