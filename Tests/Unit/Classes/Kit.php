@@ -88,5 +88,28 @@ namespace Sohoa\Framework\Tests\Unit {
 
             $this->object($xyl)->isInstanceOf('\Xyl');
         }
+
+		public function testKitGet() {
+            $this
+                ->if($miscKit = new _Kit\Kitable)
+                    ->and(_Kit::add('foo', $miscKit))
+                    ->and($controller = new Foo(new Http(), new Basic()))
+                ->assert('Kit property is a Kitable')
+                    ->object($controller->foo)->isIdenticalTo($miscKit)
+
+                ->if($miscObj = new \stdClass())
+                ->and(\Sohoa\Framework\Framework::services('bar', $miscObj))
+                ->assert('Kit property is get from Registry')
+                    ->object($controller->bar)->isIdenticalTo($miscObj)
+
+                ->if(_Kit::add('bar', $miscKit))
+                ->assert('Kit property is get from Kitable first')
+                    ->object($controller->bar)->isIdenticalTo($miscKit)
+            ;
+        }
+
+
+
+
     }
 }
