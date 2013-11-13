@@ -1,21 +1,25 @@
 {
     "name": "sohoa/framework",
     "require": {
-        "php"           : ">=5.3.0",
-        "hoa/core"      : "dev-master",
-        "hoa/http"      : "dev-master",
-        "hoa/router"    : "dev-master",
-        "hoa/view"      : "dev-master",
+        "php": ">=5.3.0",
+        "hoa/core": "dev-master",
+        "hoa/http": "dev-master",
+        "hoa/router": "dev-master",
+        "hoa/view": "dev-master",
         "hoa/dispatcher": "dev-master",
-        "hoa/session"   : "dev-master",
-        "hoa/file"      : "dev-master",
-        "hoa/registry"  : "dev-master"
+        "hoa/session": "dev-master",
+        "hoa/file": "dev-master",
+        "hoa/registry": "dev-master",
+        "hoa/stringbuffer": "dev-master"
+
+    },
+    "suggest": {
+        "hoa/xyl" : "For use the Sohoa\\Framework\\View\\Xyl adapter on your project"
     },
     "require-dev": {
         "atoum/atoum": "dev-master"
     },
-    "autoload":
-    {
+    "autoload": {
         "classmap": [ "Classes/" ]
     },
     "minimum-stability": "dev"
