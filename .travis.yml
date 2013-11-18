@@ -9,7 +9,7 @@ before_script:
   - curl -s https://getcomposer.org/installer | php
   - php composer.phar install
 
-script: php vendor/bin/atoum -d Tests/Unit/
+script: php vendor/bin/atoum -d Tests/Unit/Classes/
 
 notifications:
   disabled: true
