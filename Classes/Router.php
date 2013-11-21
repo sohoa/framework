@@ -15,6 +15,8 @@ namespace Sohoa\Framework {
 
         const ROUTE_URI_PATTERN = 2;
 
+		const ROUTE_GENERIC = 'generic';
+
         private static $_restfulRoutes = array(
             array(self::ROUTE_ACTION => 'index',    self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/'),
             array(self::ROUTE_ACTION => 'show',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/<id>'),
@@ -30,27 +32,46 @@ namespace Sohoa\Framework {
             parent::__construct();
         }
 
+        /**
+         * Return true if the given route contains (?<controller>) and (?<action>)
+         * @param string $route
+         * @return boolean
+         */
+        protected static function isGenericRoute($route) {
+
+            return false !== preg_match('#(?=.*\(\?<controller\>.+\))(?=.*\(\?<action\>.+\)).+#', $route);
+        }
+
         public function __call($name, $arguments) {
 
             // private rules added by Hoa\Xyl should be handle by Hoa\Router itself
             if('_' == $name[0]) {
 
-                parent::__call($name, $arguments);
+                return parent::__call($name, $arguments);
             }
-            else {
+
+            if($name == 'any') {
+
+                $methods = self::$_methods;
+            } else {
+
+                $methods = array($name);
+            }
+
+            if (count($arguments) === 1 && self::isGenericRoute($arguments[0])) {
+                $arguments = array(self::ROUTE_GENERIC, $methods, $arguments[0], 'controller', 'action');
+            } else {
+
                 $args = $arguments[1];
 
-                if(!isset($args['as']))
+                if(!isset($args['as'])) {
+
                     throw new Exception('Missing as !');
-
-                if(!isset($args['to']))
-                    throw new Exception('Missing to !');
-
-                if($name == 'any') {
-                    $methods = self::$_methods;
                 }
-                else {
-                    $methods = array($name);
+
+                if(!isset($args['to'])) {
+
+                    throw new Exception('Missing to !');
                 }
 
                 $to = explode('#', $args['to']);
@@ -58,9 +79,8 @@ namespace Sohoa\Framework {
                 $able = $to[1];
 
                 $arguments = array($args['as'], $methods, $arguments[0], $call, $able);
-
-                return call_user_func_array(array($this, 'addRule'), $arguments);
             }
+            return call_user_func_array(array($this, 'addRule'), $arguments);
         }
 
         public function resource($name, $args = array()) {
@@ -95,5 +115,5 @@ namespace Sohoa\Framework {
                                $route[self::ROUTE_ACTION]);
             }
         }
-    }
+        }
 }

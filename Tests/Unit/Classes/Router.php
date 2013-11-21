@@ -146,4 +146,14 @@ class Router extends \atoum\test {
         $this->rule($rule)
              ->methodIsEqualTo(array('get'));
     }
+
+    public function testAddGenericRule() {
+        $this
+            ->if($router = new \Sohoa\Framework\Router)
+            ->and($router->any('(?<controller>)(?<action>)'))
+                ->assert('Generic route has "generic" as id')
+                    ->boolean($router->ruleExists(\Sohoa\Framework\Router::ROUTE_GENERIC))
+                    ->isTrue();
+
+    }
 }
