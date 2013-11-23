@@ -14,13 +14,13 @@
 
     },
     "suggest": {
-        "hoa/xyl" : "For use the Sohoa\\Framework\\View\\Xyl adapter on your project"
+        "hoa/xyl" : "To use Sohoa\\Framework\\View\\Xyl adapter in your project"
     },
     "require-dev": {
         "atoum/atoum": "dev-master"
     },
     "autoload": {
-        "classmap": [ "Classes/" ]
+        "psr-0": { "Sohoa\\Framework": "Sources/" }
     },
     "minimum-stability": "dev"
 }
