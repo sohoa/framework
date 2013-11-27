@@ -47,7 +47,7 @@ namespace Sohoa\Framework\Kit {
                 $action     = $route[5];
             }
 
-            return $this->renderRoute($controller, $action);
+            return $this->renderRoute(ucfirst($controller), ucfirst($action));
         }
 
         protected function renderFile($filename)
