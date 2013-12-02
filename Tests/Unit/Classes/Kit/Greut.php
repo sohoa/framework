@@ -5,6 +5,7 @@ namespace Sohoa\Framework\Kit\Tests\Unit;
 use Hoa\Dispatcher\Basic;
 use Hoa\Router\Http;
 use Hoa\Stringbuffer\ReadWrite;
+use Sohoa\Framework\Framework;
 use Sohoa\Framework\Kit as Kit;
 
 require_once __DIR__ . '/../../Runner.php';
@@ -22,8 +23,8 @@ class Greut extends \atoum\test
         parent::__construct();
 
         $this->_router = new Http();
-        $this->_router->get('c', '/(?<_call>.[^/]+)/(?<_able>.*)', 'Main', 'Index');
-        $this->_router->get('h', '/', 'Main', 'Index');
+        $this->_router->get('c', '/(?<_call>.[^/]+)/(?<_able>.*)', 'main', 'index');
+        $this->_router->get('h', '/', 'main', 'index');
 
         $dispatcher  = new Basic();
         $this->_view = new \Sohoa\Framework\View\Greut();
@@ -56,12 +57,12 @@ class Greut extends \atoum\test
         $this->sizeof($this->_router->getTheRule())
             ->isEqualTo(7)
             ->in($this->_router->getTheRule())
-            ->string[4]->isEqualTo($controller)
-            ->string[5]->isEqualTo($action);
+            ->string[4]->isEqualTo(strtolower($controller))
+            ->string[5]->isEqualTo(strtolower($action));
 
         $v = $this->_kit;
         $this->exception(function () use ($v) {
-            $v->render();
+             $v->render();
         })->message->contains($view);
     }
 
@@ -94,7 +95,7 @@ class Greut extends \atoum\test
     {
         return array(
             array('/', 'Main', 'Index', 'hoa://Application/View/Main/Index.tpl.php'),
-            array('/Foo/Bar', 'foo', 'bar', 'hoa://Application/View/foo/bar.tpl.php')
+            array('/Foo/Bar', 'Foo', 'Bar', 'hoa://Application/View/Foo/Bar.tpl.php')
         );
     }
 
@@ -109,7 +110,7 @@ class Greut extends \atoum\test
     public function stringProvider()
     {
         return array(
-            'hoa://Application/View/foo/bar.tpl.php',
+            'hoa://Application/View/Foo/Bar.tpl.php',
             'hoa://Application/View/Qux/Gordon.tpl.php',
             'hoa://Application/View/Freeman/Hawk.tpl.php'
         );
