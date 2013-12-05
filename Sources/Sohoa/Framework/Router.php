@@ -29,6 +29,8 @@ namespace Sohoa\Framework {
 
         public function __construct() {
 
+           Framework::services('router' , $this);
+
             parent::__construct();
         }
 
