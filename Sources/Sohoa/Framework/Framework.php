@@ -47,7 +47,6 @@ namespace Sohoa\Framework {
                 $this->router     = new Router();
                 $this->dispatcher = new Basic();
 
-                self::services('router' , $this->router);
 
                 $parameters->setParameter('protocol.Application', '(:cwd:h:)/Application/');
                 $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
