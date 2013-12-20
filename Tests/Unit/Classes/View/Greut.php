@@ -35,5 +35,12 @@ namespace Sohoa\Framework\View\Tests\Unit {
             });
 
         }
+
+        public function testGetHelper() {
+            $this
+                ->if($greut = new \Sohoa\Framework\View\Greut())
+                ->assert
+                    ->object($greut->dummy)->isInstanceOf('\\Sohoa\\Framework\\View\\Helper\\Dummy');
+        }
     }
 }

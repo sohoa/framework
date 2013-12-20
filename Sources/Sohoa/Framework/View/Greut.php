@@ -9,8 +9,10 @@ namespace Sohoa\Framework\View {
     use Hoa\Http\Response\Response;
     use Hoa\Stream\IStream\Out;
     use Hoa\View\Viewable;
+    use Sohoa\Framework\Exception;
     use Sohoa\Framework\Framework;
     use Sohoa\Framework\Kit;
+    use Sohoa\Framework\View\Helper as Helper;
 
     class Greut implements Viewable
     {
@@ -24,6 +26,7 @@ namespace Sohoa\Framework\View {
         private $_blocknames = array();
         private $_file = '';
         private $_headers = array();
+        protected $_helpers = array();
 
         public function __construct(Out $response = null)
         {
@@ -60,6 +63,20 @@ namespace Sohoa\Framework\View {
         public function setPath($path)
         {
             $this->_paths = resolve($path) . "/";
+        }
+
+        public function __get($helperName) {
+            if (!isset($this->_helpers[$helperName])) {
+                $helperClassName = '\\Sohoa\Framework\\View\\Helper\\' . ucfirst($helperName);
+                if (!class_exists($helperClassName, true)) {
+                    $helperClassName = '\\Application\\View\\Helper\\' . ucfirst($helperName);
+                }
+                $this->_helpers[$helperName] = new $helperClassName();
+                if ($this->_helpers[$helperName] instanceof Helper) {
+                    $this->_helpers[$helperName]->setView($this);
+                }
+            }
+            return $this->_helpers[$helperName];
         }
 
         public function inherits($path)
