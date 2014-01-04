@@ -43,8 +43,20 @@ namespace Sohoa\Framework\Kit {
 
             if ($controller === null or $action === null) {
                 $route      = $this->router->getTheRule();
-                $controller = $route[4];
-                $action     = $route[5];
+                if (isset($route[6])) {
+                    if (!empty($route[6]['controller'])) {
+                        $controller = $route[6]['controller'];
+                    }
+                    if (!empty($route[6]['action'])) {
+                        $action = $route[6]['action'];
+                    }
+                }
+                if (!isset($controller)) {
+                    $controller = $route[4];
+                }
+                if (!isset($action)) {
+                    $action     = $route[5];
+                }
             }
 
             return $this->renderRoute($controller, $action);
@@ -71,4 +83,3 @@ namespace Sohoa\Framework\Kit {
         }
     }
 }
- 
