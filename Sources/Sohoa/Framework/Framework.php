@@ -13,6 +13,7 @@ namespace Sohoa\Framework {
      */
     class Framework
     {
+
         /**
          * @var Router
          */
@@ -32,6 +33,12 @@ namespace Sohoa\Framework {
 
         /**
          *
+         * @var ErrorHandler
+         */
+        protected $errorHandler;
+
+        /**
+         *
          * On définie le router , le dispatcher, et la vue
          *
          * Router       : bootstrap.router.handler
@@ -43,30 +50,27 @@ namespace Sohoa\Framework {
         public function __construct($environnement = 'production')
         {
 
-            try {
-                $core       = Core::getInstance();
-                $parameters = $core->getParameters();
+            $core       = Core::getInstance();
+            $parameters = $core->getParameters();
 
-                $parameters->setParameter('protocol.Application', '(:cwd:h:)/Application/');
-                $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
-                $parameters->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
+            $parameters->setParameter('protocol.Application', '(:cwd:h:)/Application/');
+            $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
+            $parameters->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
 
-                $core->setProtocol();
+            $core->setProtocol();
 
 
-                $this->router        = new Router();
-                self::services('router', $this->router);
-                $this->dispatcher    = new Basic();
-                $this->environnement = new Environnement($environnement);
+            $this->router        = new Router();
+            self::services('router', $this->router);
+            $this->dispatcher    = new Basic();
+            $this->environnement = new Environnement($environnement);
+            $this->setErrorHandler(new ErrorHandler());
 
-                if (file_exists('hoa://Application/Config/Route.php')) {
-
-                    require_once 'hoa://Application/Config/Route.php';
-                }
-            } catch (\Hoa\Core\Exception $e) {
-
-                var_dump($e->getFormattedMessage());
+            if (file_exists('hoa://Application/Config/Route.php')) {
+                $framework = $this;
+                require_once 'hoa://Application/Config/Route.php';
             }
+
         }
 
         public function run()
@@ -75,21 +79,44 @@ namespace Sohoa\Framework {
             try {
 
                 $this->dispatcher->dispatch($this->router, $this->view);
-            } catch (\Hoa\Core\Exception $e) {
+            } catch (\Exception $e) {
 
-                var_dump($e->getFormattedMessage());
+                $this->errorHandler->manageError($e);
+                $this->dispatcher->dispatch($this->errorHandler->getRouter(), $this->view);
             }
         }
 
         public static function services($identifier, $object = null)
         {
             if (empty($identifier))
-                throw new \Exception('Identifier cant be empty');
+                throw new \Exception('Identifier can\'t be empty');
 
             if ($object === null)
                 return Registry::get($identifier);
 
             Registry::set($identifier, $object);
         }
+
+        /**
+         *
+         * @return \Sohoa\Framework\ErrorHandler
+         */
+        public function getErrorHandler()
+        {
+            return $this->errorHandler;
+        }
+
+        /**
+         *
+         * @param \Sohoa\Framework\ErrorHandler $errorHandler
+         */
+        public function setErrorHandler(ErrorHandler $errorHandler)
+        {
+            $this->errorHandler = $errorHandler;
+            Framework::services('errorhandler', $this->errorHandler);
+            $this->errorHandler->setRouter($this->router);
+        }
+
     }
+
 }

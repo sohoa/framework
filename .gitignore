@@ -4,3 +4,4 @@ composer.lock
 *.sqlite
 *.db
 *.phar
+/nbproject/private/
