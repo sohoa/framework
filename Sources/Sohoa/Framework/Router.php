@@ -113,7 +113,7 @@ namespace Sohoa\Framework {
                 $this->addRule($route[self::ROUTE_ACTION]. ucfirst(strtolower($name)),
                                array($route[self::ROUTE_VERB]),
                                '/' . $name . $route[self::ROUTE_URI_PATTERN],
-                               ucfirst(strtolower($name)) . 'Controller',
+                               ucfirst(strtolower($name)),
                                $route[self::ROUTE_ACTION]);
             }
         }
