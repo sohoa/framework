@@ -19,8 +19,8 @@ namespace Sohoa\Framework {
 
         private static $_restfulRoutes = array(
             array(self::ROUTE_ACTION => 'index',    self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/'),
-            array(self::ROUTE_ACTION => 'show',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]?)'),
             array(self::ROUTE_ACTION => 'new',      self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/new'),
+            array(self::ROUTE_ACTION => 'show',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]?)'),
             array(self::ROUTE_ACTION => 'create',   self::ROUTE_VERB => 'post',   self::ROUTE_URI_PATTERN => '/'),
             array(self::ROUTE_ACTION => 'edit',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]*)/edit '),
             array(self::ROUTE_ACTION => 'update',   self::ROUTE_VERB => 'patch',  self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]?)'),
@@ -113,7 +113,7 @@ namespace Sohoa\Framework {
                 $this->addRule($route[self::ROUTE_ACTION]. ucfirst(strtolower($name)),
                                array($route[self::ROUTE_VERB]),
                                '/' . $name . $route[self::ROUTE_URI_PATTERN],
-                               ucfirst(strtolower($name)) . 'Controller',
+                               ucfirst(strtolower($name)),
                                $route[self::ROUTE_ACTION]);
             }
         }
