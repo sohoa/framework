@@ -13,7 +13,8 @@ namespace Sohoa\Framework\View\Helper {
     class Dummy extends View\Helper
     {
         //put your code here
-        public function test() {
+        public function test()
+        {
             return 'hello world';
         }
     }

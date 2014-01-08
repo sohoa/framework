@@ -38,6 +38,7 @@ namespace Sohoa\Framework {
                 $instance->setView($this->view);
                 static::$_kitInit[] = $name;
             }
+
             return $instance;
         }
 
@@ -55,11 +56,10 @@ namespace Sohoa\Framework {
         public function __get($key)
         {
             if (array_key_exists($key, static::$_kits)) {
-
-				return $this->kit($key);
+                return $this->kit($key);
             }
-			
-			return \Sohoa\Framework\Framework::services($key);
+
+            return \Sohoa\Framework\Framework::services($key);
         }
     }
 }

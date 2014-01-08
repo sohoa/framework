@@ -6,10 +6,13 @@ php:
   - 5.5
 
 before_script:
+  - curl http://cs.sensiolabs.org/get/php-cs-fixer.phar -o php-cs-fixer.phar
   - curl -s https://getcomposer.org/installer | php
   - php composer.phar install
 
-script: php vendor/bin/atoum -d Tests/Unit/Classes/
+script:
+ - output=$(php -n php-cs-fixer.phar fix -v --dry-run ./); if [[ $output ]]; then while read -r line; do echo -e "\e[00;31m$line\e[00m"; done <<< "$output"; false; fi;
+ - php vendor/bin/atoum -d Tests/Unit/Classes/
 
 notifications:
   disabled: true
