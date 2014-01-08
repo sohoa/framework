@@ -65,7 +65,8 @@ namespace Sohoa\Framework\View {
             $this->_paths = resolve($path) . "/";
         }
 
-        public function __get($helperName) {
+        public function __get($helperName)
+        {
             if (!isset($this->_helpers[$helperName])) {
                 $helperClassName = '\\Sohoa\Framework\\View\\Helper\\' . ucfirst($helperName);
                 if (!class_exists($helperClassName, true)) {
@@ -76,6 +77,7 @@ namespace Sohoa\Framework\View {
                     $this->_helpers[$helperName]->setView($this);
                 }
             }
+
             return $this->_helpers[$helperName];
         }
 
@@ -140,7 +142,6 @@ namespace Sohoa\Framework\View {
             return $realpath;
         }
 
-
         public function render()
         {
             while ($h = array_pop($this->_headers))
@@ -177,7 +178,7 @@ namespace Sohoa\Framework\View {
             // used by the placeholder
 
             ob_start("mb_output_handler");
-            extract((array)$this->_data);
+            extract((array) $this->_data);
             include($filename);
 
             // restore args

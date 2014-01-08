@@ -23,7 +23,8 @@ namespace Sohoa\Framework\View {
 
         /**y
          */
-        public function setView(\Hoa\View\Viewable $view) {
+        public function setView(\Hoa\View\Viewable $view)
+        {
             $this->view = $view;
             $this->data = $view->getData();
         }

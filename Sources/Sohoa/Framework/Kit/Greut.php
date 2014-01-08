@@ -17,7 +17,6 @@ namespace Sohoa\Framework\Kit {
 
         public function getDefaultPath()
         {
-
             return $this->_path;
         }
 

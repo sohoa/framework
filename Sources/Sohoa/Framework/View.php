@@ -10,8 +10,8 @@ namespace Sohoa\Framework {
     use Hoa\Http\Response;
     use Hoa\Router\Http;
 
-    class View implements \Hoa\View\Viewable {
-
+    class View implements \Hoa\View\Viewable
+    {
         protected $_in = null;
         protected $_out = null;
         protected $_data = null;
@@ -31,18 +31,18 @@ namespace Sohoa\Framework {
             return;
         }
 
-        public function getOutputStream() {
-
+        public function getOutputStream()
+        {
             return $this->_out;
         }
 
-        public function getData() {
-
+        public function getData()
+        {
             return $this->_data;
         }
 
-        public function render() {
-
+        public function render()
+        {
             $data = $this->getData();
             $router = $this->getRouter();
 
@@ -56,13 +56,13 @@ namespace Sohoa\Framework {
             return;
         }
 
-        public function getRouter() {
-
+        public function getRouter()
+        {
             return $this->_router;
         }
 
-        public function import($in, $data = null) {
-
+        public function import($in, $data = null)
+        {
             $new = new static(
                 $in, $this->getOutputStream(), $this->getRouter(), $data
             );

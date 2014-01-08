@@ -7,15 +7,15 @@ namespace Sohoa\Framework {
 
     use Hoa\Router\Http;
 
-    class Router extends \Hoa\Router\Http {
-
+    class Router extends \Hoa\Router\Http
+    {
         const ROUTE_ACTION = 0;
 
         const ROUTE_VERB = 1;
 
         const ROUTE_URI_PATTERN = 2;
 
-		const ROUTE_GENERIC = 'generic';
+        const ROUTE_GENERIC = 'generic';
 
         private static $_restfulRoutes = array(
             array(self::ROUTE_ACTION => 'index',    self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/'),
@@ -27,8 +27,8 @@ namespace Sohoa\Framework {
             array(self::ROUTE_ACTION => 'destroy',  self::ROUTE_VERB => 'delete', self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]?)'),
         );
 
-        public function __construct() {
-
+        public function __construct()
+        {
            Framework::services('router' , $this);
 
             parent::__construct();
@@ -39,20 +39,19 @@ namespace Sohoa\Framework {
          * @param string $route
          * @return boolean
          */
-        protected static function isGenericRoute($route) {
-
+        protected static function isGenericRoute($route)
+        {
             return false !== preg_match('#(?=.*\(\?<controller\>.+\))(?=.*\(\?<action\>.+\)).+#', $route);
         }
 
-        public function __call($name, $arguments) {
-
+        public function __call($name, $arguments)
+        {
             // private rules added by Hoa\Xyl should be handle by Hoa\Router itself
-            if('_' == $name[0]) {
-
+            if ('_' == $name[0]) {
                 return parent::__call($name, $arguments);
             }
 
-            if($name == 'any') {
+            if ($name == 'any') {
 
                 $methods = self::$_methods;
             } else {
@@ -66,12 +65,12 @@ namespace Sohoa\Framework {
 
                 $args = $arguments[1];
 
-                if(!isset($args['as'])) {
+                if (!isset($args['as'])) {
 
                     throw new Exception('Missing as !');
                 }
 
-                if(!isset($args['to'])) {
+                if (!isset($args['to'])) {
 
                     throw new Exception('Missing to !');
                 }
@@ -82,14 +81,15 @@ namespace Sohoa\Framework {
 
                 $arguments = array($args['as'], $methods, $arguments[0], $call, $able);
             }
+
             return call_user_func_array(array($this, 'addRule'), $arguments);
         }
 
-        public function resource($name, $args = array()) {
-
+        public function resource($name, $args = array())
+        {
             $routes = Router::$_restfulRoutes;
 
-            $routes = array_filter($routes, function($route) use(&$args) {
+            $routes = array_filter($routes, function ($route) use (&$args) {
 
                 $accept = true;
 
@@ -107,7 +107,7 @@ namespace Sohoa\Framework {
             });
 
             // write route for each HTTP verb
-            foreach($routes as $route) {
+            foreach ($routes as $route) {
 
                 // TODO decide if we pluralize/singularize resource name
                 $this->addRule($route[self::ROUTE_ACTION]. ucfirst(strtolower($name)),
