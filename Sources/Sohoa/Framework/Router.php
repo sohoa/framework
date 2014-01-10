@@ -6,6 +6,7 @@
 namespace Sohoa\Framework {
 
     use Hoa\Router\Http;
+    use Sohoa\Framework\Router\Resource;
 
     class Router extends \Hoa\Router\Http
     {
@@ -17,19 +18,33 @@ namespace Sohoa\Framework {
 
         const ROUTE_GENERIC = 'generic';
 
+        const REST_INDEX = 0;
+
+        const REST_NEW = 1;
+
+        const REST_SHOW = 2;
+
+        const REST_CREATE = 3;
+
+        const REST_EDIT = 4;
+
+        const REST_UPDATE = 5;
+
+        const REST_DESTROY = 6;
+
         private static $_restfulRoutes = array(
-            array(self::ROUTE_ACTION => 'index',    self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/'),
-            array(self::ROUTE_ACTION => 'new',      self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/new'),
-            array(self::ROUTE_ACTION => 'show',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]?)'),
-            array(self::ROUTE_ACTION => 'create',   self::ROUTE_VERB => 'post',   self::ROUTE_URI_PATTERN => '/'),
-            array(self::ROUTE_ACTION => 'edit',     self::ROUTE_VERB => 'get',    self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]*)/edit '),
-            array(self::ROUTE_ACTION => 'update',   self::ROUTE_VERB => 'patch',  self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]?)'),
-            array(self::ROUTE_ACTION => 'destroy',  self::ROUTE_VERB => 'delete', self::ROUTE_URI_PATTERN => '/(?<id>[a-z0-9]+[^/]?)'),
+            self::REST_INDEX   => array(self::ROUTE_ACTION => 'index', self::ROUTE_VERB => 'get', self::ROUTE_URI_PATTERN => '/'),
+            self::REST_NEW     => array(self::ROUTE_ACTION => 'new', self::ROUTE_VERB => 'get', self::ROUTE_URI_PATTERN => '/new'),
+            self::REST_SHOW    => array(self::ROUTE_ACTION => 'show', self::ROUTE_VERB => 'get', self::ROUTE_URI_PATTERN => '/(?<%s>[^/]+)'),
+            self::REST_CREATE  => array(self::ROUTE_ACTION => 'create', self::ROUTE_VERB => 'post', self::ROUTE_URI_PATTERN => '/'),
+            self::REST_EDIT    => array(self::ROUTE_ACTION => 'edit', self::ROUTE_VERB => 'get', self::ROUTE_URI_PATTERN => '/(?<%s>[^/]+)/edit'),
+            self::REST_UPDATE  => array(self::ROUTE_ACTION => 'update', self::ROUTE_VERB => 'patch', self::ROUTE_URI_PATTERN => '/(?<%s>[^/]+)'),
+            self::REST_DESTROY => array(self::ROUTE_ACTION => 'destroy', self::ROUTE_VERB => 'delete', self::ROUTE_URI_PATTERN => '/(?<%s>[^/]+)'),
         );
 
         public function __construct()
         {
-           Framework::services('router' , $this);
+            Framework::services('router', $this);
 
             parent::__construct();
         }
@@ -75,7 +90,7 @@ namespace Sohoa\Framework {
                     throw new Exception('Missing to !');
                 }
 
-                $to = explode('#', $args['to']);
+                $to   = explode('#', $args['to']);
                 $call = $to[0];
                 $able = $to[1];
 
@@ -87,35 +102,88 @@ namespace Sohoa\Framework {
 
         public function resource($name, $args = array())
         {
-            $routes = Router::$_restfulRoutes;
+            return new Resource($name, $args, $this, Router::$_restfulRoutes);
+        }
 
-            $routes = array_filter($routes, function ($route) use (&$args) {
 
-                $accept = true;
+        public function addResourceRule($action, $verb, $uri)
+        {
 
-                if (isset($args['only'])) {
+            $last = count(self::$_restfulRoutes);
 
-                    $accept = in_array($route[Router::ROUTE_ACTION], $args['only']);
-                }
+            self::$_restfulRoutes[$last] = array(
+                self::ROUTE_ACTION      => $action,
+                self::ROUTE_VERB        => $verb,
+                self::ROUTE_URI_PATTERN => $uri
+            );
 
-                if (isset($args['except']) and !isset($args['only'])) {
+            return $last;
+        }
 
-                    $accept = !in_array($route[Router::ROUTE_ACTION], $args['except']);
-                }
 
-                return $accept;
-            });
+        public function setRessource($id, $action = null, $verb = null, $uri = null)
+        {
 
-            // write route for each HTTP verb
-            foreach ($routes as $route) {
+            if (array_key_exists($id, self::$_restfulRoutes)) {
+                $rest                                               = self::$_restfulRoutes[$id];
+                self::$_restfulRoutes[$id][self::ROUTE_ACTION]      = ($action === null) ? $rest[self::ROUTE_ACTION] : $action;
+                self::$_restfulRoutes[$id][self::ROUTE_VERB]        = ($verb === null) ? $rest[self::ROUTE_VERB] : $verb;
+                self::$_restfulRoutes[$id][self::ROUTE_URI_PATTERN] = ($uri === null) ? $rest[self::ROUTE_URI_PATTERN] : $uri;
 
-                // TODO decide if we pluralize/singularize resource name
-                $this->addRule($route[self::ROUTE_ACTION]. ucfirst(strtolower($name)),
-                               array($route[self::ROUTE_VERB]),
-                               '/' . $name . $route[self::ROUTE_URI_PATTERN],
-                               ucfirst(strtolower($name)),
-                               $route[self::ROUTE_ACTION]);
+            }
+
+        }
+
+        public function getRessource($id)
+        {
+            if (array_key_exists($id, self::$_restfulRoutes))
+                return self::$_restfulRoutes[$id];
+
+            return null;
+        }
+
+        public function getRessources()
+        {
+            return self::$_restfulRoutes;
+        }
+
+        public function dump()
+        {
+            $out = array();
+
+            foreach ($this->getRules() as $id => $value)
+                $out[] = array($id, implode(',', $value[2]), $value[3], $value[4] . '#' . $value[5]);
+
+            return $out;
+
+        }
+
+        public function load(Array $rules)
+        {
+            foreach ($rules as $rule) {
+                $methods = explode(',', $rule[1]);
+                list($call, $able) = explode('#', $rule[3]);
+                $this->addRule($rule[0], $methods, $rule[2], $call, $able);
             }
         }
+
+        public function loadCache($cacheFile)
+        {
+            $dump = require_once $cacheFile;
+            $this->load($dump);
         }
+
+        public function saveCache($cacheFile)
+        {
+            file_put_contents($cacheFile, '<?php return ' . var_export($this->dump(), true) . ';');
+        }
+
+        protected function _unroute($id, $pattern, Array $variables,
+                                    $allowEmpty = true)
+        {
+            $variables = array_map('rawurlencode', $variables);
+            parent::__unroute($id, $pattern, $variables, $allowEmpty);
+        }
+
+    }
 }
