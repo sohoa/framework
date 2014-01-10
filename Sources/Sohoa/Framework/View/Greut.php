@@ -37,7 +37,7 @@ namespace Sohoa\Framework\View {
 
             $this->_out   = $response;
             $this->_data  = new \Stdclass();
-            $this->_paths = resolve('hoa://Application/View/');
+            $this->_paths = 'hoa://Application/View/';
         }
 
         public function setOutputStream(Out $response)
@@ -62,7 +62,10 @@ namespace Sohoa\Framework\View {
 
         public function setPath($path)
         {
-            $this->_paths = resolve($path) . "/";
+            if ($path[strlen($path) - 1] !== '/')
+                $path .= '/';
+
+            $this->_paths = $path;
         }
 
         public function __get($helperName)
@@ -86,13 +89,13 @@ namespace Sohoa\Framework\View {
             $this->_inherits[$this->_file][] = $path;
         }
 
-        function block($blockname, $mode = "replace")
+        public function block($blockname, $mode = "replace")
         {
             $this->_blocknames[] = array($blockname, $mode);
             ob_start("mb_output_handler");
         }
 
-        function endblock()
+        public function endblock()
         {
             list($blockname, $mode) = array_pop($this->_blocknames);
 
@@ -124,20 +127,19 @@ namespace Sohoa\Framework\View {
             }
         }
 
-        protected function getFilenamePath($filename)
+        public function getFilenamePath($filename)
         {
-            if (substr($filename, 0, 6) === 'hoa://') {
-
-                $path     = $filename;
-                $realpath = resolve($path, false);
-            } else {
-
-                $path     = $this->_paths . $filename;
-                $realpath = realpath($path);
+            $realpath = $filename;
+            if (preg_match('#^[a-zA-Z0-9\.^\\\\]+#', $filename) === 1) {
+                if (substr($filename, 0, 6) !== 'hoa://') {
+                    $filename = $this->_paths . $filename;
+                    $realpath = realpath($filename);
+                }
             }
 
+
             if ((false === $realpath) || !(file_exists($realpath)))
-                throw new \Sohoa\Framework\Exception('Path ' . $path . ' (' . (($realpath === false) ? 'false' : $realpath). ') not found!');
+                throw new \Sohoa\Framework\Exception('Path ' . $filename . ' (' . (($realpath === false) ? 'false' : $realpath) . ') not found!');
 
             return $realpath;
         }
