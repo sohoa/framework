@@ -42,9 +42,9 @@ namespace Sohoa\Framework {
         {
 
             try {
-                $core             = Core::getInstance();
-                $parameters       = $core->getParameters();
-                $this->router     = new Router();
+                $core = Core::getInstance();
+                $parameters = $core->getParameters();
+                $this->router = new Router();
                 $this->dispatcher = new Basic();
 
 
@@ -54,9 +54,15 @@ namespace Sohoa\Framework {
 
                 $core->setProtocol();
 
-                if (file_exists('hoa://Application/Config/Route.php')) {
+                if (file_exists('hoa://Application/Cache/Route.php')) {
 
-                    require_once 'hoa://Application/Config/Route.php';
+                    $this->router->loadCache('hoa://Application/Cache/Route.php');
+                } else {
+
+                    if (file_exists('hoa://Application/Config/Route.php')) {
+
+                        require_once 'hoa://Application/Config/Route.php';
+                    }
                 }
             } catch (\Hoa\Core\Exception $e) {
 
