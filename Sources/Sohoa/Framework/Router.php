@@ -182,7 +182,8 @@ namespace Sohoa\Framework {
                                     $allowEmpty = true)
         {
             $variables = array_map('rawurlencode', $variables);
-            parent::__unroute($id, $pattern, $variables, $allowEmpty);
+
+            return parent::_unroute($id, $pattern, $variables, $allowEmpty);
         }
 
     }
