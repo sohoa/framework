@@ -1,6 +1,8 @@
 <?php
 namespace Sohoa\Framework\Kit {
 
+    use \Hoa\Router\Router;
+
     class Greut extends Kitable
     {
 
@@ -42,19 +44,19 @@ namespace Sohoa\Framework\Kit {
 
             if ($controller === null or $action === null) {
                 $route      = $this->router->getTheRule();
-                if (isset($route[6])) {
-                    if (!empty($route[6]['controller'])) {
-                        $controller = $route[6]['controller'];
+                if (isset($route[Router::RULE_VARIABLES])) {
+                    if (!empty($route[Router::RULE_VARIABLES]['controller'])) {
+                        $controller = $route[Router::RULE_VARIABLES]['controller'];
                     }
-                    if (!empty($route[6]['action'])) {
-                        $action = $route[6]['action'];
+                    if (!empty($route[Router::RULE_VARIABLES]['action'])) {
+                        $action = $route[Router::RULE_VARIABLES]['action'];
                     }
                 }
                 if (!isset($controller)) {
-                    $controller = $route[4];
+                    $controller = $route[Router::RULE_CALL];
                 }
                 if (!isset($action)) {
-                    $action     = $route[5];
+                    $action     = $route[Router::RULE_ABLE];
                 }
             }
 
