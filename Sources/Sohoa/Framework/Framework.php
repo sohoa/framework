@@ -28,6 +28,7 @@ namespace Sohoa\Framework {
          */
         public $view = null;
 
+
         /**
          *
          * On définie le router , le dispatcher, et la vue
