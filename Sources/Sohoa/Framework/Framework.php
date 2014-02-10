@@ -29,6 +29,11 @@ namespace Sohoa\Framework {
         public $view = null;
 
         /**
+         * @var Sohoa\Framework\ISession;
+         */
+        public $session = null;
+
+        /*
          *
          * On définie le router , le dispatcher, et la vue
          *
