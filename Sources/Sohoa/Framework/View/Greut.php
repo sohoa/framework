@@ -37,7 +37,7 @@ namespace Sohoa\Framework\View {
 
             $this->_out   = $response;
             $this->_data  = new \Stdclass();
-            $this->_paths = resolve('hoa://Application/View/');
+            $this->_paths = 'hoa://Application/View/';
         }
 
         public function setOutputStream(Out $response)
@@ -62,7 +62,7 @@ namespace Sohoa\Framework\View {
 
         public function setPath($path)
         {
-            $this->_paths = resolve($path) . "/";
+            $this->_paths = $path . '/';
         }
 
         public function __get($helperName)
@@ -126,15 +126,8 @@ namespace Sohoa\Framework\View {
 
         protected function getFilenamePath($filename)
         {
-            if (substr($filename, 0, 6) === 'hoa://') {
-
-                $path     = $filename;
-                $realpath = resolve($path, false);
-            } else {
-
-                $path     = $this->_paths . $filename;
-                $realpath = realpath($path);
-            }
+            $path     = $this->_paths . $filename;
+            $realpath = realpath($path);
 
             if ((false === $realpath) || !(file_exists($realpath)))
                 throw new \Sohoa\Framework\Exception('Path ' . $path . ' (' . (($realpath === false) ? 'false' : $realpath). ') not found!');
