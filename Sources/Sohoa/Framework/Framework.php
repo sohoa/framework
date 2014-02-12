@@ -28,12 +28,9 @@ namespace Sohoa\Framework {
          */
         public $view = null;
 
-        /**
-         * @var Sohoa\Framework\ISession;
-         */
-        public $session = null;
+        public $environnement = null;
 
-        /*
+        /**
          *
          * On définie le router , le dispatcher, et la vue
          *
@@ -43,15 +40,12 @@ namespace Sohoa\Framework {
          *
          */
 
-        public function __construct()
+        public function __construct($environnement = 'production')
         {
 
             try {
-                $core = Core::getInstance();
+                $core       = Core::getInstance();
                 $parameters = $core->getParameters();
-                $this->router = new Router();
-                $this->dispatcher = new Basic();
-
 
                 $parameters->setParameter('protocol.Application', '(:cwd:h:)/Application/');
                 $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
@@ -59,15 +53,15 @@ namespace Sohoa\Framework {
 
                 $core->setProtocol();
 
-                if (file_exists('hoa://Application/Cache/Route.php')) {
 
-                    $this->router->loadCache('hoa://Application/Cache/Route.php');
-                } else {
+                $this->router        = new Router();
+                self::services('router', $this->router);
+                $this->dispatcher    = new Basic();
+                $this->environnement = new Environnement($environnement);
 
-                    if (file_exists('hoa://Application/Config/Route.php')) {
+                if (file_exists('hoa://Application/Config/Route.php')) {
 
-                        require_once 'hoa://Application/Config/Route.php';
-                    }
+                    require_once 'hoa://Application/Config/Route.php';
                 }
             } catch (\Hoa\Core\Exception $e) {
 
