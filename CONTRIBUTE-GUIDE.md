@@ -7,13 +7,13 @@ adapté a notre hébergeur [Github](http://github.com/)
 Dans ce guide nous allons détaillé pas à pas toutes les étapes pour contribuer.
 Nous partons du principe que vous savez utiliser Github, et que vous avez fait
 un fork du [dépot](http://github.com/sohoa/framework) concerné et que vous
-travaillé dans le clone de votre fork ie git clone http://github.com/votre_username/framework && cd framework`
+travaillé dans le clone de votre fork ie `git clone http://github.com/votre_username/framework && cd framework`
 
 
 Important
 =====
 
-Ne jamais travailler sur la branche `master` est votre devoir travaillé sur votre branche est votre droit.
+Ne jamais travailler sur la branche `master` est votre devoir, travailler sur votre branche est votre droit.
 
 Ajout des remotes
 -----
@@ -33,7 +33,7 @@ Mise à jour de votre dépot avec les dernières modification
 git pull sohoa master
 ```
 
-Cette commande peut engendrer des conflits si jamais vous n'avez pas suivi ce guide
+Cette commande peut engendrer des conflits, il faut bien veillez à les résoudres , mais en toutes logiques vous DEVEZ PAS avoir de conflit sur `master`
 
 Contributions
 =====
@@ -41,14 +41,14 @@ Contributions
 Mon premier jet de code
 -----
 
-Pour des raisons de pratiques j'ai adopté la nomination des branches suivantes `f/<ma_feature>` dans le cadre
-d'une nouvelle feature et `b/<mon_bugfix>` pour la résolution d'un bug, mais ce n'est qu'une pratique et non pas une obligation
+Pour des raisons de pratiques j'ai adopté la nomination des branches suivantes `f/ma_feature` dans le cadre
+d'une nouvelle feature et `b/mon_bugfix` pour la résolution d'un bug, mais ce n'est qu'une pratique et non pas une obligation
 
 ```
-git checkout -b <f/maNouvelleSuperFeature>
+git checkout -b f/maNouvelleSuperFeature
 
 // Il est conseillé de faire git pull sohoa master de temps en temps notamment avant de soumettre la PR
-// (sur la branche master **et** sur votre branche <f/maNouvelleSuperFeature>)
+// (sur la branche master **et** sur votre branche f/maNouvelleSuperFeature)
 // Modify your code for your next feature
 git commit -a -m "My first feature"
 //Modify
@@ -57,22 +57,22 @@ git commit -a -m "fix an little bug"
 git commit -a -m "Be compatible with PSR"
 //...
 
-git push origin <f/maNouvelleSuperFeature>
+git push origin f/maNouvelleSuperFeature
 ```
 
 Dans l'interface de github quand vous pensez votre feature prête vous la poussez, ainsi le serveur 
 d'intégration continue en sera informé et jouera les tests (unitaires et de conformité a PSR) automatiquement
-et le rapport apparaitra sous peu (~ 5-10 minutes suivant la disponibilité du robot) dans votre PSR
+et le rapport apparaitra sous peu (~ 5-10 minutes suivant la disponibilité du robot) dans votre PR
 
 Discussion
 -----
 
-Avant de merger la PR probablement nous en discuterons en interne (sur IRC et/ou sur la ML de sohoa), des précisions
-peuvent être demandées, et / ou des compléments de code pour cela la marche à suivre est celle du paragraphe §Mon premier jet de code.
+Avant de merger la PR probablement nous en discuterons en interne (sur IRC et/ou sur la ML de sohoa et/ou dans les commentaires), des précisions
+peuvent être demandées, et/ou des compléments de code pour cela la marche à suivre est :
 
 
 ```
-git checkout <f/maNouvelleSuperFeature> // Pour revenir sur notre branche en cas qu'on en soit sortit
+git checkout f/maNouvelleSuperFeature // Pour revenir sur notre branche en cas qu'on en soit sortit
 
 // Modify your code for your next feature
 git commit -a -m "My bugfix from the discussion"
