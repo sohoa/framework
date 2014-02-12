@@ -8,14 +8,11 @@ namespace Sohoa\Framework {
     use Hoa\Router\Http;
     use Sohoa\Framework\Router\Resource;
 
-    class Router extends \Hoa\Router\Http
+    class Router extends Http
     {
         const ROUTE_ACTION = 0;
-
         const ROUTE_VERB = 1;
-
         const ROUTE_URI_PATTERN = 2;
-
         const ROUTE_GENERIC = 'generic';
 
         const REST_INDEX = 0;
@@ -99,6 +96,12 @@ namespace Sohoa\Framework {
 
             return call_user_func_array(array($this, 'addRule'), $arguments);
         }
+
+        public function setVariable($name, $value)
+        {
+            $this->_rule[self::RULE_VARIABLES][$name] = $value;
+        }
+
 
         public function resource($name, $args = array())
         {
