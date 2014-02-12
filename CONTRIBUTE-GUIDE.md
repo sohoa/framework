@@ -76,7 +76,7 @@ git checkout f/maNouvelleSuperFeature // Pour revenir sur notre branche en cas q
 
 // Modify your code for your next feature
 git commit -a -m "My bugfix from the discussion"
-git push origin <f/maNouvelleSuperFeature>
+git push origin f/maNouvelleSuperFeature
 ```
 
 Pas besoin de republier votre PR , elle est automatiquement mise à jour dans l'interface de Github, et les tests sont rejoués automatiquement
@@ -100,12 +100,12 @@ git checkout master
 git pull sohoa master
 git log  -n 1 --pretty=oneline
 ```
-On obtient le `<sha1>` du dernier commit
+On obtient le `sha1` du dernier commit
 
 ``` 
-git checkout <f/maNouvelleSuperFeature>
+git checkout f/maNouvelleSuperFeature
 git pull sohoa master
-git rebase <sha1>
+git rebase sha1
 ```
 
 On peut obtenir des conflits que l'on doit résoudre et faire des commits comme vu dans le  §Mon premier jet de code
@@ -201,5 +201,5 @@ Et recommencer l'étape "Un seul commit"
 Allez courage on est à la fin :)
 
 il nous reste plus qu'a pusher nos modifications, comme nous avons toucher à l'arbre il faut utiliser l'option `--force` sinon l'hébergeur le refusera
-donc en toute logique on execute cette commande `git push origin <f/maNouvelleSuperFeature>`
+donc en toute logique on execute cette commande `git push origin f/maNouvelleSuperFeature`
 
