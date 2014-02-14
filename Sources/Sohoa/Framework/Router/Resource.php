@@ -11,9 +11,9 @@ namespace Sohoa\Framework\Router {
     class Resource
     {
 
-        private $_router = null;
-        private $_restRule = array();
-        private $_resourceTree = array();
+        protected  $_router = null;
+        protected  $_restRule = array();
+        protected  $_resourceTree = array();
 
         public function __construct($resource, $argument, Router $router, Array $restRules = array())
         {

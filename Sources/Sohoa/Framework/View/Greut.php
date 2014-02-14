@@ -7,6 +7,7 @@
 namespace Sohoa\Framework\View {
 
     use Hoa\Http\Response\Response;
+    use Hoa\Router\Router;
     use Hoa\Stream\IStream\Out;
     use Hoa\View\Viewable;
     use Sohoa\Framework\Exception;
@@ -14,23 +15,24 @@ namespace Sohoa\Framework\View {
     use Sohoa\Framework\Kit;
     use Sohoa\Framework\View\Helper as Helper;
 
-    class Greut implements Viewable
+    class Greut implements Viewable, Soview
     {
 
 
-        private $_out = null;
-        private $_data = null;
-        private $_paths = null;
-        private $_inherits = array();
-        private $_blocks = array();
-        private $_blocknames = array();
-        private $_file = '';
-        private $_headers = array();
+        protected $_out = null;
+        protected $_router = null;
+        protected $_framework = null;
+        protected $_data = null;
+        protected $_paths = null;
+        protected $_inherits = array();
+        protected $_blocks = array();
+        protected $_blocknames = array();
+        protected $_file = '';
+        protected $_headers = array();
         protected $_helpers = array();
 
         public function __construct(Out $response = null)
         {
-            Kit::add('greut', new Kit\Greut());
 
             if ($response === null)
                 $response = new Response();
@@ -55,10 +57,24 @@ namespace Sohoa\Framework\View {
             return $this->_data;
         }
 
+
         public function getRouter()
         {
-            return Framework::services('router');
+            return $this->_router;
         }
+
+        public function setRouter(Router $router)
+        {
+            $this->_router = $router;
+        }
+
+        public function setFramework(Framework $framework)
+        {
+            $this->_framework = $framework;
+            $framework->kit('greut', new Kit\Greut());
+
+        }
+
 
         public function setPath($path)
         {
@@ -127,22 +143,20 @@ namespace Sohoa\Framework\View {
             }
         }
 
-        public function getFilenamePath($filename)
-        {
-            $realpath = $filename;
-            if (preg_match('#^[a-zA-Z0-9\.^\\\\]+#', $filename) === 1) {
-                if (substr($filename, 0, 6) !== 'hoa://') {
-                    $filename = $this->_paths . $filename;
-                    $realpath = realpath($filename);
-                }
-            }
+           public function getFilenamePath($filename)
+           {
+               if (preg_match('#^(?:[/\\\\]|[\w]+:([/\\\\])\1?)#', $filename) !== 1) { // TODO Bug on windows ! hoa://…/C:\…\*.tpl.php
+                   $filename = $this->_paths . $filename;
+                   $realpath = realpath($filename);
+               } else {
+                   $realpath = realpath($filename);
+               }
 
+               if ((false === $realpath) || !(file_exists($realpath)))
+                   throw new \Sohoa\Framework\Exception('Path ' . $filename . ' (' . (($realpath === false) ? 'false' : $realpath) . ') not found!');
 
-            if ((false === $realpath) || !(file_exists($realpath)))
-                throw new \Sohoa\Framework\Exception('Path ' . $filename . ' (' . (($realpath === false) ? 'false' : $realpath) . ') not found!');
-
-            return $realpath;
-        }
+               return $realpath;
+           }
 
         public function render()
         {

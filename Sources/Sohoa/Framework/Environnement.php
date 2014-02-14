@@ -8,17 +8,17 @@
 namespace Sohoa\Framework {
     class Environnement implements \ArrayAccess
     {
-        private static $_path = 'hoa://Application/Config/Environnement/';
+        private static $_path = 'hoa://Application/Config/';
         private $_current = null;
         private $_variable = null;
+        private $_framework = null;
 
-        public function __construct($environnement)
+        public function __construct($framework, $environnement = 'production')
         {
-            Framework::services('environnement', $this);
-
-            $this->_current = strtolower($environnement);
-            $general        = static::$_path . 'Configuration.php';
-            $env            = static::$_path . ucfirst($environnement) . '/Application.php';
+            $this->_current   = strtolower($environnement);
+            $general          = static::$_path . 'Environnement.php';
+            $env              = static::$_path . ucfirst($environnement) . '/Application.php';
+            $this->_framework = $framework;
 
             if (file_exists($general)) {
                 $var = require_once $general;
@@ -31,6 +31,11 @@ namespace Sohoa\Framework {
             }
         }
 
+        public function getFramework()
+        {
+            return $this->_framework;
+        }
+
         public function getEnvironnement()
         {
             return $this->_current;
@@ -41,10 +46,11 @@ namespace Sohoa\Framework {
             self::$_path = $path;
         }
 
-        public function setVariables(Array $array)
+        public function setVariables($array)
         {
-            foreach ($array as $key => $value)
-                $this->offsetSet($key, $value);
+            if (is_array($array))
+                foreach ($array as $key => $value)
+                    $this->offsetSet($key, $value);
         }
 
         public function offsetExists($offset)
