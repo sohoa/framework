@@ -12,7 +12,6 @@ namespace Sohoa\Framework {
 
     class Framework
     {
-
         /**
          * @var \Sohoa\Framework\Router
          */
@@ -55,8 +54,9 @@ namespace Sohoa\Framework {
 
         public static function initialize($cwd = null)
         {
-            if (static::$_initialize === true)
+            if (static::$_initialize === true) {
                 return;
+            }
 
             static::$_initialize = true;
             /**
@@ -66,8 +66,9 @@ namespace Sohoa\Framework {
             $core       = Core::getInstance();
             $parameters = $core->getParameters();
 
-            if($cwd !== null)
-                $parameters->setKeyword('cwd' , $cwd);
+            if ($cwd !== null) {
+                $parameters->setKeyword('cwd', $cwd);
+            }
 
             $parameters->setParameter('protocol.Application', '(:cwd:h:)/Application/');
             $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
@@ -81,7 +82,6 @@ namespace Sohoa\Framework {
          */
         public function __construct($environnement = 'production')
         {
-
             static::initialize();
 
             $this->setEnvironnement($environnement);
@@ -91,7 +91,6 @@ namespace Sohoa\Framework {
 
         public function construct()
         {
-
         }
 
         /**
@@ -126,7 +125,7 @@ namespace Sohoa\Framework {
 
         public function setEnvironnement($useEnvironnement = null, Environnement $environnement = null)
         {
-            $this->_environnement = $environnement ? : new Environnement($this, $useEnvironnement);
+            $this->_environnement = $environnement ?: new Environnement($this, $useEnvironnement);
 
             return $this;
         }
@@ -154,7 +153,10 @@ namespace Sohoa\Framework {
          */
         public function getDispatcher()
         {
-            if ( !$this->_dispatcher) $this->initDispatcher();
+            if (!$this->_dispatcher) {
+                $this->initDispatcher();
+            }
+
             return $this->_dispatcher;
         }
 
@@ -163,7 +165,10 @@ namespace Sohoa\Framework {
          */
         public function getRouter()
         {
-            if ( !$this->_router) $this->initRouter();
+            if (!$this->_router) {
+                $this->initRouter();
+            }
+
             return $this->_router;
         }
 
@@ -172,7 +177,10 @@ namespace Sohoa\Framework {
          */
         public function getView()
         {
-            if ( !$this->_view) $this->initView();
+            if (!$this->_view) {
+                $this->initView();
+            }
+
             return $this->_view;
         }
 
@@ -192,7 +200,10 @@ namespace Sohoa\Framework {
          */
         public function getErrorHandler()
         {
-            if ( !$this->_errorHandler) $this->initErrorHandler();
+            if (!$this->_errorHandler) {
+                $this->initErrorHandler();
+            }
+
             return $this->_errorHandler;
         }
 
@@ -202,9 +213,7 @@ namespace Sohoa\Framework {
          */
         public function initRouter()
         {
-
             if (!$this->_router) {
-
                 $this->_router = new Router();
             }
 
@@ -219,9 +228,7 @@ namespace Sohoa\Framework {
          */
         public function initView()
         {
-
             if (!$this->_view) {
-
                 $this->_view = new Greut();
             }
 
@@ -236,9 +243,7 @@ namespace Sohoa\Framework {
          */
         public function initDispatcher()
         {
-
             if (!$this->_dispatcher) {
-
                 $this->_dispatcher = new Basic();
             }
 
@@ -251,9 +256,7 @@ namespace Sohoa\Framework {
          */
         public function initErrorHandler()
         {
-
             if (!$this->_errorHandler) {
-
                 $this->_errorHandler = new ErrorHandler();
             }
 
@@ -279,7 +282,6 @@ namespace Sohoa\Framework {
 
         public function run()
         {
-
             $this->initRouter()
                 ->initView()
                 ->initDispatcher()
@@ -291,7 +293,6 @@ namespace Sohoa\Framework {
             try {
                 $this->_dispatcher->dispatch($this->_router, $this->_view, $this);
             } catch (\Exception $e) {
-
                 $this->_errorHandler->manageError($e);
                 $this->_dispatcher->dispatch($this->_errorHandler->getRouter(), $this->_view, $this);
             }
@@ -299,15 +300,17 @@ namespace Sohoa\Framework {
 
         public function kit($identifier, Kitable $object = null)
         {
-
-            if (empty($identifier))
+            if (empty($identifier)) {
                 throw new \Exception('Kit identifier can\'t be empty');
+            }
 
-            if ($object === null)
-                if (array_key_exists($identifier, $this->_kit))
+            if ($object === null) {
+                if (array_key_exists($identifier, $this->_kit)) {
                     return $this->_kit[$identifier];
-                else
-                    throw new Exception('Kit "' . $identifier . '" has not been set');
+                } else {
+                    throw new Exception('Kit "'.$identifier.'" has not been set');
+                }
+            }
 
             $object->setRouter($this->getRouter());
             $object->setView($this->getView());
@@ -329,10 +332,8 @@ namespace Sohoa\Framework {
 
         public static function services($identifier, $object = null)
         {
-
-            trigger_error('Framework::services has been deprecated (' . $identifier . ')', E_USER_DEPRECATED);
+            trigger_error('Framework::services has been deprecated ('.$identifier.')', E_USER_DEPRECATED);
         }
-
     }
 
 }

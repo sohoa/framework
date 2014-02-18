@@ -10,12 +10,10 @@ namespace Sohoa\Framework\Router {
 
     interface IRouter
     {
-
         public function construct();
 
         public function setFramework(Framework $framework);
 
         public function getFramework();
-
     }
 }

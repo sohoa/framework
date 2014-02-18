@@ -13,12 +13,9 @@ namespace Sohoa\Framework\View {
     use Sohoa\Framework\Exception;
     use Sohoa\Framework\Framework;
     use Sohoa\Framework\Kit;
-    use Sohoa\Framework\View\Helper as Helper;
 
     class Greut implements Viewable, Soview
     {
-
-
         protected $_out = null;
         protected $_router = null;
         protected $_framework = null;
@@ -33,7 +30,6 @@ namespace Sohoa\Framework\View {
 
         public function __construct(Out $response = null)
         {
-
             if ($response === null) {
                 $response = new Response();
             }
@@ -58,7 +54,6 @@ namespace Sohoa\Framework\View {
             return $this->_data;
         }
 
-
         public function getRouter()
         {
             return $this->_router;
@@ -80,7 +75,6 @@ namespace Sohoa\Framework\View {
             return $this;
         }
 
-
         public function setPath($path)
         {
             if ($path[strlen($path) - 1] !== '/') {
@@ -95,9 +89,9 @@ namespace Sohoa\Framework\View {
         public function __get($helperName)
         {
             if (!isset($this->_helpers[$helperName])) {
-                $helperClassName = '\\Sohoa\Framework\\View\\Helper\\' . ucfirst($helperName);
+                $helperClassName = '\\Sohoa\Framework\\View\\Helper\\'.ucfirst($helperName);
                 if (!class_exists($helperClassName, true)) {
-                    $helperClassName = '\\Application\\View\\Helper\\' . ucfirst($helperName);
+                    $helperClassName = '\\Application\\View\\Helper\\'.ucfirst($helperName);
                 }
                 $this->view($helperName, $helperClassName);
             }
@@ -145,15 +139,15 @@ namespace Sohoa\Framework\View {
                     case "before":
                     case "prepend":
                         $this->_blocks[$blockname] = array(
-                            "content" => $this->_blocks[$blockname]["content"] . ob_get_contents(),
-                            "mode"    => $mode
+                            "content" => $this->_blocks[$blockname]["content"].ob_get_contents(),
+                            "mode"    => $mode,
                         );
                         break;
                     case "after":
                     case "append":
                         $this->_blocks[$blockname] = array(
-                            "content" => ob_get_contents() . $this->_blocks[$blockname]["content"],
-                            "mode"    => $mode
+                            "content" => ob_get_contents().$this->_blocks[$blockname]["content"],
+                            "mode"    => $mode,
                         );
                         break;
                 }
@@ -169,14 +163,13 @@ namespace Sohoa\Framework\View {
         public function getFilenamePath($filename)
         {
             if (preg_match('#^(?:[/\\\\]|[\w]+:([/\\\\])\1?)#', $filename) !== 1) {
-                $filename = $this->_paths . $filename;
+                $filename = $this->_paths.$filename;
             }
-
 
             $realpath = realpath(resolve($filename, false)); // We need to use resolve beacause realpath dont use stream wrapper
 
             if ((false === $realpath) || !(file_exists($realpath))) {
-                throw new \Sohoa\Framework\Exception('Path ' . $filename . ' (' . (($realpath === false) ? 'false' : $realpath) . ') not found!');
+                throw new \Sohoa\Framework\Exception('Path '.$filename.' ('.(($realpath === false) ? 'false' : $realpath).') not found!');
             }
 
             return $realpath;
@@ -202,7 +195,7 @@ namespace Sohoa\Framework\View {
                 $hName,
                 $hValue,
                 $force,
-                $status
+                $status,
             );
         }
 
@@ -222,7 +215,7 @@ namespace Sohoa\Framework\View {
 
             ob_start("mb_output_handler");
             extract((array) $this->_data);
-            include($filename);
+            include $filename;
 
             // restore args
             $content = ob_get_contents();

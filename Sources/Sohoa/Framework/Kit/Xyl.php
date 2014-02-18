@@ -1,16 +1,14 @@
 <?php
 namespace Sohoa\Framework\Kit {
 
-    use \Hoa\Router\Router;
+    use Hoa\Router\Router;
 
     class Xyl extends Kitable
     {
-
         protected $_path = 'hoa://Application/View/%s/%s.xyl';
 
         public function setDefaultPath($path = 'hoa://Application/View/%s/%s.xyl')
         {
-
             $old         = $this->_path;
             $this->_path = $path;
 
@@ -24,22 +22,26 @@ namespace Sohoa\Framework\Kit {
 
         public function render($data = null)
         {
-
             $controller = null;
             $action     = null;
 
-            if (is_string($data))
+            if (is_string($data)) {
                 return $this->renderOverlay($data);
+            }
 
             if (is_array($data)) {
-                if (array_key_exists('controller', $data))
+                if (array_key_exists('controller', $data)) {
                     $controller = $data['controller'];
-                if (array_key_exists(0, $data))
+                }
+                if (array_key_exists(0, $data)) {
                     $controller = $data[0];
-                if (array_key_exists('action', $data))
+                }
+                if (array_key_exists('action', $data)) {
                     $action = $data['action'];
-                if (array_key_exists(1, $data))
+                }
+                if (array_key_exists(1, $data)) {
                     $action = $data[1];
+                }
             }
 
             if ($controller === null or $action === null) {
@@ -65,7 +67,6 @@ namespace Sohoa\Framework\Kit {
 
         protected function renderOverlay($filename)
         {
-
             $this->view->addOverlay($filename);
             $this->view->render();
 
@@ -74,9 +75,9 @@ namespace Sohoa\Framework\Kit {
 
         protected function renderRoute($controller, $action, $path = null)
         {
-
-            if ($path === null)
+            if ($path === null) {
                 $path = $this->getDefaultPath();
+            }
 
             $path = sprintf($path, $controller, $action);
 

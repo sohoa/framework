@@ -4,7 +4,6 @@ namespace Sohoa\Framework {
 
     class ErrorHandler
     {
-
         /**
          *
          * @var Router
@@ -35,25 +34,23 @@ namespace Sohoa\Framework {
         protected $routeId           = array(
             self::ROUTE_ALL_ERROR => self::ERROR_ROUTE_ID,
             self::ROUTE_ERROR_404 => self::ERROR_404_ROUTE_ID,
-            self::ROUTE_ERROR_500 => self::ERROR_500_ROUTE_ID
+            self::ROUTE_ERROR_500 => self::ERROR_500_ROUTE_ID,
         );
         protected $customErrorRoutes = array();
 
         public function handleErrorsAsException($error_types = null)
         {
-            $error_types = ($error_types ? : (E_ALL | E_STRICT));
+            $error_types = ($error_types ?: (E_ALL | E_STRICT));
             set_error_handler(function ($errno, $errstr, $errfile, $errline) {
                 if (error_reporting() !== 0) {
                     throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
                 }
             }, $error_types);
             if (0 !== ($error_types & E_ERROR)) {
-
                 register_shutdown_function(function () {
 
                     $error = error_get_last();
                     if ($error["type"] == E_ERROR) {
-
                         ob_clean();
                         $this->manageError(new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line']));
                         $this->_dispatcher->dispatch($this->_router, $this->_framework->getView(), $this->_framework);
@@ -110,15 +107,12 @@ namespace Sohoa\Framework {
         public function routeError($errorType, $actionName)
         {
             if (true === is_numeric($errorType)) {
-
                 $errorRouteId = $this->routeId[$errorType];
             } elseif (class_exists($errorType) && is_subclass_of($errorType, '\Exception')) {
-
-                $errorRouteId              = preg_replace('/\W/', '', self::ERROR_CUSTOM_ROUTE_ID . $errorType);
+                $errorRouteId              = preg_replace('/\W/', '', self::ERROR_CUSTOM_ROUTE_ID.$errorType);
                 $this->customErrorRoutes[] = $errorType;
                 $this->routeId[$errorType] = $errorRouteId;
             } else {
-
                 throw new Exception('Unable to add error route for %s', 0, $errorType);
             }
 
@@ -134,11 +128,9 @@ namespace Sohoa\Framework {
         public function manageError($error)
         {
             if ($error instanceof \Hoa\Router\Exception\NotFound) {
-
                 $this->route(self::ROUTE_ERROR_404, $error);
             } elseif ($error instanceof \Hoa\Dispatcher\Exception
                 || $error instanceof \Sohoa\Framework\Dispatcher\Exception) {
-
                 switch ($error->getCode()) {
 
                     case 4:
@@ -151,23 +143,18 @@ namespace Sohoa\Framework {
                         break;
                 }
             } elseif (false === empty($this->customErrorRoutes)) {
-
                 $routingDone = false;
                 foreach ($this->customErrorRoutes as $className) {
-
                     if ($error instanceof $className) {
-
                         $routingDone = true;
                         $this->route($className, $error);
                     }
                 }
 
                 if (false === $routingDone) {
-
                     $this->route(self::ROUTE_ALL_ERROR, $error);
                 }
             } else {
-
                 $this->route(self::ROUTE_ALL_ERROR, $error);
             }
         }
@@ -183,46 +170,36 @@ namespace Sohoa\Framework {
         {
             // Router knows a route for this error code
             if (isset($this->routeId[$errorCode])) {
-
                 $errorRouteId = $this->routeId[$errorCode];
             } else {
-
                 $errorRouteId = null;
             }
 
             if ($this->_router->ruleExists($errorRouteId)) {
-
                 // There is a specific route for this error code
                 $errorRoute = $errorRouteId;
             } elseif ($this->_router->ruleExists(self::ROUTE_ALL_ERROR)) {
-
                 // There is a default route for all errors
                 $errorRoute = self::ROUTE_ALL_ERROR;
             } else {
-
                 // No route for error, do nothing
                 $errorRoute = null;
             }
 
             if ($errorRoute !== null) {
-
                 try {
-
                     // Prepare redirecting in the router
-                    $this->_router->route($this->_router->getPrefix() . '/' . $errorRoute);
+                    $this->_router->route($this->_router->getPrefix().'/'.$errorRoute);
                     $this->_router->setVariable('err', $error);
                 } catch (\Exception $e) {
-
                     // The router is unable to route the error
-                    throw new Exception('Unable to handle error ' . $e, 0, $e);
+                    throw new Exception('Unable to handle error '.$e, 0, $e);
                 }
             } else {
-
                 // There is no error route for this error code, just transfert the exception
                 throw $error;
             }
         }
-
     }
 
 }

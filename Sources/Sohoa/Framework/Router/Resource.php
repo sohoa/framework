@@ -10,7 +10,6 @@ namespace Sohoa\Framework\Router {
 
     class Resource
     {
-
         protected $_router = null;
         protected $_restRule = array();
         protected $_resourceTree = array();
@@ -25,7 +24,6 @@ namespace Sohoa\Framework\Router {
 
         public function resource($resource, $argument = array())
         {
-
             $parentResource = array();
             if (!empty($this->_resourceTree)) {
                 $last = count($this->_resourceTree) - 1;
@@ -59,7 +57,7 @@ namespace Sohoa\Framework\Router {
             $resource = ucwords($resource);
             $resource = str_replace(' ', '', $resource);
 
-            return $action . $resource;
+            return $action.$resource;
         }
 
         protected function generateResource($name, $args = array(), $parent = array())
@@ -67,7 +65,7 @@ namespace Sohoa\Framework\Router {
             $prefix                 = '';
             $uri                    = (isset($args['alias'])) ? $args['alias'] : $name;
             $routes                 = $this->_restRule;
-            $variableName           = (isset($args['variable'])) ? $args['variable'] : strtolower($name) . '_id';
+            $variableName           = (isset($args['variable'])) ? $args['variable'] : strtolower($name).'_id';
             $controller             =  ucfirst(strtolower($name));
             if (count($this->_resourceTree) === 0) {
                 if (isset($args['prefix'])) {
@@ -84,12 +82,10 @@ namespace Sohoa\Framework\Router {
                 $accept = true;
 
                 if (isset($args['only'])) {
-
                     $accept = in_array($route[Router::ROUTE_ACTION], $args['only']);
                 }
 
                 if (isset($args['except']) and !isset($args['only'])) {
-
                     $accept = !in_array($route[Router::ROUTE_ACTION], $args['except']);
                 }
 
@@ -98,19 +94,19 @@ namespace Sohoa\Framework\Router {
 
             array_walk($routes, function (&$route, $key, $p) use ($prefix) {
                 list($parent, $name) = $p;
-                if (array_key_exists($route[Router::ROUTE_ACTION], $parent))
-                    $route[Router::ROUTE_URI_PATTERN] = $prefix.$parent[$route[Router::ROUTE_ACTION]] . '/' . $name . $route[Router::ROUTE_URI_PATTERN];
-                else
-                    $route[Router::ROUTE_URI_PATTERN] = $prefix.'/' . $name . $route[Router::ROUTE_URI_PATTERN];
+                if (array_key_exists($route[Router::ROUTE_ACTION], $parent)) {
+                    $route[Router::ROUTE_URI_PATTERN] = $prefix.$parent[$route[Router::ROUTE_ACTION]].'/'.$name.$route[Router::ROUTE_URI_PATTERN];
+                } else {
+                    $route[Router::ROUTE_URI_PATTERN] = $prefix.'/'.$name.$route[Router::ROUTE_URI_PATTERN];
+                }
 
             }, array($parent, $uri));
 
             // write route for each HTTP verb
             foreach ($routes as $route) {
-
                 // TODO decide if we pluralize/singularize resource name
 
-                if (!$this->_router->ruleExists($this->resourceAction($route[Router::ROUTE_ACTION])))
+                if (!$this->_router->ruleExists($this->resourceAction($route[Router::ROUTE_ACTION]))) {
                     $this->_router->addRule(
                         $this->resourceAction($route[Router::ROUTE_ACTION]),
                         array($route[Router::ROUTE_VERB]),
@@ -118,8 +114,8 @@ namespace Sohoa\Framework\Router {
                         $controller,
                         $route[Router::ROUTE_ACTION]
                     );
+                }
             }
         }
-
     }
 }

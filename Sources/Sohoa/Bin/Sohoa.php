@@ -7,24 +7,19 @@
  */
 namespace Sohoa\Bin {
     use Hoa\Core\Core;
-    use Sohoa\Bin\Style\Basic;
 
-    require __DIR__ . '/../../../../../autoload.php';
-    require __DIR__ . DS . 'Style' . DS . 'Basic.php';
-    $style = new Basic();
-    $style->import();
+    require __DIR__.'/../../../../../autoload.php';
 
     /**
      * Here we go…
      */
     try {
-
         $core       = Core::getInstance();
         $parameters = $core->getParameters();
         /**
          * @var \Hoa\Core\Parameter\Parameter $parameters
          */
-        $cwd =  __DIR__ . '/../../../../../../';
+        $cwd =  __DIR__.'/../../../../../../';
         $parameters->setKeyword('cwd', realpath($cwd));
         $parameters->setParameter('protocol.Application', '(:cwd:)/Application/');
         $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
@@ -41,24 +36,20 @@ namespace Sohoa\Bin {
             array(
                 'vendor'  => 'sohoa',
                 'library' => 'core',
-                'command' => 'welcome'
+                'command' => 'welcome',
             )
         );
 
         $dispatcher = new \Hoa\Dispatcher\Basic(array(
-            'synchronous.controller'
-            => '(:%variables.vendor:lU:)\Bin\Command\(:%variables.library:lU:)\(:%variables.command:lU:)',
-            'synchronous.action'
-            => 'main'
+            'synchronous.controller' => '(:%variables.vendor:lU:)\Bin\Command\(:%variables.library:lU:)\(:%variables.command:lU:)',
+            'synchronous.action' => 'main',
         ));
 
         $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
         exit($dispatcher->dispatch($router));
     } catch (\Hoa\Core\Exception $e) {
-
         $message = $e->raise(true);
     } catch (\Exception $e) {
-
         $message = $e->getMessage();
     }
 

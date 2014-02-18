@@ -45,6 +45,5 @@ namespace Sohoa\Framework\Kit {
         {
             return $this->view;
         }
-
     }
 }

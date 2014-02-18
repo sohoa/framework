@@ -42,16 +42,12 @@ namespace Sohoa\Framework {
 
         protected $_framework = null;
 
-
         public function construct()
         {
             if (file_exists('hoa://Application/Cache/Route.php')) {
-
                 $this->loadCache('hoa://Application/Cache/Route.php');
             } else {
-
                 if (file_exists('hoa://Application/Config/Route.php')) {
-
                     require_once 'hoa://Application/Config/Route.php';
                 }
             }
@@ -68,7 +64,6 @@ namespace Sohoa\Framework {
         {
             return $this->_framework;
         }
-
 
         /**
          * Return true if the given route contains (?<controller>) and (?<action>)
@@ -88,10 +83,8 @@ namespace Sohoa\Framework {
             }
 
             if ($name == 'any') {
-
                 $methods = static::$_methods;
             } else {
-
                 $methods = array($name);
             }
 
@@ -101,12 +94,10 @@ namespace Sohoa\Framework {
                 $args = $arguments[1];
 
                 if (!isset($args['as'])) {
-
                     throw new Exception('Missing as !');
                 }
 
                 if (!isset($args['to'])) {
-
                     throw new Exception('Missing to !');
                 }
 
@@ -127,37 +118,31 @@ namespace Sohoa\Framework {
             return $this;
         }
 
-
         public function resource($name, $args = array())
         {
             return new Resource($name, $args, $this);
         }
 
-
         public function addResourceRule($action, $verb, $uri)
         {
-
             $last = count(static::$_restfulRoutes);
 
             static::$_restfulRoutes[$last] = array(
                 static::ROUTE_ACTION      => $action,
                 static::ROUTE_VERB        => $verb,
-                static::ROUTE_URI_PATTERN => $uri
+                static::ROUTE_URI_PATTERN => $uri,
             );
 
             return $last;
         }
 
-
         public function setResource($id, $action = null, $verb = null, $uri = null)
         {
-
             if (array_key_exists($id, static::$_restfulRoutes)) {
                 $rest                                               = static::$_restfulRoutes[$id];
                 static::$_restfulRoutes[$id][static::ROUTE_ACTION]      = ($action === null) ? $rest[static::ROUTE_ACTION] : $action;
                 static::$_restfulRoutes[$id][static::ROUTE_VERB]        = ($verb === null) ? $rest[static::ROUTE_VERB] : $verb;
                 static::$_restfulRoutes[$id][static::ROUTE_URI_PATTERN] = ($uri === null) ? $rest[static::ROUTE_URI_PATTERN] : $uri;
-
             }
 
             return $this;
@@ -165,10 +150,11 @@ namespace Sohoa\Framework {
 
         public function getResource($id)
         {
-            if (array_key_exists($id, static::$_restfulRoutes))
+            if (array_key_exists($id, static::$_restfulRoutes)) {
                 return static::$_restfulRoutes[$id];
+            }
 
-            return null;
+            return;
         }
 
         public function getResources()
@@ -180,11 +166,11 @@ namespace Sohoa\Framework {
         {
             $out = array();
 
-            foreach ($this->getRules() as $id => $value)
-                $out[] = array($id, implode(',', $value[2]), $value[3], $value[4] . '#' . $value[5]);
+            foreach ($this->getRules() as $id => $value) {
+                $out[] = array($id, implode(',', $value[2]), $value[3], $value[4].'#'.$value[5]);
+            }
 
             return $out;
-
         }
 
         public function load(array $rules)
@@ -204,7 +190,7 @@ namespace Sohoa\Framework {
 
         public function saveCache($cacheFile)
         {
-            file_put_contents($cacheFile, '<?php return ' . var_export($this->dump(), true) . ';');
+            file_put_contents($cacheFile, '<?php return '.var_export($this->dump(), true).';');
         }
 
         protected function _unroute($id, $pattern, array $variables,
@@ -214,6 +200,5 @@ namespace Sohoa\Framework {
 
             return parent::_unroute($id, $pattern, $variables, $allowEmpty);
         }
-
     }
 }

@@ -2,5 +2,7 @@
 
 namespace Sohoa\Framework\Dispatcher {
 
-    class Exception extends \Sohoa\Framework\Exception {}
+    class Exception extends \Sohoa\Framework\Exception
+    {
+    }
 }
