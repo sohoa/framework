@@ -2,8 +2,6 @@
 
 namespace Sohoa\Framework\Kit\Tests\Unit;
 
-use Hoa\Dispatcher\Basic;
-use Hoa\Router\Http;
 use Hoa\Stringbuffer\ReadWrite;
 use Sohoa\Framework\Framework;
 use Sohoa\Framework\Kit as Kit;
@@ -13,23 +11,26 @@ require_once __DIR__ . '/../../Runner.php';
 class Greut extends \atoum\test
 {
 
-    private $_router;
-    private $_view;
-    private $_kit;
+    protected $_router;
+    protected $_view;
+    protected $_kit;
 
     public function __construct()
     {
 
         parent::__construct();
 
-        $this->_router = new Http();
-        $this->_router->get('c', '/(?<_call>.[^/]+)/(?<_able>.*)', 'main', 'index');
-        $this->_router->get('h', '/', 'main', 'index');
 
-        $dispatcher  = new Basic();
-        $this->_view = new \Sohoa\Framework\View\Greut();
-        $kit         = new Kit($this->_router, $dispatcher, $this->_view);
-        $this->_kit  = $kit->greut;
+        $fwk           = new Framework();
+        $this->_router = $fwk->getRouter();
+        $this->_view   = $fwk->getView();
+
+        $this->_router->any('/(?<_call>.[^/]+)/(?<_able>.*)', array('as' => 'c', 'to' => 'main#index'));
+        $this->_router->any('/', array('as' => 'm', 'to' => 'main#index'));
+
+
+        $kit        = new Kit($this->_router, $fwk->getDispatcher(), $this->_view, $fwk);
+        $this->_kit = $kit->greut;
     }
 
     public function testReal()
@@ -60,9 +61,10 @@ class Greut extends \atoum\test
             ->string[4]->isEqualTo(strtolower($controller))
             ->string[5]->isEqualTo(strtolower($action));
 
+
         $v = $this->_kit;
         $this->exception(function () use ($v) {
-             $v->render();
+            $v->render();
         })->message->contains($view);
     }
 

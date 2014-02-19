@@ -2,7 +2,7 @@
 
 namespace Sohoa\Framework {
 
-    class Exception extends \Hoa\Core\Exception
+    class Exception extends \Hoa\Core\Exception\Exception
     {
     }
 }

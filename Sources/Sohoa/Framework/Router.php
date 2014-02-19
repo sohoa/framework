@@ -29,7 +29,7 @@ namespace Sohoa\Framework {
 
         const REST_DESTROY = 6;
 
-        private static $_restfulRoutes = array(
+        protected  static $_restfulRoutes = array(
             self::REST_INDEX   => array(self::ROUTE_ACTION => 'index', self::ROUTE_VERB => 'get', self::ROUTE_URI_PATTERN => '/'),
             self::REST_NEW     => array(self::ROUTE_ACTION => 'new', self::ROUTE_VERB => 'get', self::ROUTE_URI_PATTERN => '/new'),
             self::REST_SHOW    => array(self::ROUTE_ACTION => 'show', self::ROUTE_VERB => 'get', self::ROUTE_URI_PATTERN => '/(?<%s>[^/]+)'),
@@ -41,7 +41,6 @@ namespace Sohoa\Framework {
 
         public function __construct()
         {
-            Framework::services('router', $this);
 
             parent::__construct();
         }

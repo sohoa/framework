@@ -4,11 +4,14 @@ namespace Sohoa\Framework\Kit\Tests\Unit;
 
 use Hoa\Dispatcher\Basic;
 use Hoa\Router\Http;
+use Hoa\Router\Router;
+use Sohoa\Framework\Framework;
 use Sohoa\Framework\Kit as Kit;
+use Sohoa\Framework\View\Soview;
 
 require_once __DIR__ . '/../../Runner.php';
 
-class myView implements \Hoa\View\Viewable
+class myView implements \Hoa\View\Viewable, Soview
 {
 
     protected $_overlay = array();
@@ -40,6 +43,17 @@ class myView implements \Hoa\View\Viewable
     public function getRouter()
     {
     }
+
+    public function setRouter(Router $router)
+    {
+    }
+
+    public function setFramework(Framework $framework)
+    {
+        $framework->kit('xyl' , new Kit\Xyl());
+    }
+
+
 }
 
 class Xyl extends \atoum\test
@@ -54,16 +68,18 @@ class Xyl extends \atoum\test
 
         parent::__construct();
 
-        Kit::add('xyl', new Kit\Xyl());
 
-        $this->_router = new Http();
-        $this->_router->get('c', '/(?<_call>.[^/]+)/(?<_able>.*)', 'Main', 'Index');
-        $this->_router->get('h', '/', 'Main', 'Index');
+        $fwk = new Framework();
+        $fwk->setView(new myView());
+        $this->_router = $fwk->getRouter();
+        $this->_view   = $fwk->getView();
 
-        $dispatcher  = new Basic();
-        $this->_view = new myView();
-        $kit         = new Kit($this->_router, $dispatcher, $this->_view);
-        $this->_kit  = $kit->xyl;
+        $this->_router->any('/(?<_call>.[^/]+)/(?<_able>.*)', array('as' => 'c', 'to' => 'Main#Index'));
+        $this->_router->any('/', array('as' => 'h', 'to' => 'Main#Index'));
+
+
+        $kit        = new Kit($this->_router, $fwk->getDispatcher(), $this->_view, $fwk);
+        $this->_kit = $kit->xyl;
     }
 
     /**
@@ -84,7 +100,7 @@ class Xyl extends \atoum\test
         $this->array($this->_view->getOverlay())
             ->contains($view);
 
-       $this->dump($this->_router->getTheRule());
+        $this->dump($this->_router->getTheRule());
     }
 
     /**

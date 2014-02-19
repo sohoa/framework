@@ -6,19 +6,25 @@
 
 namespace Sohoa\Framework\View {
 
+    use Hoa\Router\Router;
+    use Sohoa\Framework\Framework;
     use Sohoa\Framework\Kit;
 
 
-    class Xyl extends \Hoa\Xyl\Xyl
+    class Xyl extends \Hoa\Xyl\Xyl implements Soview
     {
+        public $framework = null;
 
-
-        public function __construct(\Hoa\Stream\IStream\In $in, \Hoa\Stream\IStream\Out $out, \Hoa\Xyl\Interpreter $interpreter,
-            \Hoa\Router\Http $router = null, $entityResolver = null, Array $parameters = array())
+        public function setRouter(Router $router)
         {
 
-            Kit::add('xyl', new Kit\Xyl());
-            parent:: __construct($in, $out, $interpreter, $router, $entityResolver, $parameters);
         }
+
+        public function setFramework(Framework $framework)
+        {
+            $this->_framework = $framework;
+            $framework->kit('xyl', new Kit\Xyl());
+        }
+
     }
 }

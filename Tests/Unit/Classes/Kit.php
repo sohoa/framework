@@ -9,6 +9,11 @@ namespace {
 
     }
 
+    class Xylophone extends Kit\Kitable
+    {
+
+    }
+
 }
 
 namespace Application\Controller {
@@ -21,94 +26,78 @@ namespace Application\Controller {
         public function IndexAction()
         {
 
-            return $this->xyl;
+            return $this->foo;
         }
     }
 }
 namespace Sohoa\Framework\Tests\Unit {
 
     use Application\Controller\Foo;
-    use Hoa\Dispatcher\Basic;
-    use Hoa\Router\Http;
+    use Sohoa\Framework\Framework as Fwk;
     use Sohoa\Framework\Kit as _Kit;
 
     class Kit extends \atoum\test
     {
+        protected $fwk = null;
+        protected $kit = null;
+
+        public function __construct()
+        {
+            parent::__construct();
+
+
+            $this->fwk = new Fwk();
+            $this->fwk->kit('foo', new \Xyl());
+            $this->fwk->kit('bar', new \Xyl());
+            $this->fwk->kit('wux', new \Xyl());
+
+            $this->kit = new _Kit($this->fwk->getRouter(), $this->fwk->getDispatcher(), $this->fwk->getView(), $this->fwk);
+        }
+
         public function testAdd()
         {
-            _Kit::add('xyl', new \Xyl());
-            _Kit::add('xyls', new \Xyl());
-            _Kit::add('xylsx', new \Xyl());
 
-            $kit = new _Kit(new Http(), new Basic());
 
-            $this->sizeof($kit->getAllKits())->isEqualto(3);
+            $this->sizeof($this->fwk->getKits())->isEqualto(4);
 
-            $this->object($kit->kit('xyl'))->isInstanceOf('\Xyl');
+            $this->object($this->fwk->kit('foo'))->isInstanceOf('\Xyl');
 
-            $kit = $kit->kit('xyl');
+            $kit = $this->fwk->kit('foo');
 
-            $this->object($kit->getRouter())->isInstanceOf('\Hoa\Router\Http');
-            $this->variable($kit->getView())->isNull();
+            $this->object($kit->getRouter())->isInstanceOf('\Sohoa\Framework\Router');
+            $this->object($kit->getView())->isInstanceOf('\Sohoa\Framework\View\Greut');
         }
 
         public function testLimitless()
         {
-            _Kit::add('xyl', new \Xyl());
 
-            $kit = new _Kit(new Http(), new Basic());
-
-            $this->sizeof($kit->getAllKits())->isEqualto(1);
-
-            $this->object($kit->kit('xyl'))->isInstanceOf('\Xyl');
-
-            $kit = $kit->kit('xyl');
-
-            $this->object($kit->getRouter())->isInstanceOf('\Hoa\Router\Http');
-            $this->variable($kit->getView())->isNull();
+            $this->object($this->fwk->kit('foo'))->isInstanceOf('\Xyl');
+            $this->fwk->kit('foo', new \Xylophone());
+            $this->sizeof($this->fwk->getKits())->isEqualto(4);
+            $this->object($this->fwk->kit('foo'))->isInstanceOf('\Xylophone');
 
 
-            _Kit::add('xyl', new \Xyl());
-            $kit = new _Kit(new Http(), new Basic());
-            $this->sizeof($kit->getAllKits())->isEqualto(1);
-
-            $this->object($kit->kit('xyl'))->isInstanceOf('\Xyl');
-
-            $kit = $kit->kit('xyl');
-            $this->object($kit->getRouter())->isInstanceOf('\Hoa\Router\Http');
-            $this->variable($kit->getView())->isNull();
         }
 
         public function testKitInController()
         {
-            _Kit::add('xyl', new \Xyl());
 
-            $controller = new Foo(new Http(), new Basic());
+
+            $controller = new Foo($this->fwk->getRouter(), $this->fwk->getDispatcher(), $this->fwk->getView(), $this->fwk);
             $xyl        = $controller->IndexAction();
 
             $this->object($xyl)->isInstanceOf('\Xyl');
         }
 
-		public function testKitGet() {
+        public function testKitGet()
+        {
             $this
                 ->if($miscKit = new _Kit\Kitable)
-                    ->and(_Kit::add('foo', $miscKit))
-                    ->and($controller = new Foo(new Http(), new Basic()))
+                ->and($this->fwk->kit('foo', $miscKit))
+                ->and($controller = new Foo($this->fwk->getRouter(), $this->fwk->getDispatcher(), $this->fwk->getView(), $this->fwk))
                 ->assert('Kit property is a Kitable')
-                    ->object($controller->foo)->isIdenticalTo($miscKit)
-
-                ->if($miscObj = new \stdClass())
-                ->and(\Sohoa\Framework\Framework::services('bar', $miscObj))
-                ->assert('Kit property is get from Registry')
-                    ->object($controller->bar)->isIdenticalTo($miscObj)
-
-                ->if(_Kit::add('bar', $miscKit))
-                ->assert('Kit property is get from Kitable first')
-                    ->object($controller->bar)->isIdenticalTo($miscKit)
-            ;
+                ->object($controller->foo)->isIdenticalTo($miscKit);
         }
-
-
 
 
     }
