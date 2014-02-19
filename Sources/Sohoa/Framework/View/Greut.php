@@ -143,20 +143,19 @@ namespace Sohoa\Framework\View {
             }
         }
 
-           public function getFilenamePath($filename)
-           {
-               if (preg_match('#^(?:[/\\\\]|[\w]+:([/\\\\])\1?)#', $filename) !== 1) { // TODO Bug on windows ! hoa://…/C:\…\*.tpl.php
-                   $filename = $this->_paths . $filename;
-                   $realpath = realpath($filename);
-               } else {
-                   $realpath = realpath($filename);
-               }
+        public function getFilenamePath($filename)
+        {
+            if (preg_match('#^(?:[/\\\\]|[\w]+:([/\\\\])\1?)#', $filename) !== 1)
+                $filename = $this->_paths . $filename;
 
-               if ((false === $realpath) || !(file_exists($realpath)))
-                   throw new \Sohoa\Framework\Exception('Path ' . $filename . ' (' . (($realpath === false) ? 'false' : $realpath) . ') not found!');
 
-               return $realpath;
-           }
+            $realpath = realpath(resolve($filename, false)); // We need to use resolve beacause realpath dont use stream wrapper
+
+            if ((false === $realpath) || !(file_exists($realpath)))
+                throw new \Sohoa\Framework\Exception('Path ' . $filename . ' (' . (($realpath === false) ? 'false' : $realpath) . ') not found!');
+
+            return $realpath;
+        }
 
         public function render()
         {
