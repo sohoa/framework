@@ -71,8 +71,8 @@ et le rapport apparaitra sous peu (~ 5-10 minutes suivant la disponibilité du r
 Discussion
 -----
 
-Avant de merger (= accepter) la PR, nous en discuterons en interne (sur IRC et/ou sur la ML de sohoa et/ou dans les commentaires), des précisions
-peuvent être demandées, et/ou des compléments de code. Pour cela la marche à suivre est :
+Avant de merger (= accepter) la PR, nous en discuterons en interne (sur IRC et/ou sur la ML de sohoa et/ou dans les commentaires),
+nous serons sûrement amenés à demander des précisions et/ou des compléments de code. Pour cela la marche à suivre est :
 
 
 ```
@@ -84,7 +84,7 @@ git push origin f/maNouvelleSuperFeature
 ```
 
 Pas besoin de republier votre PR , elle est automatiquement mise à jour dans l'interface de Github, et les tests sont rejoués automatiquement
-à condition de leur laissé le temps de se lancer … pensez à nous en informer par le biais d'un court commentaire histoire que nous regardions	
+à condition de leur laisser le temps de se lancer … pensez à nous en informer par le biais d'un court commentaire histoire que nous regardions	
 
 Acceptation
 =====
@@ -123,6 +123,7 @@ Pour cela nous allons suivre un exemple :
 
 Dans notre exemple nous avons 4 commits en avant de notre commit parent
 donc on veut obtenir le commit parent comme on le voit ici:
+
 ![Sohoa network](http://imageshack.com/a/img401/1120/dh4k.png)
 
 Le commit parent (le point noir) a le hash : `7c09fca1793b3015f26ebdbbb8b53bb373a233f3`
