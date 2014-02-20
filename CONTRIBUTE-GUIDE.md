@@ -19,23 +19,23 @@ Ne jamais travailler sur la branche `master` est votre devoir, travailler sur vo
 Ajout des remotes
 -----
 
-Par défaut le remote `origin` pointe sur votre dépot Github (http://github.com/votre_username/framework).
-Nous allons ajouter un remote vers le dépot sohoa/framework afin de pouvoir se synchroniser et récupérer les différentes 
+Par défaut le remote `origin` pointe sur votre dépôt Github (http://github.com/votre_username/framework).
+Nous allons ajouter un remote vers le dépôt sohoa/framework afin de pouvoir se synchroniser et récupérer les différentes 
 modifications apportées sur le dépôt par d'autres contributeurs.
 
 ```
 git remote add sohoa https://github.com/sohoa/framework
 ```
 
-Mise à jour de votre dépot avec les dernières modifications
+Mise à jour de votre dépôt avec les dernières modifications
 -----
 
 ```
 git pull sohoa master
 ```
 
-Cette commande peut engendrer des conflits qu'il faut bien veiller à résoudre. Ces conflits ne surviennent que lorsque vous avez modifiez la branche master de votre clone (ce qui est interdit cf §Important).
-En toutes logiques vous NE DEVEZ PAS avoir de conflit sur master.
+Cette commande peut engendrer des conflits qu'il faut bien veiller à résoudre. Ces conflits ne surviennent que lorsque vous avez modifié	 la branche master de votre clone (ce qui est interdit cf §Important).
+En toute logique vous **NE DEVEZ PAS** avoir de conflit sur master.
 
 Contributions
 =====
@@ -84,20 +84,20 @@ git push origin f/maNouvelleSuperFeature
 ```
 
 Pas besoin de republier votre PR , elle est automatiquement mise à jour dans l'interface de Github, et les tests sont rejoués automatiquement
-à la condition de leur laissé le temps de se lancé … pensez à nous le notifié par le biais d'un petit commentaire histoire que l'on regarde
+à condition de leur laissé le temps de se lancer … pensez à nous en informer par le biais d'un court commentaire histoire que nous regardions	
 
 Acceptation
 =====
 
-Dans le cas de la validation de la PR nous serons amené à effectuer une ultime manipulation sur la PR.
+Dans le cas de la validation de la PR nous serons amenés à effectuer une ultime manipulation sur la PR.
 En effet nous nous basons sur cette [page](http://github.com/sohoa/framework/network) et votre PR (branche) doit correspondre à deux critères
 *	Avoir comme commit parent le dernier commit
 *	Avoir qu'un seul et unique commit
 
-Mettre à jour notre branche
+Mettre à jour votre branche
 -----
 
-Nous allons mettre à jour notre banche avec les données contenues dans master
+Nous allons mettre à jour votre banche avec les données contenues dans master
 
 ```
 git checkout master
@@ -122,10 +122,11 @@ Nous allons effectuer un rebase interactif sur notre branch.
 Pour cela nous allons suivre un exemple :
 
 Dans notre exemple nous avons 4 commits en avant de notre commit parent
-donc on veut obtenir le commit parent comme on le voit ![Sohoa network](http://imageshack.com/a/img401/1120/dh4k.png)
+donc on veut obtenir le commit parent comme on le voit ici:
+![Sohoa network](http://imageshack.com/a/img401/1120/dh4k.png)
 
 Le commit parent (le point noir) a le hash : `7c09fca1793b3015f26ebdbbb8b53bb373a233f3`
-Nous allons donc rebase à partir de celui là.
+Nous allons donc rebase à partir de celui-ci.
 
 
 ##### Rebase Interactif
@@ -166,7 +167,7 @@ pick 1963fb4 Remove & change the private properties
 # Note that empty commits are commented out
 ```
 
-Suivant votre utilisation vous devrez utiliser différentes options dans le cadre de l'exemple nous allons fusionner les commits (sans garder les messages de commit)
+Suivant votre utilisation vous devrez utiliser différentes options. Dans le cadre de l'exemple nous allons fusionner les commits (sans garder les messages de commit)
 b9e7e85, f373c6f, 1963fb4 dans le commit f559e50 et éditer le message du commit
 
 Nous aurons alors 
@@ -188,10 +189,10 @@ fixup 1963fb4 Remove & change the private properties
 ```
 
 Le rebase va commencer et s'arrêter pour éditer le premier commit. Nous pourrons ainsi modifier les fichiers , le message de commit
-donc j'ai juste à lancé la commande `git commit --amend` et je vais pouvoir éditer le commit message et à fermer le logiciel d'éditions
+donc j'ai juste à lancé la commande `git commit --amend` et je vais pouvoir éditer le message de commit.
 il nous reste juste à continuer le rebase avec un `git rebase --continue`
 
-Après quelques secondes (ne pas arrêter le processus), il se peut que vous ayez des conflits, il suffit de lire la sortie de git qui va tout vous expliquer
+Après quelques secondes (ne pas arrêter le processus), il se peut que vous ayez des conflits, il suffit de lire les messages de git qui va tout vous expliquer
 En l'occurence voici les étapes simplifiées, chaque cas étant très spécifique :
 
 1. Editer le/les fichiers en cause et lever les conflits (ce ne sont que des annotations texte) avec votre éditeur préféré.
