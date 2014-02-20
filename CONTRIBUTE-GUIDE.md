@@ -190,7 +190,7 @@ fixup 1963fb4 Remove & change the private properties
 ```
 
 Le rebase va commencer et s'arrêter pour éditer le premier commit. Nous pourrons ainsi modifier les fichiers , le message de commit
-donc j'ai juste à lancé la commande `git commit --amend` et je vais pouvoir éditer le message de commit.
+donc j'ai juste à lancé la commande `git commit --amend` et nous allons pouvoir éditer le message de commit.
 il nous reste juste à continuer le rebase avec un `git rebase --continue`
 
 Après quelques secondes (ne pas arrêter le processus), il se peut que vous ayez des conflits, il suffit de lire les messages de git qui va tout vous expliquer
