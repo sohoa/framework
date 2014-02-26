@@ -85,8 +85,8 @@ namespace Sohoa\Framework {
             static::inialize();
 
             $this->setRouter();
-            $this->setErrorHandler();
             $this->setDispatcher();
+            $this->setErrorHandler();
             $this->setView();
             $this->setEnvironnement($environnement);
 
@@ -222,6 +222,8 @@ namespace Sohoa\Framework {
         {
             $this->_errorHandler = $errorHandler ? : new ErrorHandler();
             $this->_errorHandler->setRouter($this->getRouter());
+            $this->_errorHandler->setFramework($this);
+            $this->_errorHandler->setDispatcher($this->_dispatcher);
         }
 
     }
