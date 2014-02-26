@@ -89,17 +89,6 @@ namespace Sohoa\Framework {
             $this->setView();
             $this->setEnvironnement($environnement);
 
-            if (file_exists('hoa://Application/Cache/Route.php')) {
-
-                $this->_router->loadCache('hoa://Application/Cache/Route.php');
-            } else {
-
-                if (file_exists('hoa://Application/Config/Route.php')) {
-
-                    require_once 'hoa://Application/Config/Route.php';
-                }
-            }
-
         }
 
         /**

@@ -41,8 +41,19 @@ namespace Sohoa\Framework {
 
         public function __construct()
         {
-
             parent::__construct();
+
+
+            if (file_exists('hoa://Application/Cache/Route.php')) {
+
+                $this->loadCache('hoa://Application/Cache/Route.php');
+            } else {
+
+                if (file_exists('hoa://Application/Config/Route.php')) {
+
+                    require_once 'hoa://Application/Config/Route.php';
+                }
+            }
         }
 
         /**
