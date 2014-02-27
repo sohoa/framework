@@ -60,6 +60,8 @@ namespace Sohoa\Framework {
         public function setFramework(Framework $framework)
         {
             $this->_framework = $framework;
+
+            return $this;
         }
 
         public function getFramework()
@@ -122,6 +124,8 @@ namespace Sohoa\Framework {
         public function setVariable($name, $value)
         {
             $this->_rule[self::RULE_VARIABLES][$name] = $value;
+
+            return $this;
         }
 
 
@@ -157,6 +161,7 @@ namespace Sohoa\Framework {
 
             }
 
+            return $this;
         }
 
         public function getRessource($id)

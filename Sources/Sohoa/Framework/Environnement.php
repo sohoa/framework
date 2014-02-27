@@ -51,6 +51,8 @@ namespace Sohoa\Framework {
             if (is_array($array))
                 foreach ($array as $key => $value)
                     $this->offsetSet($key, $value);
+
+            return $this;
         }
 
         public function offsetExists($offset)

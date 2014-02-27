@@ -11,6 +11,8 @@ namespace Sohoa\Framework\Kit {
         public function setRouter($router)
         {
             $this->router = $router;
+
+            return $this;
         }
 
         /**
@@ -27,6 +29,8 @@ namespace Sohoa\Framework\Kit {
         public function setView($view)
         {
             $this->view = $view;
+
+            return $this;
         }
 
         /**

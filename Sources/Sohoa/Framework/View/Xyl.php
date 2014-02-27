@@ -24,6 +24,8 @@ namespace Sohoa\Framework\View {
         {
             $this->_framework = $framework;
             $framework->kit('xyl', new Kit\Xyl());
+
+            return $this;
         }
 
     }

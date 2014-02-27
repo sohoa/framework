@@ -27,6 +27,8 @@ namespace Sohoa\Framework\View {
         {
             $this->view = $view;
             $this->data = $view->getData();
+
+            return $this;
         }
     }
 
