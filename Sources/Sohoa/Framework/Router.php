@@ -6,9 +6,10 @@
 namespace Sohoa\Framework {
 
     use Hoa\Router\Http;
+    use Sohoa\Framework\Router\IRouter;
     use Sohoa\Framework\Router\Resource;
 
-    class Router extends Http
+    class Router extends Http implements IRouter
     {
         const ROUTE_ACTION = 0;
         const ROUTE_VERB = 1;
@@ -39,11 +40,11 @@ namespace Sohoa\Framework {
             self::REST_DESTROY => array(self::ROUTE_ACTION => 'destroy', self::ROUTE_VERB => 'delete', self::ROUTE_URI_PATTERN => '/(?<%s>[^/]+)'),
         );
 
-        public function __construct()
+        protected $_framework = null;
+
+
+        public function construct()
         {
-            parent::__construct();
-
-
             if (file_exists('hoa://Application/Cache/Route.php')) {
 
                 $this->loadCache('hoa://Application/Cache/Route.php');
@@ -55,6 +56,17 @@ namespace Sohoa\Framework {
                 }
             }
         }
+
+        public function setFramework(Framework $framework)
+        {
+            $this->_framework = $framework;
+        }
+
+        public function getFramework()
+        {
+            return $this->_framework;
+        }
+
 
         /**
          * Return true if the given route contains (?<controller>) and (?<action>)
