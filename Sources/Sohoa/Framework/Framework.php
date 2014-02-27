@@ -7,6 +7,7 @@ namespace Sohoa\Framework {
     use Hoa\View\Viewable;
     use Sohoa\Framework\Dispatcher\Basic;
     use Sohoa\Framework\Kit\Kitable;
+    use Sohoa\Framework\Router\IRouter;
     use Sohoa\Framework\Session\Session;
     use Sohoa\Framework\View\Greut;
     use Sohoa\Framework\View\Soview;
@@ -89,20 +90,20 @@ namespace Sohoa\Framework {
             $this->setView();
             $this->setEnvironnement($environnement);
 
+            $this->getRouter()->construct();
         }
 
         /**
-         * @param Router $router
-         * @return $this
+         * @param IRouter $router
          */
-        public function setRouter(Router $router = null)
+        public function setRouter(IRouter $router = null)
         {
             $this->_router = $router ? : new \Sohoa\Framework\Router();
+            $this->_router->setFramework($this);
         }
 
         /**
          * @param Dispatcher $dispatcher
-         * @return $this
          */
         public function setDispatcher(Dispatcher $dispatcher = null)
         {
