@@ -84,13 +84,12 @@ namespace Sohoa\Framework {
 
             static::inialize();
 
-            $this->setRouter();
-            $this->setDispatcher();
-            $this->setErrorHandler();
-            $this->setView();
-            $this->setEnvironnement($environnement);
-
-            $this->getRouter()->construct();
+            $this->setRouter()
+                 ->setDispatcher()
+                 ->setErrorHandler()
+                 ->setView()
+                 ->setEnvironnement($environnement)
+                 ->getRouter()->construct();
         }
 
         /**
@@ -100,6 +99,8 @@ namespace Sohoa\Framework {
         {
             $this->_router = $router ? : new \Sohoa\Framework\Router();
             $this->_router->setFramework($this);
+
+            return $this;
         }
 
         /**
@@ -108,6 +109,8 @@ namespace Sohoa\Framework {
         public function setDispatcher(Dispatcher $dispatcher = null)
         {
             $this->_dispatcher = $dispatcher ? : new Basic();
+
+            return $this;
         }
 
         /**
@@ -119,16 +122,22 @@ namespace Sohoa\Framework {
 
             $this->_view->setRouter($this->_router);
             $this->_view->setFramework($this);
+
+            return $this;
         }
 
         public function setEnvironnement($useEnvironnement = null, Environnement $environnement = null)
         {
             $this->_environnement = $environnement ? : new Environnement($this, $useEnvironnement);
+
+            return $this;
         }
 
         public function setSession(Session $session)
         {
             $this->_session = $session ? : new Session();
+
+            return $this;
         }
 
         /**
@@ -192,6 +201,8 @@ namespace Sohoa\Framework {
             $object->setView($this->_view);
 
             $this->_kit[$identifier] = $object;
+
+            return $this;
         }
 
         public function getKits()
@@ -221,9 +232,11 @@ namespace Sohoa\Framework {
         public function setErrorHandler(ErrorHandler $errorHandler = null)
         {
             $this->_errorHandler = $errorHandler ? : new ErrorHandler();
-            $this->_errorHandler->setRouter($this->getRouter());
-            $this->_errorHandler->setFramework($this);
-            $this->_errorHandler->setDispatcher($this->_dispatcher);
+            $this->_errorHandler->setRouter($this->getRouter())
+                                ->setFramework($this)
+                                ->setDispatcher($this->_dispatcher);
+
+            return $this;
         }
 
     }

@@ -60,6 +60,8 @@ namespace Sohoa\Framework {
                     }
                 });
             }
+
+            return $this;
         }
 
         public function getRouter()
@@ -70,6 +72,8 @@ namespace Sohoa\Framework {
         public function setRouter(Router $router)
         {
             $this->_router = $router;
+
+            return $this;
         }
 
         public function getFramework()

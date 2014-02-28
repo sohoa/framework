@@ -66,6 +66,8 @@ namespace Sohoa\Framework\View {
         public function setRouter(Router $router)
         {
             $this->_router = $router;
+
+            return $this;
         }
 
         public function setFramework(Framework $framework)
@@ -73,6 +75,7 @@ namespace Sohoa\Framework\View {
             $this->_framework = $framework;
             $framework->kit('greut', new Kit\Greut());
 
+            return $this;
         }
 
 
@@ -82,6 +85,8 @@ namespace Sohoa\Framework\View {
                 $path .= '/';
 
             $this->_paths = $path;
+
+            return $this;
         }
 
         public function __get($helperName)
@@ -183,6 +188,8 @@ namespace Sohoa\Framework\View {
         public function setViewFile($filename)
         {
             $this->_file = $filename;
+
+            return $this;
         }
 
         public function renderFile($filename)
