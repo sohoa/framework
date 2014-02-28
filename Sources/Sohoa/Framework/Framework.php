@@ -39,10 +39,11 @@ namespace Sohoa\Framework {
          * @var \Sohoa\Framework\ErrorHandler
          */
         protected $_errorHandler = null;
+
         /**
          * @var \Sohoa\Framework\Session\Session
          */
-        protected $_session = null;
+        protected $_session      = null;
 
         /**
          * @var array
@@ -64,7 +65,6 @@ namespace Sohoa\Framework {
              * @var \Hoa\Core\Parameter\Parameter $parameters
              * @var \Hoa\Core\Core $core
              */
-
             $core       = Core::getInstance();
             $parameters = $core->getParameters();
 
@@ -73,7 +73,6 @@ namespace Sohoa\Framework {
             $parameters->setParameter('namespace.prefix.Application', '(:cwd:h:)/');
 
             $core->setProtocol();
-
         }
 
         /**
@@ -189,13 +188,13 @@ namespace Sohoa\Framework {
         {
 
             if (empty($identifier))
-                throw new \Exception('Identifier can\'t be empty');
+                throw new \Exception('Kit identifier can\'t be empty');
 
             if ($object === null)
                 if (array_key_exists($identifier, $this->_kit))
                     return $this->_kit[$identifier];
                 else
-                    throw new Exception('Kit "' . $identifier . '" has not set');
+                    throw new Exception('Kit "' . $identifier . '" has not been set');
 
             $object->setRouter($this->_router);
             $object->setView($this->_view);
@@ -212,8 +211,8 @@ namespace Sohoa\Framework {
 
         public static function services($identifier, $object = null)
         {
-            throw new \Exception('Replace of all Services ->'.$identifier);
 
+            trigger_error('Framework::services has been deprecated (' . $identifier . ')', E_USER_DEPRECATED);
         }
 
         /**

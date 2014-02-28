@@ -134,7 +134,8 @@ namespace Sohoa\Framework {
             if ($error instanceof \Hoa\Router\Exception\NotFound) {
 
                 $this->route(self::ROUTE_ERROR_404, $error);
-            } elseif ($error instanceof \Hoa\Dispatcher\Exception) {
+            } elseif ($error instanceof \Hoa\Dispatcher\Exception
+                || $error instanceof \Sohoa\Framework\Dispatcher\Exception) {
 
                 switch ($error->getCode()) {
 

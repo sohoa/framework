@@ -3,12 +3,17 @@ namespace Sohoa\Framework\Kit {
     class Kitable
     {
         protected $router;
+
+        /**
+         *
+         * @var \Hoa\View\Viewable
+         */
         protected $view;
 
         /**
          * @param mixed $router
          */
-        public function setRouter($router)
+        public function setRouter(\Hoa\Router\Router $router)
         {
             $this->router = $router;
 
