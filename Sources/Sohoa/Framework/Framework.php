@@ -55,7 +55,7 @@ namespace Sohoa\Framework {
          */
         protected static $_initialize = false;
 
-        public static function inialize()
+        public static function initialize($cwd = null)
         {
             if (static::$_initialize === true)
                 return;
@@ -67,6 +67,9 @@ namespace Sohoa\Framework {
              */
             $core       = Core::getInstance();
             $parameters = $core->getParameters();
+
+            if($cwd !== null)
+                $parameters->setKeyword('cwd' , $cwd);
 
             $parameters->setParameter('protocol.Application', '(:cwd:h:)/Application/');
             $parameters->setParameter('protocol.Public', '(:%root.application:)/Public/');
@@ -81,7 +84,7 @@ namespace Sohoa\Framework {
         public function __construct($environnement = 'production')
         {
 
-            static::inialize();
+            static::initialize();
 
             $this->setRouter()
                  ->setDispatcher()
