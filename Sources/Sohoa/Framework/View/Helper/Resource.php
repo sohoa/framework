@@ -4,110 +4,62 @@ namespace Sohoa\Framework\View\Helper {
 
     use Sohoa\Framework\View;
 
-    class Resource extends View\Helper
+    abstract class Resource extends View\Helper
     {
         protected static $_useMin = false;
-        protected static $_id = 'z__current';
-        public static $_css = "<link href='%s' rel='stylesheet' />\n";
-        public static $_js = "<script src='%s'></script>\n";
-
-        protected $_tree = array();
+        protected $_output = '';
+        protected $_extension = '';
+        protected $_store = array();
+        protected $_resource = array();
 
         public static function useMin()
         {
-            static::$_useMin = true;
-
+            self::$_useMin = true;
         }
 
-        public function css($path)
-        {
-            $this->_tree['css'][static::$_id][] = $path;
-
-            return $this;
+        protected function store($file) {
+            array_push($this->_store, $file);
         }
 
-        public function min($path , $type = 'auto')
-        {
-            if ($type === 'auto') {
+        public function min($file = null){
 
-                if(preg_match('#js$#', $path))
-                    $type = 'js';
+            if($file === null){
+                $file = '';
+                foreach ($this->_store as $value)
+                    $file .= $value;
 
-                if(preg_match('#css$#', $path))
-                    $type = 'css';
 
+                $file = md5($file).$this->_extension;
             }
 
-            switch ($type) {
-                case 'css':
-                    $this->_minCss($path);
-                    break;
-                case 'js':
-                    $this->_minJs($path);
-                    break;
-            }
+            $this->_resource[$file]    = $this->_store;
+            $this->_store               = array();
 
             return $this;
         }
 
-        protected function _minCss($path)
-        {
-            $this->_tree['css'][$path] = $this->_tree['css'][static::$_id];
-            $this->_tree['css'][static::$_id] = array();
-        }
-
-         protected function _minJs($path)
-         {
-            $this->_tree['js'][$path] = $this->_tree['js'][static::$_id];
-            $this->_tree['js'][static::$_id] = array();
-        }
-
-        public function js($path)
-        {
-            $this->_tree['js'][static::$_id][] = $path;
-
-            return $this;
-        }
-
-        protected function _htmlCss()
-        {
-            ksort($this->_tree['css']);
-            $out = '';
-
-            if(static::$_useMin === true)
-                foreach (array_keys($this->_tree['css']) as $min)
-                    if($min !== static::$_id)
-                        $out .= sprintf(static::$_css , $min);
-
-            foreach ($this->_tree['css'] as $id => $v)
-                if(static::$_useMin === false or $id === static::$_id)
-                    foreach ($v as $css)
-                        $out .= sprintf(static::$_css , $css);
-
-            return $out;
-        }
-
-        protected function _htmlJs()
-        {
-            ksort($this->_tree['js']);
-            $out = '';
-
-            if(static::$_useMin === true)
-                foreach (array_keys($this->_tree['js']) as $min)
-                    if($min !== static::$_id)
-                        $out .= sprintf(static::$_js , $min);
-
-            foreach ($this->_tree['js'] as $id => $v)
-                if(static::$_useMin === false or $id === static::$_id)
-                    foreach ($v as $js)
-                        $out .= sprintf(static::$_js , $js);
-
-            return $out;
+        protected function _html($file){
+            return sprintf($this->_output , $file);
         }
 
         public function html()
         {
-           return $this->_htmlCss() ."\n" . $this->_htmlJs();
+           $out = '';
+
+            foreach ($this->_resource as $min => $files) 
+                if(self::$_useMin === true)
+                    $out .= $this->_html($min);
+                else
+                    foreach ($files as $file)   
+                        $out .= $this->_html($file);
+                
+            
+
+            foreach ($this->_store as $file)
+                $out .= $this->_html($file);
+            
+
+           return $out;
 
         }
         public function __toString()
