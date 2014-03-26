@@ -19,10 +19,10 @@ namespace Sohoa\Framework\View\Helper {
             self::$_useMin = true;
         }
 
-        public static function cache($data , $string = null){
+        public static function cache($data , $suffix= null){
 
             if($string !== null)
-                self::$_append = $string;
+                self::$_append = $suffix;
 
             self::$_appendData = $data;
         }
