@@ -105,9 +105,8 @@ namespace Sohoa\Framework\View {
             return $this->_helpers[$helperName];
         }
 
-        public function __call($function , $argument){
-
-
+        public function __call($function , $argument)
+        {
             return $this->$function->$function($argument[0]);
         }
 

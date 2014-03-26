@@ -9,8 +9,8 @@ namespace Sohoa\Framework\View\Helper {
         protected $_extension = '.css';
        
 
-        public function css($link){
-            
+        public function css($link)
+        {
             $this->store($link);
 
             return $this;

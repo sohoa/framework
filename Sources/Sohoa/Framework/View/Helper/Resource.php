@@ -19,25 +19,25 @@ namespace Sohoa\Framework\View\Helper {
             self::$_useMin = true;
         }
 
-        public static function cache($data , $suffix= null){
-
+        public static function cache($data , $suffix= null)
+        {
             if($string !== null)
                 self::$_append = $suffix;
 
             self::$_appendData = $data;
         }
 
-        protected function store($file) {
-
+        protected function store($file)
+        {
             if(self::$_appendData !== null)
                 $file .= sprintf(self::$_append , self::$_appendData);
 
             array_push($this->_store, $file);
         }
 
-        public function min($file = null){
-
-            if($file === null){
+        public function min($file = null)
+        {
+            if ($file === null) {
                 $file = '';
                 foreach ($this->_store as $value)
                     $file .= $value;
@@ -55,7 +55,8 @@ namespace Sohoa\Framework\View\Helper {
             return $this;
         }
 
-        protected function _html($file){
+        protected function _html($file)
+        {
             return sprintf($this->_output , $file);
         }
 
