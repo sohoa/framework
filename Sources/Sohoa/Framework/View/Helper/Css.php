@@ -7,13 +7,16 @@ namespace Sohoa\Framework\View\Helper {
     {
         protected $_output = "<link href='%s' rel='stylesheet' />\n";
         protected $_extension = '.css';
-        public function link($file) {
+       
 
-            $this->store($file);
+        public function css($link){
+            
+            $this->store($link);
 
             return $this;
         }
 
+       
 
     }
 
