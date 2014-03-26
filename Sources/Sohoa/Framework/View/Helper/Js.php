@@ -7,7 +7,7 @@ namespace Sohoa\Framework\View\Helper {
     {
         protected $_output = "<script src='%s'></script>\n";
         protected $_extension = '.js';
-        public function script($file) {
+        public function js($file) {
 
             $this->store($file);
 
