@@ -66,6 +66,10 @@ namespace Sohoa\Framework\View {
         public function setRouter(Router $router)
         {
             $this->_router = $router;
+            // add rule for Html helper (unroute images, js, css)
+            if(!$this->_router->ruleExists('_resource'))
+              $this->_router->get('/(?<resource>)', array('as' => '_resource',
+                                                          'to' => '#'));
 
             return $this;
         }
