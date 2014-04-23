@@ -1,7 +1,11 @@
 <?php
 
 /**
- * Se mettre d'accord sur la doc.
+ * Greut (enhanced PHP) template engine
+ *
+ * @author greut
+ * @author thehawk
+ * @author osaris
  */
 
 namespace Sohoa\Framework\View {
@@ -17,7 +21,6 @@ namespace Sohoa\Framework\View {
 
     class Greut implements Viewable, Soview
     {
-
 
         protected $_out = null;
         protected $_router = null;
@@ -57,7 +60,6 @@ namespace Sohoa\Framework\View {
             return $this->_data;
         }
 
-
         public function getRouter()
         {
             return $this->_router;
@@ -82,7 +84,6 @@ namespace Sohoa\Framework\View {
             return $this;
         }
 
-
         public function setPath($path)
         {
             if ($path[strlen($path) - 1] !== '/')
@@ -98,7 +99,7 @@ namespace Sohoa\Framework\View {
             if (!isset($this->_helpers[$helperName])) {
                 $helperClassName = '\\Application\\View\\Helper\\' . ucfirst($helperName);
                 if (!class_exists($helperClassName, true)) {
-                  $helperClassName = '\\Sohoa\Framework\\View\\Helper\\' . ucfirst($helperName);                    
+                  $helperClassName = '\\Sohoa\Framework\\View\\Helper\\' . ucfirst($helperName);
                 }
                 $this->_helpers[$helperName] = new $helperClassName();
                 if ($this->_helpers[$helperName] instanceof Helper) {
@@ -156,7 +157,6 @@ namespace Sohoa\Framework\View {
         {
             if (preg_match('#^(?:[/\\\\]|[\w]+:([/\\\\])\1?)#', $filename) !== 1)
                 $filename = $this->_paths . $filename;
-
 
             $realpath = realpath(resolve($filename, false)); // We need to use resolve beacause realpath dont use stream wrapper
 

@@ -12,9 +12,9 @@ namespace Sohoa\Framework\View\Helper {
 
     class Html extends View\Helper
     {
-      public function __call( $name, $arguments ) {
-
-        if(in_array($name, array('css', 'image', 'js'))) {
+      public function __call($name, $arguments)
+      {
+        if (in_array($name, array('css', 'image', 'js'))) {
 
           $router = $this->view->getRouter();
 
@@ -25,8 +25,8 @@ namespace Sohoa\Framework\View\Helper {
         }
       }
 
-      public function url( $route ) {
-
+      public function url($route)
+      {
         return $this->view->getRouter()->unroute($route);
       }
     }
