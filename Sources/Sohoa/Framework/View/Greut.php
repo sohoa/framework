@@ -96,9 +96,9 @@ namespace Sohoa\Framework\View {
         public function __get($helperName)
         {
             if (!isset($this->_helpers[$helperName])) {
-                $helperClassName = '\\Sohoa\Framework\\View\\Helper\\' . ucfirst($helperName);
+                $helperClassName = '\\Application\\View\\Helper\\' . ucfirst($helperName);
                 if (!class_exists($helperClassName, true)) {
-                    $helperClassName = '\\Application\\View\\Helper\\' . ucfirst($helperName);
+                  $helperClassName = '\\Sohoa\Framework\\View\\Helper\\' . ucfirst($helperName);                    
                 }
                 $this->_helpers[$helperName] = new $helperClassName();
                 if ($this->_helpers[$helperName] instanceof Helper) {
