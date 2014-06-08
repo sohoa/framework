@@ -21,7 +21,7 @@ class rule extends \atoum\asserters\phpArray {
 
         if ($checkType === true) {
 
-            if (self::isArray($this->value) === false) {
+            if (is_array($this->value) === false) {
 
                 $this->fail(sprintf($this->getLocale()->_('%s is not an array'), $this));
             }

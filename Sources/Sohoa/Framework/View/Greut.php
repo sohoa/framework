@@ -34,8 +34,9 @@ namespace Sohoa\Framework\View {
         public function __construct(Out $response = null)
         {
 
-            if ($response === null)
+            if ($response === null) {
                 $response = new Response();
+            }
 
             $this->_out   = $response;
             $this->_data  = new \Stdclass();
@@ -82,8 +83,9 @@ namespace Sohoa\Framework\View {
 
         public function setPath($path)
         {
-            if ($path[strlen($path) - 1] !== '/')
+            if ($path[strlen($path) - 1] !== '/') {
                 $path .= '/';
+            }
 
             $this->_paths = $path;
 
@@ -97,13 +99,28 @@ namespace Sohoa\Framework\View {
                 if (!class_exists($helperClassName, true)) {
                     $helperClassName = '\\Application\\View\\Helper\\' . ucfirst($helperName);
                 }
-                $this->_helpers[$helperName] = new $helperClassName();
-                if ($this->_helpers[$helperName] instanceof Helper) {
-                    $this->_helpers[$helperName]->setView($this);
-                }
+                $this->view($helperName, $helperClassName);
             }
 
             return $this->_helpers[$helperName];
+        }
+
+        public function view($name, $classname)
+        {
+            if (array_key_exists($name, $this->_helpers)) {
+                return $this->_helpers[$name];
+            }
+
+            if (is_string($classname)) {
+                $classname = dnew($classname);
+            }
+
+            if ($classname instanceof Helper) {
+                $this->_helpers[$name] = $classname;
+                $this->_helpers[$name]->setView($this);
+            }
+
+            return $this->_helpers[$name];
         }
 
         public function inherits($path)
@@ -151,22 +168,25 @@ namespace Sohoa\Framework\View {
 
         public function getFilenamePath($filename)
         {
-            if (preg_match('#^(?:[/\\\\]|[\w]+:([/\\\\])\1?)#', $filename) !== 1)
+            if (preg_match('#^(?:[/\\\\]|[\w]+:([/\\\\])\1?)#', $filename) !== 1) {
                 $filename = $this->_paths . $filename;
+            }
 
 
             $realpath = realpath(resolve($filename, false)); // We need to use resolve beacause realpath dont use stream wrapper
 
-            if ((false === $realpath) || !(file_exists($realpath)))
+            if ((false === $realpath) || !(file_exists($realpath))) {
                 throw new \Sohoa\Framework\Exception('Path ' . $filename . ' (' . (($realpath === false) ? 'false' : $realpath) . ') not found!');
+            }
 
             return $realpath;
         }
 
         public function render()
         {
-            while ($h = array_pop($this->_headers))
+            while ($h = array_pop($this->_headers)) {
                 $this->_out->sendHeader($h[0], $h[1], $h[2], $h[3]);
+            }
 
             $this->_out->writeAll($this->renderFile($this->_file));
         }
@@ -208,8 +228,9 @@ namespace Sohoa\Framework\View {
             $content = ob_get_contents();
             ob_end_clean();
 
-            while ($inherit = array_pop($this->_inherits[$filename]))
+            while ($inherit = array_pop($this->_inherits[$filename])) {
                 $content = $this->renderFile($inherit);
+            }
 
             return $content;
         }
