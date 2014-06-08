@@ -11,14 +11,14 @@ namespace Sohoa\Framework\Router {
     class Resource
     {
 
-        protected  $_router = null;
-        protected  $_restRule = array();
-        protected  $_resourceTree = array();
+        protected $_router = null;
+        protected $_restRule = array();
+        protected $_resourceTree = array();
 
-        public function __construct($resource, $argument, Router $router, Array $restRules = array())
+        public function __construct($resource, $argument, Router $router)
         {
-            $this->_router = $router;
-            $this->_restRule = $restRules;
+            $this->_router   = $router;
+            $this->_restRule = $router->getResources();
 
             $this->resource($resource, $argument);
         }
@@ -41,7 +41,7 @@ namespace Sohoa\Framework\Router {
         {
             $route = array();
             foreach ($this->_restRule as $v) {
-                $rAction = $this->resourceAction($resource, 'show');
+                $rAction = $this->resourceAction('show');
                 if ($this->_router->ruleExists($rAction)) {
                     $rule = $this->_router->getRule($rAction);
                     $route[$v[Router::ROUTE_ACTION]] = $rule[3];
@@ -53,17 +53,33 @@ namespace Sohoa\Framework\Router {
             return $route;
         }
 
-        protected function resourceAction($resource, $action)
+        protected function resourceAction($action)
         {
-            return $action . ucfirst(strtolower($resource));
+            $resource = implode(' ', $this->_resourceTree);
+            $resource = ucwords($resource);
+            $resource = str_replace(' ', '', $resource);
+
+            return $action . $resource;
         }
 
         protected function generateResource($name, $args = array(), $parent = array())
         {
+            $prefix                 = '';
+            $uri                    = (isset($args['alias'])) ? $args['alias'] : $name;
+            $routes                 = $this->_restRule;
+            $variableName           = (isset($args['variable'])) ? $args['variable'] : strtolower($name) . '_id';
+            $controller             =  ucfirst(strtolower($name));
+            if (count($this->_resourceTree) === 0) {
+                if (isset($args['prefix'])) {
+                    $prefix = $args['prefix'];
+                    $prefixName = preg_replace('#[^[:alpha:]]#', '', $prefix);
+                    $this->_resourceTree[] = $prefixName;
+                    $controller = ucfirst($prefixName).'\\'.$controller;
+                }
+            }
 
-            $this->_resourceTree[] = $name;
-            $routes = $this->_restRule;
-            $varName = (isset($args['variable'])) ? $args['variable'] : strtolower($name) . '_id';
+            $this->_resourceTree[]  = $name;
+
             $routes = array_filter($routes, function ($route) use (&$args, &$parent) {
                 $accept = true;
 
@@ -80,27 +96,28 @@ namespace Sohoa\Framework\Router {
                 return $accept;
             });
 
-            array_walk($routes, function (&$route, $key, $p) {
+            array_walk($routes, function (&$route, $key, $p) use ($prefix) {
                 list($parent, $name) = $p;
-
                 if (array_key_exists($route[Router::ROUTE_ACTION], $parent))
-                    $route[Router::ROUTE_URI_PATTERN] = $parent[$route[Router::ROUTE_ACTION]] . '/' . $name . $route[Router::ROUTE_URI_PATTERN];
+                    $route[Router::ROUTE_URI_PATTERN] = $prefix.$parent[$route[Router::ROUTE_ACTION]] . '/' . $name . $route[Router::ROUTE_URI_PATTERN];
                 else
-                    $route[Router::ROUTE_URI_PATTERN] = '/' . $name . $route[Router::ROUTE_URI_PATTERN];
+                    $route[Router::ROUTE_URI_PATTERN] = $prefix.'/' . $name . $route[Router::ROUTE_URI_PATTERN];
 
-            }, array($parent, $name));
+            }, array($parent, $uri));
 
             // write route for each HTTP verb
             foreach ($routes as $route) {
 
                 // TODO decide if we pluralize/singularize resource name
 
-                if (!$this->_router->ruleExists($this->resourceAction($name, $route[Router::ROUTE_ACTION])))
-                    $this->_router->addRule($this->resourceAction($name, $route[Router::ROUTE_ACTION]),
+                if (!$this->_router->ruleExists($this->resourceAction($route[Router::ROUTE_ACTION])))
+                    $this->_router->addRule(
+                        $this->resourceAction($route[Router::ROUTE_ACTION]),
                         array($route[Router::ROUTE_VERB]),
-                        sprintf($route[Router::ROUTE_URI_PATTERN], $varName),
-                        ucfirst(strtolower($name)),
-                        $route[Router::ROUTE_ACTION]);
+                        sprintf($route[Router::ROUTE_URI_PATTERN], $variableName),
+                        $controller,
+                        $route[Router::ROUTE_ACTION]
+                    );
             }
         }
 

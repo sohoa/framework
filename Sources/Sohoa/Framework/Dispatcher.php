@@ -18,7 +18,7 @@ namespace Sohoa\Framework {
         protected $_currentView = null;
         protected $_kit         = 'Hoa\Dispatcher\Kit';
 
-        public function __construct(Array $parameters = array())
+        public function __construct(array $parameters = array())
         {
 
             $this->_parameters = new Parameter(
@@ -79,7 +79,7 @@ namespace Sohoa\Framework {
             return $out;
         }
 
-        abstract protected function resolve(Array $rule, Routing $router, Viewable $view , Framework $framework);
+        abstract protected function resolve(array $rule, Routing $router, Viewable $view , Framework $framework);
 
     }
 }
