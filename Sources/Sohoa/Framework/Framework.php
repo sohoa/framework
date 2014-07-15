@@ -3,8 +3,6 @@
 namespace Sohoa\Framework {
 
     use Hoa\Core\Core;
-    use Hoa\Router\Router;
-    use Hoa\View\Viewable;
     use Sohoa\Framework\Dispatcher\Basic;
     use Sohoa\Framework\Kit\Kitable;
     use Sohoa\Framework\Router\IRouter;
@@ -86,21 +84,15 @@ namespace Sohoa\Framework {
 
             static::initialize();
 
-            $this->setRouter()
-                 ->setDispatcher()
-                 ->setErrorHandler()
-                 ->setView()
-                 ->setEnvironnement($environnement)
-                 ->getRouter()->construct();
+            $this->setEnvironnement($environnement);
         }
 
         /**
          * @param IRouter $router
          */
-        public function setRouter(IRouter $router = null)
+        public function setRouter(IRouter $router)
         {
-            $this->_router = $router ? : new \Sohoa\Framework\Router();
-            $this->_router->setFramework($this);
+            $this->_router = $router;
 
             return $this;
         }
@@ -108,9 +100,9 @@ namespace Sohoa\Framework {
         /**
          * @param Dispatcher $dispatcher
          */
-        public function setDispatcher(Dispatcher $dispatcher = null)
+        public function setDispatcher(Dispatcher $dispatcher)
         {
-            $this->_dispatcher = $dispatcher ? : new Basic();
+            $this->_dispatcher = $dispatcher;
 
             return $this;
         }
@@ -118,12 +110,9 @@ namespace Sohoa\Framework {
         /**
          * @param Soview $view
          */
-        public function setView(Soview $view = null)
+        public function setView(Soview $view)
         {
-            $this->_view = $view ? : new Greut();
-
-            $this->_view->setRouter($this->_router);
-            $this->_view->setFramework($this);
+            $this->_view = $view;
 
             return $this;
         }
@@ -137,7 +126,18 @@ namespace Sohoa\Framework {
 
         public function setSession(Session $session)
         {
-            $this->_session = $session ? : new Session();
+            $this->_session = $session;
+
+            return $this;
+        }
+
+        /**
+         *
+         * @param \Sohoa\Framework\ErrorHandler $errorHandler
+         */
+        public function setErrorHandler(ErrorHandler $errorHandler)
+        {
+            $this->_errorHandler = $errorHandler;
 
             return $this;
         }
@@ -147,6 +147,7 @@ namespace Sohoa\Framework {
          */
         public function getDispatcher()
         {
+            if ( !$this->_dispatcher) $this->initDispatcher();
             return $this->_dispatcher;
         }
 
@@ -155,6 +156,7 @@ namespace Sohoa\Framework {
          */
         public function getRouter()
         {
+            if ( !$this->_router) $this->initRouter();
             return $this->_router;
         }
 
@@ -163,6 +165,7 @@ namespace Sohoa\Framework {
          */
         public function getView()
         {
+            if ( !$this->_view) $this->initView();
             return $this->_view;
         }
 
@@ -176,8 +179,108 @@ namespace Sohoa\Framework {
             return $this->_session;
         }
 
+        /**
+         *
+         * @return \Sohoa\Framework\ErrorHandler
+         */
+        public function getErrorHandler()
+        {
+            if ( !$this->_errorHandler) $this->initErrorHandler();
+            return $this->_errorHandler;
+        }
+
+        /**
+         * Initialize the router : create the default router if not already given, and inject framework to the router
+         * @return \Sohoa\Framework\Framework
+         */
+        public function initRouter()
+        {
+
+            if (!$this->_router) {
+
+                $this->_router = new Router();
+            }
+
+            $this->_router->setFramework($this);
+
+            return $this;
+        }
+
+        /**
+         * Initialize the view : create the default view if not already given, and inject framework to the view
+         * @return \Sohoa\Framework\Framework
+         */
+        public function initView()
+        {
+
+            if (!$this->_view) {
+
+                $this->_view = new Greut();
+            }
+
+            $this->_view->setFramework($this);
+
+            return $this;
+        }
+
+        /**
+         * Initialize the dispatcher : create the basic dispatcher if not already given
+         * @return \Sohoa\Framework\Framework
+         */
+        public function initDispatcher()
+        {
+
+            if (!$this->_dispatcher) {
+
+                $this->_dispatcher = new Basic();
+            }
+
+            return $this;
+        }
+
+        /**
+         * Initialize the error handler : create the default error handler if not already given, and inject framework to error handler
+         * @return \Sohoa\Framework\Framework
+         */
+        public function initErrorHandler()
+        {
+
+            if (!$this->_errorHandler) {
+
+                $this->_errorHandler = new ErrorHandler();
+            }
+
+            $this->_errorHandler->setFramework($this);
+
+            return $this;
+        }
+
+        /**
+         * Initialize all the kits : inject router and view to each kit
+         * @return \Sohoa\Framework\Framework
+         */
+        public function initKit()
+        {
+            /* @var $kit Kitable */
+            foreach ($this->_kit as $kit) {
+                $kit->setView($this->getView());
+                $kit->setRouter($this->getRouter());
+            }
+
+            return $this;
+        }
+
         public function run()
         {
+
+            $this->initRouter()
+                ->initView()
+                ->initDispatcher()
+                ->initErrorHandler()
+                ->initKit();
+
+            $this->_router->construct();
+
             try {
                 $this->_dispatcher->dispatch($this->_router, $this->_view, $this);
             } catch (\Exception $e) {
@@ -199,8 +302,8 @@ namespace Sohoa\Framework {
                 else
                     throw new Exception('Kit "' . $identifier . '" has not been set');
 
-            $object->setRouter($this->_router);
-            $object->setView($this->_view);
+//            $object->setRouter($this->_router);
+//            $object->setView($this->_view);
 
             $this->_kit[$identifier] = $object;
 
@@ -216,29 +319,6 @@ namespace Sohoa\Framework {
         {
 
             trigger_error('Framework::services has been deprecated (' . $identifier . ')', E_USER_DEPRECATED);
-        }
-
-        /**
-         *
-         * @return \Sohoa\Framework\ErrorHandler
-         */
-        public function getErrorHandler()
-        {
-            return $this->_errorHandler;
-        }
-
-        /**
-         *
-         * @param \Sohoa\Framework\ErrorHandler $errorHandler
-         */
-        public function setErrorHandler(ErrorHandler $errorHandler = null)
-        {
-            $this->_errorHandler = $errorHandler ? : new ErrorHandler();
-            $this->_errorHandler->setRouter($this->getRouter())
-                                ->setFramework($this)
-                                ->setDispatcher($this->_dispatcher);
-
-            return $this;
         }
 
     }

@@ -84,6 +84,8 @@ namespace Sohoa\Framework {
         public function setFramework(Framework $framework)
         {
             $this->_framework = $framework;
+            $this->_router = $framework->getRouter();
+            $this->_dispatcher = $framework->getDispatcher();
 
             return $this;
         }

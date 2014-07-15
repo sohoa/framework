@@ -73,6 +73,7 @@ namespace Sohoa\Framework\View {
         public function setFramework(Framework $framework)
         {
             $this->_framework = $framework;
+            $this->_router = $framework->getRouter();
             $framework->kit('greut', new Kit\Greut());
 
             return $this;
