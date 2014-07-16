@@ -22,10 +22,8 @@ namespace Application\Controller {
     class Foo extends Kit
     {
 
-
         public function IndexAction()
         {
-
             return $this->foo;
         }
     }
@@ -45,7 +43,6 @@ namespace Sohoa\Framework\Tests\Unit {
         {
             parent::__construct();
 
-
             $this->fwk = new Fwk();
             $this->fwk->kit('foo', new \Xyl());
             $this->fwk->kit('bar', new \Xyl());
@@ -56,7 +53,6 @@ namespace Sohoa\Framework\Tests\Unit {
 
         public function testAdd()
         {
-
 
             $this->sizeof($this->fwk->getKits())->isEqualto(4);
 
@@ -76,12 +72,10 @@ namespace Sohoa\Framework\Tests\Unit {
             $this->sizeof($this->fwk->getKits())->isEqualto(4);
             $this->object($this->fwk->kit('foo'))->isInstanceOf('\Xylophone');
 
-
         }
 
         public function testKitInController()
         {
-
 
             $controller = new Foo($this->fwk->getRouter(), $this->fwk->getDispatcher(), $this->fwk->getView(), $this->fwk);
             $xyl        = $controller->IndexAction();
@@ -98,7 +92,6 @@ namespace Sohoa\Framework\Tests\Unit {
                 ->assert('Kit property is a Kitable')
                 ->object($controller->foo)->isIdenticalTo($miscKit);
         }
-
 
     }
 }

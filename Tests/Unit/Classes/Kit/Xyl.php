@@ -2,8 +2,6 @@
 
 namespace Sohoa\Framework\Kit\Tests\Unit;
 
-use Hoa\Dispatcher\Basic;
-use Hoa\Router\Http;
 use Hoa\Router\Router;
 use Sohoa\Framework\Framework;
 use Sohoa\Framework\Kit as Kit;
@@ -24,7 +22,6 @@ class myView implements \Hoa\View\Viewable, Soview
 
     public function getOverlay()
     {
-
         return $this->_overlay;
     }
 
@@ -53,7 +50,6 @@ class myView implements \Hoa\View\Viewable, Soview
         $framework->kit('xyl' , new Kit\Xyl());
     }
 
-
 }
 
 class Xyl extends \atoum\test
@@ -68,7 +64,6 @@ class Xyl extends \atoum\test
 
         parent::__construct();
 
-
         $fwk = new Framework();
         $fwk->setView(new myView());
         $this->_router = $fwk->getRouter();
@@ -77,9 +72,9 @@ class Xyl extends \atoum\test
         $this->_router->any('/(?<_call>.[^/]+)/(?<_able>.*)', array('as' => 'c', 'to' => 'Main#Index'));
         $this->_router->any('/', array('as' => 'h', 'to' => 'Main#Index'));
 
+        $kit           = new Kit($this->_router, $fwk->getDispatcher(), $this->_view, $fwk);
+        $this->_kit    = $kit->xyl;
 
-        $kit        = new Kit($this->_router, $fwk->getDispatcher(), $this->_view, $fwk);
-        $this->_kit = $kit->xyl;
     }
 
     /**
@@ -106,6 +101,7 @@ class Xyl extends \atoum\test
     /**
      * @dataProvider arrayProvider
      */
+
     public function testArray($array, $correctView)
     {
         $errorView = 'hoa://Application/View/Main/Index.xyl';
@@ -114,13 +110,13 @@ class Xyl extends \atoum\test
             ->isIdenticalTO($correctView)
             ->isNotIdenticalTo($errorView);
 
-
         $this->array($this->_view->getOverlay())->contains($correctView)->notContains($errorView);
     }
 
     /**
      * @dataProvider stringProvider
      */
+
     public function testString($filename)
     {
 
@@ -158,4 +154,5 @@ class Xyl extends \atoum\test
             'hoa://Application/View/Freeman/Hawk.xyl'
         );
     }
+
 }

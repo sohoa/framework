@@ -85,6 +85,13 @@ namespace Sohoa\Framework {
             static::initialize();
 
             $this->setEnvironnement($environnement);
+
+            $this->construct();
+        }
+
+        public function construct()
+        {
+
         }
 
         /**
@@ -302,12 +309,17 @@ namespace Sohoa\Framework {
                 else
                     throw new Exception('Kit "' . $identifier . '" has not been set');
 
-//            $object->setRouter($this->_router);
-//            $object->setView($this->_view);
+            $object->setRouter($this->getRouter());
+            $object->setView($this->getView());
 
             $this->_kit[$identifier] = $object;
 
-            return $this;
+            return $this->_kit[$identifier];
+        }
+
+        public function hasKit($identifier)
+        {
+            return array_key_exists($identifier, $this->_kit);
         }
 
         public function getKits()
