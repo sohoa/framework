@@ -16,7 +16,7 @@ namespace Sohoa\Framework\Model {
 
         public function __construct()
         {
-            $this->_mapping = call_user_func_array([$this, 'map'], func_get_args());
+            $this->_mapping = call_user_func_array(array($this, 'map'), func_get_args());
         }
 
         public static function mode($save = null, $update = self::UPDATE_CHANGE_VALUE)
