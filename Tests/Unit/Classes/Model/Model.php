@@ -37,7 +37,7 @@ namespace Sohoa\Framework\Model\Tests\Unit {
     {
         public function testHydrate()
         {
-            $model = new \Foo(['foo' => 'barssss', 'bar' => 2]);
+            $model = new \Foo(array('foo' => 'barssss', 'bar' => 2));
 
             $this
                 ->object($model)
@@ -50,7 +50,7 @@ namespace Sohoa\Framework\Model\Tests\Unit {
         {
             \Foo::mode(\Foo::SAVE_IMMEDIATE);
 
-            $model = new \Foo(['foo' => 'barssss', 'bar' => 2]);
+            $model = new \Foo(array('foo' => 'barssss', 'bar' => 2));
 
             $this
                 ->object($model)
@@ -67,7 +67,7 @@ namespace Sohoa\Framework\Model\Tests\Unit {
         public function testManuUpdate()
         {
             \Foo::mode(\Foo::SAVE_MANU);
-            $model = new \Foo(['foo' => 'barssss', 'bar' => 2]);
+            $model = new \Foo(array('foo' => 'barssss', 'bar' => 2));
 
             $this
                 ->object($model)
@@ -97,7 +97,7 @@ namespace Sohoa\Framework\Model\Tests\Unit {
         public function testManuAllUpdate()
         {
             \Foo::mode(\Foo::SAVE_MANU, \Foo::UPDATE_ALL_VALUE);
-            $model = new \Foo(['foo' => 'barssss', 'bar' => 2]);
+            $model = new \Foo(array('foo' => 'barssss', 'bar' => 2));
 
             $this
                 ->object($model)
@@ -127,7 +127,7 @@ namespace Sohoa\Framework\Model\Tests\Unit {
         {
             \Foo::mode(\Foo::SAVE_IMMEDIATE, \Foo::UPDATE_ALL_VALUE); // That no sense :)
 
-            $model = new \Foo(['foo' => 'barssss', 'bar' => 2]);
+            $model = new \Foo(array('foo' => 'barssss', 'bar' => 2));
 
             $this
                 ->object($model)
@@ -147,7 +147,7 @@ namespace Sohoa\Framework\Model\Tests\Unit {
 
         public function testInsert()
         {
-             $model = new \Foo(['foo' => 'barssss', 'bar' => 2]);
+             $model = new \Foo(array('foo' => 'barssss', 'bar' => 2));
 
              $this->exception(function () use ($model) {
                  $model['hello'] = 'world';
