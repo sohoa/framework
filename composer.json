@@ -1,17 +1,17 @@
 {
     "name": "sohoa/framework",
     "require": {
-        "php": ">=5.3.0",
-        "hoa/core": "dev-master",
-        "hoa/console": "dev-master",
-        "hoa/http": "dev-master",
-        "hoa/router": "dev-master",
-        "hoa/view": "dev-master",
-        "hoa/dispatcher": "dev-master",
-        "hoa/session": "dev-master",
-        "hoa/file": "dev-master",
-        "hoa/registry": "dev-master",
-        "hoa/stringbuffer": "dev-master"
+        "php": ">=5.4.0",
+        "hoa/core": "~2.0",
+        "hoa/console": "~2.0",
+        "hoa/http": "~0.0",
+        "hoa/router": "~2.0",
+        "hoa/view": "~2.0",
+        "hoa/dispatcher": "~0.0",
+        "hoa/session": "~0.0",
+        "hoa/file": "~0.0",
+        "hoa/registry": "~2.0",
+        "hoa/stringbuffer": "~0.0"
 
     },
     "suggest": {
