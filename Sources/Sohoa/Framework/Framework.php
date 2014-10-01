@@ -42,6 +42,10 @@ namespace Sohoa\Framework {
          * @var \Sohoa\Framework\Session\Session
          */
         protected $_session      = null;
+        /**
+         * @var \Sohoa\Framework\Form\Form
+         */
+        protected $_form         = null;
 
         /**
          * @var array
@@ -85,7 +89,6 @@ namespace Sohoa\Framework {
             static::initialize();
 
             $this->setEnvironnement($environnement);
-
             $this->construct();
         }
 
@@ -277,6 +280,24 @@ namespace Sohoa\Framework {
             return $this;
         }
 
+        /**
+         * @return \Sohoa\Framework\Framework
+         */
+        public function initForm()
+        {
+            if (!$this->_form and file_exists('hoa://Application/Config/Form.php')) {
+
+                require 'hoa://Application/Config/Form.php';
+            }
+
+            return $this;
+        }
+
+        public function form($id)
+        {
+            return Form\Form::get($id);
+        }
+
         public function run()
         {
 
@@ -284,6 +305,7 @@ namespace Sohoa\Framework {
                 ->initView()
                 ->initDispatcher()
                 ->initErrorHandler()
+                ->initForm()
                 ->initKit();
 
             $this->_router->construct();
