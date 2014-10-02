@@ -27,7 +27,10 @@ namespace Sohoa\Framework\Form\Validate {
 
         protected function getDetail()
         {
-            return $this->_detail;
+            return [
+                'object' => get_class($this),
+                'message' => $this->_detail
+            ];
         }
 
         protected function _valid($data, $element)

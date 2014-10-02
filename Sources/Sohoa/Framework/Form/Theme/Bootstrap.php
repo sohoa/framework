@@ -79,7 +79,7 @@ namespace Sohoa\Framework\Form\Theme {
             $errorLabel = '';
             if (($error = $this->getError($name)) !== null) {
                 foreach ($error as $value) {
-                    $errorLabel .= '<span class="help-block">'.$value.'</span>';
+                    $errorLabel .= '<span class="help-block">'.$value['message'].'</span>';
                 }
             }
 
@@ -128,7 +128,7 @@ namespace Sohoa\Framework\Form\Theme {
             $errorLabel = '';
             if (($errors = $this->getError($name)) !== null) {
                 foreach ($errors as $error) {
-                    $errorLabel .= '<span class="help-block">'.$error.'</span>';
+                    $errorLabel .= '<span class="help-block">'.$error['message'].'</span>';
                 }
             }
 
@@ -149,7 +149,7 @@ namespace Sohoa\Framework\Form\Theme {
             $errorLabel = '';
             if (($errors = $this->getError($name)) !== null) {
                 foreach ($errors as $error) {
-                    $errorLabel .= '<span class="help-block">'.$error.'</span>';
+                    $errorLabel .= '<span class="help-block">'.$error['message'].'</span>';
                 }
             }
 
@@ -198,7 +198,7 @@ namespace Sohoa\Framework\Form\Theme {
             $errorLabel = '';
             if (($errors = $this->getError($name)) !== null) {
                 foreach ($errors as $error) {
-                    $errorLabel .= '<span class="help-block">'.$error.'</span>';
+                    $errorLabel .= '<span class="help-block">'.$error['message'].'</span>';
                 }
             }
 

@@ -54,7 +54,17 @@ namespace Sohoa\Framework\Form\Validate {
 
         protected function getDetail()
         {
-            return vsprintf($this->_detail, $this->ex);
+            $args = [
+                'length' => $this->length,
+                'max'    => $this->max,
+                'min'    => $this->min
+            ];
+
+            return [
+                'object'  => get_class($this),
+                'message' => vsprintf($this->_detail, $this->ex),
+                'args'    => $args
+            ];
         }
     }
 }

@@ -22,7 +22,16 @@ namespace Sohoa\Framework\Form\Validate {
 
         protected function getDetail()
         {
-            return sprintf($this->_detail, var_export($this->value, true), $this->realdom);
+            $args = [
+                'realdom' => $this->realdom,
+                'value'   => $this->value
+            ];
+
+            return [
+                'object'  => get_class($this),
+                'message' => sprintf($this->_detail, var_export($this->value, true), $this->realdom),
+                'args'    => $args
+            ];
         }
     }
 }

@@ -18,7 +18,11 @@ namespace Sohoa\Framework\Form\Validate {
 
         protected function getDetail()
         {
-            return sprintf($this->_detail, $this->max);
+            return [
+                'object'  => get_class($this),
+                'message' => sprintf($this->_detail, $this->max),
+                'args'    => ['max' => $this->max]
+            ];
         }
     }
 }

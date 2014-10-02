@@ -89,7 +89,10 @@ class Form extends \atoum\test
                 ->isFalse()
             ->array($validate->getErrors())
                 ->hasSize(1)
-                ->string['login'][0]->isEqualTo('The given value 80 do not match boundinteger(0, 52)');
+                ->string['login'][0]['object']->isEqualTo('Sohoa\Framework\Form\Validate\Praspel')
+                ->string['login'][0]['message']->isEqualTo('The given value 80 do not match boundinteger(0, 52)')
+                ->string['login'][0]['args']['realdom']->isEqualTo('boundinteger(0, 52)')
+                ->integer['login'][0]['args']['value']->isEqualTo('80');
 
         $data       = [
             'login'     => 5,
@@ -114,27 +117,32 @@ class Form extends \atoum\test
             ->isFalse()
             ->array($validate->getErrors())
                 ->hasSize(1)
-                ->string['password'][0]->isEqualTo('The given value is too long, need >= 5 char');
+                ->string['password'][0]['message']->isEqualTo('The given value is too long, need >= 5 char');
 
         $this
             ->boolean($validate->isValid(['aaaa' => 'a']))
             ->isFalse()
             ->array($validate->getErrors())
                 ->hasSize(5)
-                ->string['login'][0]->isEqualTo('The given value NULL do not match boundinteger(0, 52)')
+                ->string['login'][0]['message']->isEqualTo('The given value NULL do not match boundinteger(0, 52)')
 
-                ->string['password'][0]->isEqualTo('This field is required')
-                ->string['password'][1]->isEqualTo('The given value is too long, need >= 5 char')
+                ->string['password'][0]['message']->isEqualTo('This field is required')
 
-                ->string['rpassword'][0]->isEqualTo('This field is required')
-                ->string['rpassword'][1]->isEqualTo('The given value is too long, need >= 5 char')
+                ->string['password'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
+                ->string['password'][1]['object']->isEqualTo('Sohoa\Framework\Form\Validate\Length')
+                ->integer['password'][1]['args']['length']->isEqualTo('The given value is too long, need >= 5 char')
+                ->string['password'][1]['args']['max']->isEqualTo('')
+                ->string['password'][1]['args']['min']->isEqualTo('5')
 
-                ->string['email'][0]->isEqualTo('This field is required')
-                ->string['email'][1]->isEqualTo('The given value is too long, need >= 5 char')
-                ->string['email'][2]->isEqualTo('The given value is not an valid email address')
+                ->string['rpassword'][0]['message']->isEqualTo('This field is required')
+                ->string['rpassword'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
 
-                ->string['name'][0]->isEqualTo('This field is required')
-                ->string['name'][1]->isEqualTo('The given value is too long, need >= 5 char')
+                ->string['email'][0]['message']->isEqualTo('This field is required')
+                ->string['email'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
+                ->string['email'][2]['message']->isEqualTo('The given value is not an valid email address')
+
+                ->string['name'][0]['message']->isEqualTo('This field is required')
+                ->string['name'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
         ;
 
     }
