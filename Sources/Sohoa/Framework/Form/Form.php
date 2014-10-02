@@ -108,7 +108,7 @@ namespace Sohoa\Framework\Form {
             $this->_validator = $validate;
         }
 
-        public function getValidate()
+        public function getValidator()
         {
             if ($this->_validator === null) {
                 $this->_validator = new Validate\Check($this);
@@ -119,7 +119,12 @@ namespace Sohoa\Framework\Form {
 
         public function isValid($data = array())
         {
-            return $this->getValidate()->isValid($data);
+            return $this->getValidator()->isValid($data);
+        }
+
+        public function getErrors()
+        {
+            return $this->getValidator()->getErrors();
         }
     }
 }
