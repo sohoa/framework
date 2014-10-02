@@ -6,22 +6,25 @@ require_once __DIR__ . '/../Runner.php';
 
 class Form extends \atoum\test
 {
-
+    // TODO : Add optgroup on select
+    // TODO : Add Button
+    // TODO : Add File
+    // TODO : <Guile> comment tu définis la méthod du form, et est-il possible que Form ait un moyen implicite de récupérer ses data par la bonne méthode ?
+    // TODO : type=numeric, required=required => dans le need()
     public function testRadio()
     {
         $fwk      = new \Sohoa\Framework\Framework();
         $form     = $fwk->form('foo');
         $form
             ->action('/user/')
-            ->method('post')
-            ->setTheme(new \Sohoa\Framework\Form\Theme\Bootstrap());
+            ->method('post');
 
         $form[]   = (new \Sohoa\Framework\Form\Radio())
                     ->name('foo')
                     ->option('doo', 'bar', ['id' => 'hello'])
                     ->option('doo', 'bar');
 
-        $this->string($form->render())->length->isEqualTo(410);
+        $this->string($form->render())->length->isIdenticalTo(410);
     }
 
     public function testLoad()
@@ -89,10 +92,10 @@ class Form extends \atoum\test
                 ->isFalse()
             ->array($validate->getErrors())
                 ->hasSize(1)
-                ->string['login'][0]['object']->isEqualTo('Sohoa\Framework\Form\Validate\Praspel')
-                ->string['login'][0]['message']->isEqualTo('The given value 80 do not match boundinteger(0, 52)')
-                ->string['login'][0]['args']['realdom']->isEqualTo('boundinteger(0, 52)')
-                ->integer['login'][0]['args']['value']->isEqualTo('80');
+                ->string['login'][0]['object']->isIdenticalTo('Sohoa\Framework\Form\Validate\Praspel')
+                ->string['login'][0]['message']->isIdenticalTo('The given value 80 do not match boundinteger(0, 52)')
+                ->string['login'][0]['args']['realdom']->isIdenticalTo('boundinteger(0, 52)')
+                ->integer['login'][0]['args']['value']->isIdenticalTo(80);
 
         $data       = [
             'login'     => 5,
@@ -117,32 +120,33 @@ class Form extends \atoum\test
             ->isFalse()
             ->array($validate->getErrors())
                 ->hasSize(1)
-                ->string['password'][0]['message']->isEqualTo('The given value is too long, need >= 5 char');
+                ->string['password'][0]['message']->isIdenticalTo('The given value is too long, need >= 5 char');
 
         $this
             ->boolean($validate->isValid(['aaaa' => 'a']))
             ->isFalse()
             ->array($validate->getErrors())
                 ->hasSize(5)
-                ->string['login'][0]['message']->isEqualTo('The given value NULL do not match boundinteger(0, 52)')
+                ->string['login'][0]['message']->isIdenticalTo('The given value NULL do not match boundinteger(0, 52)')
 
-                ->string['password'][0]['message']->isEqualTo('This field is required')
+                ->string['password'][0]['message']->isIdenticalTo('This field is required')
 
-                ->string['password'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
-                ->string['password'][1]['object']->isEqualTo('Sohoa\Framework\Form\Validate\Length')
-                ->integer['password'][1]['args']['length']->isEqualTo('The given value is too long, need >= 5 char')
-                ->string['password'][1]['args']['max']->isEqualTo('')
-                ->string['password'][1]['args']['min']->isEqualTo('5')
+                ->string['password'][1]['message']->isIdenticalTo('The given value is too long, need >= 5 char')
+                ->string['password'][1]['object']->isIdenticalTo('Sohoa\Framework\Form\Validate\Length')
 
-                ->string['rpassword'][0]['message']->isEqualTo('This field is required')
-                ->string['rpassword'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
+                ->integer['password'][1]['args']['length']->isIdenticalTo(0)
+                ->string['password'][1]['args']['max']->isIdenticalTo('')
+                ->string['password'][1]['args']['min']->isIdenticalTo('5')
 
-                ->string['email'][0]['message']->isEqualTo('This field is required')
-                ->string['email'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
-                ->string['email'][2]['message']->isEqualTo('The given value is not an valid email address')
+                ->string['rpassword'][0]['message']->isIdenticalTo('This field is required')
+                ->string['rpassword'][1]['message']->isIdenticalTo('The given value is too long, need >= 5 char')
 
-                ->string['name'][0]['message']->isEqualTo('This field is required')
-                ->string['name'][1]['message']->isEqualTo('The given value is too long, need >= 5 char')
+                ->string['email'][0]['message']->isIdenticalTo('This field is required')
+                ->string['email'][1]['message']->isIdenticalTo('The given value is too long, need >= 5 char')
+                ->string['email'][2]['message']->isIdenticalTo('The given value is not an valid email address')
+
+                ->string['name'][0]['message']->isIdenticalTo('This field is required')
+                ->string['name'][1]['message']->isIdenticalTo('The given value is too long, need >= 5 char')
         ;
 
     }

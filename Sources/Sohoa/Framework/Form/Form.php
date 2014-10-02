@@ -96,11 +96,7 @@ namespace Sohoa\Framework\Form {
 
         public function render()
         {
-            if ($this->_theme !== null) {
-                return $this->getTheme()->form($this);
-            }
-
-            return null;
+            return $this->getTheme()->form($this);
         }
 
         public function setValidate($validate)
