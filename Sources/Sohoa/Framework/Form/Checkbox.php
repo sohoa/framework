@@ -6,9 +6,9 @@ namespace Sohoa\Framework\Form {
         protected $_name = 'input';
         protected $_attributes = ['type' => 'checkbox'];
 
-        public function option($value, $label, $name)
+        public function option($value, $label, $name, $args = array())
         {
-            $this->_options[] = [$value , $label ,$name];
+            $this->_options[] = [$value , $label ,$name, $args];
 
             return $this;
         }

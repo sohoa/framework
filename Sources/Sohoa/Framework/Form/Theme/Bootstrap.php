@@ -8,7 +8,7 @@ namespace Sohoa\Framework\Form\Theme {
 
         public function form(\Sohoa\Framework\Form\Form $form)
         {
-            $check = new \Mojo\Form\Validate\Check($form->getFormId());
+            $check = new \Sohoa\Framework\Form\Validate\Check($form);
             if ($check->isValid([], true) === false && $form->getCheckStatus() === true) {
                 $this->setErrors($check->getErrors());
             }
@@ -206,13 +206,26 @@ namespace Sohoa\Framework\Form\Theme {
             foreach ($item->getOptions() as $value) {
                     $select .= '<label class="radio-inline"><'.$item->getName().' '.$item->getAttributeAsString().' name="'.$name.'" value="'.$value[1].'" '.
                     (($selectValue !== null and $selectValue === $value[1]) ? 'checked' : '')
-                    .' />'.$value[0].'</label>';
+                    .' '.$this->attributeAsString($value[2]).'/>'.$value[0].'</label>';
             }
 
             return '<div class="form-group '.(($this->hasError($name)) ? 'has-error' : '').'">
             <label for="'.$item->getId().'" class="'.$this->_sizeLabel.' control-label">'.$item->getLabel().'</label>
             <div class="'.$this->_sizeControl.'">'.$select.$errorLabel.'</div>
             </div>';
+        }
+
+        protected function attributeAsString(array $array)
+        {
+            $out = array();
+
+            foreach ($array as $name => $value) {
+                if ($value !== null) {
+                    $out[] = sprintf('%s="%s"', $name, $value);
+                }
+            }
+
+            return trim(implode(' ', $out));
         }
     }
 }
