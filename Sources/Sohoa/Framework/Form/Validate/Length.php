@@ -11,6 +11,7 @@ namespace Sohoa\Framework\Form\Validate {
 
         protected function _valid($data, $argument)
         {
+            $this->_form[$this->_currentName]->setAttribute('type' , 'numeric');
 
             if (in_array('getOptions', get_class_methods($this->_parent))) {
                 throw new Exception("You cant set Length validator on item %s", 0, array(get_class($this->_parent)));
