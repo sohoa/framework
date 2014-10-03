@@ -6,6 +6,7 @@ namespace Sohoa\Framework\Form\Validate {
         protected $_detail = 'This field is required';
         protected function _valid($data, $argument)
         {
+            $this->_form[$this->_currentName]->setAttribute('required' , 'required');
 
             if (in_array('getAllName', get_class_methods($this->_parent))) {
 

@@ -11,6 +11,8 @@ namespace Sohoa\Framework\Form\Validate {
                 throw new Exception("You cant set Email validator on item %s", 0, array(get_class($this->_parent)));
             }
 
+            $this->_form[$this->_currentName]->setAttribute('type' , 'email');
+
             return filter_var($data, FILTER_VALIDATE_EMAIL);
         }
     }

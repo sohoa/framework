@@ -34,6 +34,13 @@ namespace Sohoa\Framework\Form {
             return $this->_formid;
         }
 
+        public function useHttpData()
+        {
+            $this->setData(\Hoa\Http\Runtime::getData());
+
+            return $this;
+        }
+
         public function getData($name = null)
         {
             if ($name === null) {

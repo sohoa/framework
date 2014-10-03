@@ -8,9 +8,22 @@ class Form extends \atoum\test
 {
     // TODO : Add Button
     // TODO : Add File
-    // TODO : <Guile> comment tu définis la méthod du form, et est-il possible que Form ait un moyen implicite de récupérer ses data par la bonne méthode ?
     // TODO : type=numeric, required=required => dans le need(int) or need('required')
-
+/*
+   + <form>    Defines an HTML form for user input
+   + <input>     Defines an input control
+   + <textarea>  Defines a multiline input control (text area)
+   + <label>     Defines a label for an <input> element
+   - <fieldset>  Groups related elements in a form
+   - <legend>    Defines a caption for a <fieldset> element
+   + <select>    Defines a drop-down list
+   + <optgroup>  Defines a group of related options in a drop-down list
+   + <option>    Defines an option in a drop-down list
+   - <button>    Defines a clickable button
+   - <datalist>  Specifies a list of pre-defined options for input controls
+   - <keygen>    Defines a key-pair generator field (for forms)
+   - <output>    Defines the result of a calculation
+*/
     public function testRadio()
     {
         $fwk      = new \Sohoa\Framework\Framework();
@@ -22,6 +35,16 @@ class Form extends \atoum\test
                     ->name('foo')
                     ->option('doo', 'bar', ['id' => 'hello'])
                     ->option('doo', 'bar');
+
+        $form[]   = (new \Sohoa\Framework\Form\Input())
+                    ->id('rpassword')
+                    ->type('password')
+                    ->label('Confirm password')
+                    ->placeholder('Confirm Your password')
+                    ->need('required|length:5:|max:5');
+
+        $this->dump($form->render());
+
         $this
             ->string($form->render())
             ->length

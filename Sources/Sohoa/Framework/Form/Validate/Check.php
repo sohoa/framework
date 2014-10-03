@@ -47,7 +47,7 @@ namespace Sohoa\Framework\Form\Validate {
                     }
 
                     foreach ($child->getNeed() as $val) {
-                        if ($this->valid($val, $child, $iData, $form) === false) {
+                        if ($this->valid($val, $child, $iData, $form, $name) === false) {
                             $valid = false;
                         }
                     }
@@ -57,13 +57,12 @@ namespace Sohoa\Framework\Form\Validate {
             return $valid;
         }
 
-        private function valid($validator, $item, $data, $form)
+        private function valid($validator, $item, $data, $form, $name)
         {
             $validator              = explode(':', $validator);
             $val                    = array_shift($validator);
-            $instance                = dnew('\\Sohoa\\Framework\\Form\\Validate\\'.ucfirst($val));
-            $bool                   = $instance->valid($data, $validator, $item, $form);
-            $name                   = $item->getAttribute('name');
+            $instance               = dnew('\\Sohoa\\Framework\\Form\\Validate\\'.ucfirst($val));
+            $bool                   = $instance->valid($data, $validator, $item, $form, $name);
 
             if($instance->getErrors() !== null)
                 $this->_errors[$name][] = $instance->getErrors();
