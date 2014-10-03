@@ -10,7 +10,8 @@ class Form extends \atoum\test
     // TODO : Add Button
     // TODO : Add File
     // TODO : <Guile> comment tu définis la méthod du form, et est-il possible que Form ait un moyen implicite de récupérer ses data par la bonne méthode ?
-    // TODO : type=numeric, required=required => dans le need()
+    // TODO : type=numeric, required=required => dans le need(int) or need('required')
+
     public function testRadio()
     {
         $fwk      = new \Sohoa\Framework\Framework();
