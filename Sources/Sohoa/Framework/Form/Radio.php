@@ -6,7 +6,7 @@ namespace Sohoa\Framework\Form {
         protected $_name = 'input';
         protected $_attributes = ['type' => 'radio'];
 
-        public function option($value, $label, $args = array())
+        public function option($value, $label = null, $args = array())
         {
             $this->_options[] = [$value , $label, $args];
 

@@ -30,6 +30,5 @@
 
     "bin": [
         "Sources/Sohoa/Bin/sohoa"
-    ],
-    "minimum-stability": "dev"
+    ]
 }

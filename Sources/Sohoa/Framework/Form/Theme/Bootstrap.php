@@ -154,15 +154,32 @@ namespace Sohoa\Framework\Form\Theme {
             }
 
             $select = '<'.$item->getName().' '.$item->getAttributeAsString().'>';
-            foreach ($item->getOptions() as $value) {
-                if ($value[1] !== null) {
-                    $select .= '<option value="'.$value[1].'" '.
-                    (($selectValue !== null and $selectValue === $value[1]) ? 'selected' : '')
-                    .'>'.$value[0].'</option>';
-                } else {
-                    $select .= '<option'.
-                    (($selectValue !== null and $selectValue === $value[0]) ? ' selected="selected"' : '')
-                    .'>'.$value[0].'</option>';
+
+            $opts = function($value) use(&$selectValue){
+                $out = '';
+                    if ($value[1] !== null) {
+                        $out .= '<option value="'.$value[1].'" '.
+                        (($selectValue !== null and $selectValue === $value[1]) ? 'selected' : '')
+                        .' '.$this->attributeAsString($value[2]).'>'.$value[0].'</option>';
+                    } else {
+                        $out .= '<option'.
+                        (($selectValue !== null and $selectValue === $value[0]) ? ' selected="selected"' : '')
+                        .' '.$this->attributeAsString($value[2]).'>'.$value[0].'</option>';
+                    }
+
+                return $out;
+            };
+
+            foreach ($item->getOptions() as $opt => $value) {
+                if(is_integer($opt)){
+                    $select .= $opts($value);
+                }
+                else {
+                    $select .= '<optgroup label="'.$opt.'">';
+                        foreach ($value as $v) {
+                            $select .= $opts($v);
+                        }
+                    $select .= '</optgroup>';
                 }
             }
 

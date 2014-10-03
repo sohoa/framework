@@ -6,7 +6,6 @@ require_once __DIR__ . '/../Runner.php';
 
 class Form extends \atoum\test
 {
-    // TODO : Add optgroup on select
     // TODO : Add Button
     // TODO : Add File
     // TODO : <Guile> comment tu définis la méthod du form, et est-il possible que Form ait un moyen implicite de récupérer ses data par la bonne méthode ?
@@ -19,13 +18,49 @@ class Form extends \atoum\test
         $form
             ->action('/user/')
             ->method('post');
-
         $form[]   = (new \Sohoa\Framework\Form\Radio())
                     ->name('foo')
                     ->option('doo', 'bar', ['id' => 'hello'])
                     ->option('doo', 'bar');
+        $this
+            ->string($form->render())
+            ->length
+                ->isIdenticalTo(413);
+    }
 
-        $this->string($form->render())->length->isIdenticalTo(410);
+    public function testSelect()
+    {
+        $fwk      = new \Sohoa\Framework\Framework();
+        $form     = $fwk->form('foo');
+        $form
+            ->action('/user/')
+            ->method('post');
+
+        $form[]   = (new \Sohoa\Framework\Form\Select())
+                    ->name('foo')
+                    ->option('doo', 'bar', ['id' => 'hello'])
+                    ->option('doo', 'bar')
+                    ->group('Foobar')
+                        ->option('a' , 'a', ['aaaaa' => 'bae'])
+                        ->option('b' , 'b')
+                        ->option('c' , 'c')
+                    ->group('Wazaaaa')
+                        ->option('a' , 'a')
+                        ->option('b' , 'b')
+                        ->option('c' , 'c')
+                    ->root()
+                        ->option('a' , 'a')
+                        ->option('b' , 'b')
+                        ->option('c' , 'c')
+                    ->group('Qux')
+                        ->option('a' , 'a')
+                        ->option('b' , 'b')
+                        ->option('c' , 'c')
+                ;
+        $this
+            ->string($form->render())
+            ->length
+                ->isIdenticalTo(838);
     }
 
     public function testLoad()
