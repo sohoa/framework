@@ -1,7 +1,7 @@
 <?php
 
 namespace Sohoa\Framework\Tests\Unit;
-
+   use Hoa\Console\Chrome\Text;
 require_once __DIR__ . '/../Runner.php';
 
 class Router extends \atoum\test
@@ -95,6 +95,8 @@ class Router extends \atoum\test
         $router = new \Sohoa\Framework\Router;
         $router->resource('vehicles');
 
+
+
         $this->array($router->getRules())
             ->hasKeys(array('indexVehicles',
                 'showVehicles',
@@ -158,12 +160,12 @@ class Router extends \atoum\test
                 'editVehicles',
                 'updateVehicles',
                 'destroyVehicles',
-                'indexFireman',
-                'showFireman',
-                'createFireman',
-                'editFireman',
-                'updateFireman',
-                'destroyFireman'
+                'indexVehiclesFireman',
+                'showVehiclesFireman',
+                'createVehiclesFireman',
+                'editVehiclesFireman',
+                'updateVehiclesFireman',
+                'destroyVehiclesFireman'
             ));
 
     }
@@ -221,28 +223,28 @@ class Router extends \atoum\test
             ));
     }
 
-    public function testModifyRessource()
+    public function testModifyResource()
     {
         $router = new \Sohoa\Framework\Router;
-        $this->if($router->setRessource(\Sohoa\Framework\Router::REST_SHOW, null, 'post', null))
+        $this->if($router->setResource(\Sohoa\Framework\Router::REST_SHOW, null, 'post', null))
             ->then
-            ->array($router->getRessource(\Sohoa\Framework\Router::REST_SHOW))
+            ->array($router->getResource(\Sohoa\Framework\Router::REST_SHOW))
             ->hasSize(3)
             ->string[0]->isIdenticalTo('show')
             ->string[1]->isIdenticalTo('post')
             ->string[2];
 
-        $this->if($router->setRessource(\Sohoa\Framework\Router::REST_SHOW, 'foo', 'post', null))
+        $this->if($router->setResource(\Sohoa\Framework\Router::REST_SHOW, 'foo', 'post', null))
             ->then
-            ->array($router->getRessource(\Sohoa\Framework\Router::REST_SHOW))
+            ->array($router->getResource(\Sohoa\Framework\Router::REST_SHOW))
             ->hasSize(3)
             ->string[0]->isIdenticalTo('foo')
             ->string[1]->isIdenticalTo('post')
             ->string[2];
 
-        $this->if($router->setRessource(\Sohoa\Framework\Router::REST_SHOW, 'foo', 'post', 'bar'))
+        $this->if($router->setResource(\Sohoa\Framework\Router::REST_SHOW, 'foo', 'post', 'bar'))
             ->then
-            ->array($router->getRessource(\Sohoa\Framework\Router::REST_SHOW))
+            ->array($router->getResource(\Sohoa\Framework\Router::REST_SHOW))
             ->hasSize(3)
             ->string[0]->isIdenticalTo('foo')
             ->string[1]->isIdenticalTo('post')
@@ -255,7 +257,7 @@ class Router extends \atoum\test
 
         $router = new \Sohoa\Framework\Router;
 
-        $this->array($router->getRessources())
+        $this->array($router->getResources())
             ->hasSize(7);
     }
 
@@ -272,7 +274,87 @@ class Router extends \atoum\test
                     'bFoo'
                 ));
 
+   }
+
+   public function testPrefixResource() {
+
+        $router = new \Sohoa\Framework\Router;
+        $router
+            ->resource('fireman' , array('prefix' => '/admin' , 'only' => array('show', 'index')))
+            ->resource('vehicles' , array('prefix' => '/admin' , 'only' => array('index')));
+
+        $this->array($router->getRules())
+            ->hasSize(3)
+            ->hasKey('indexAdminFireman')
+            ->hasKey('showAdminFireman')
+            ->hasKey('indexAdminFiremanVehicles');
+
+        $rule = $router->getRule('indexAdminFireman');
+        $this->array($rule)
+            ->string[1]->isEqualTo('indexAdminFireman')
+            ->string[3]->isEqualTo('/admin/fireman/');
+   }
+
+    public function testRoutingPrefixResource() {
+
+            //$fwk = new \Sohoa\Framework\Framework();
+            $router = new \Sohoa\Framework\Router();
+            $router->get('/' , array('as' => 'root' , 'to' => 'Foo\Bar#Main'));
+            $router
+                ->resource('fireman' , array('prefix' => '/admin' , 'only' => array('show', 'index')))
+                ->resource('vehicles' , array('prefix' => '/admin' , 'only' => array('index')));
+
+            $router->route('/admin/fireman/');
+            $rule = $router->getTheRule();
+            $this->array($rule)
+                ->string[1]->isEqualTo('indexAdminFireman')
+                ->string[3]->isEqualTo('/admin/fireman/')
+                ->array[6]->string['_call']->isEqualTo('Admin\\Fireman');
     }
+
+    public function testNestedPrefixedResource() {
+
+        $router = new \Sohoa\Framework\Router;
+        $router
+
+            ->resource('fireman' , array('prefix' => '/admin'))
+            ->resource('vehicles');
+
+        $this->array($router->getRules())
+            ->hasSize(14)
+            ->hasKey('indexAdminFireman');
+
+        $rule = $router->getRule('indexAdminFireman');
+        $this->array($rule)
+            ->string[1]->isEqualTo('indexAdminFireman')
+            ->string[3]->isEqualTo('/admin/fireman/');
+
+        $rule = $router->getRule('indexAdminFiremanVehicles');
+        $this->array($rule)
+            ->string[1]->isEqualTo('indexAdminFiremanVehicles')
+            ->string[3]->isEqualTo('/admin/fireman/(?<fireman_id>[^/]+)/vehicles/');
+   }
+
+
+
+   public function testAliasResource() {
+        $router = new \Sohoa\Framework\Router;
+        $router
+            ->resource('vehicles', array('alias' => 'foo' , 'only' => array('index' , 'show')))
+            ->resource('fireman' , array('alias' => 'bar' , 'only' => array('index')));
+
+        $this->array($router->getRules())
+            ->hasSize(3)
+            ->hasKeys(array(
+                'indexVehicles',
+                'showVehicles',
+                'indexVehiclesFireman'
+            ))
+            ->array['indexVehicles']
+                ->string[3]->isEqualTo('/foo/')
+            ->array['indexVehiclesFireman']
+                ->string[3]->isEqualTo('/foo/(?<vehicles_id>[^/]+)/bar/');
+   }
 
     /**
      * Hoa\Xyl add private rule to the router beginning with "_" so Sohoa\Router
@@ -300,4 +382,5 @@ class Router extends \atoum\test
             ->isTrue();
 
     }
+
 }

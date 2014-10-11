@@ -89,16 +89,15 @@ namespace Sohoa\Framework {
 
             if ($name == 'any') {
 
-                $methods = self::$_methods;
+                $methods = static::$_methods;
             } else {
 
                 $methods = array($name);
             }
 
-            if (count($arguments) === 1 && self::isGenericRoute($arguments[0])) {
-                $arguments = array(self::ROUTE_GENERIC, $methods, $arguments[0], 'controller', 'action');
+            if (count($arguments) === 1 && static::isGenericRoute($arguments[0])) {
+                $arguments = array(static::ROUTE_GENERIC, $methods, $arguments[0], 'controller', 'action');
             } else {
-
                 $args = $arguments[1];
 
                 if (!isset($args['as'])) {
@@ -123,7 +122,7 @@ namespace Sohoa\Framework {
 
         public function setVariable($name, $value)
         {
-            $this->_rule[self::RULE_VARIABLES][$name] = $value;
+            $this->_rule[static::RULE_VARIABLES][$name] = $value;
 
             return $this;
         }
@@ -131,50 +130,50 @@ namespace Sohoa\Framework {
 
         public function resource($name, $args = array())
         {
-            return new Resource($name, $args, $this, Router::$_restfulRoutes);
+            return new Resource($name, $args, $this);
         }
 
 
         public function addResourceRule($action, $verb, $uri)
         {
 
-            $last = count(self::$_restfulRoutes);
+            $last = count(static::$_restfulRoutes);
 
-            self::$_restfulRoutes[$last] = array(
-                self::ROUTE_ACTION      => $action,
-                self::ROUTE_VERB        => $verb,
-                self::ROUTE_URI_PATTERN => $uri
+            static::$_restfulRoutes[$last] = array(
+                static::ROUTE_ACTION      => $action,
+                static::ROUTE_VERB        => $verb,
+                static::ROUTE_URI_PATTERN => $uri
             );
 
             return $last;
         }
 
 
-        public function setRessource($id, $action = null, $verb = null, $uri = null)
+        public function setResource($id, $action = null, $verb = null, $uri = null)
         {
 
-            if (array_key_exists($id, self::$_restfulRoutes)) {
-                $rest                                               = self::$_restfulRoutes[$id];
-                self::$_restfulRoutes[$id][self::ROUTE_ACTION]      = ($action === null) ? $rest[self::ROUTE_ACTION] : $action;
-                self::$_restfulRoutes[$id][self::ROUTE_VERB]        = ($verb === null) ? $rest[self::ROUTE_VERB] : $verb;
-                self::$_restfulRoutes[$id][self::ROUTE_URI_PATTERN] = ($uri === null) ? $rest[self::ROUTE_URI_PATTERN] : $uri;
+            if (array_key_exists($id, static::$_restfulRoutes)) {
+                $rest                                               = static::$_restfulRoutes[$id];
+                static::$_restfulRoutes[$id][static::ROUTE_ACTION]      = ($action === null) ? $rest[static::ROUTE_ACTION] : $action;
+                static::$_restfulRoutes[$id][static::ROUTE_VERB]        = ($verb === null) ? $rest[static::ROUTE_VERB] : $verb;
+                static::$_restfulRoutes[$id][static::ROUTE_URI_PATTERN] = ($uri === null) ? $rest[static::ROUTE_URI_PATTERN] : $uri;
 
             }
 
             return $this;
         }
 
-        public function getRessource($id)
+        public function getResource($id)
         {
-            if (array_key_exists($id, self::$_restfulRoutes))
-                return self::$_restfulRoutes[$id];
+            if (array_key_exists($id, static::$_restfulRoutes))
+                return static::$_restfulRoutes[$id];
 
             return null;
         }
 
-        public function getRessources()
+        public function getResources()
         {
-            return self::$_restfulRoutes;
+            return static::$_restfulRoutes;
         }
 
         public function dump()
@@ -188,7 +187,7 @@ namespace Sohoa\Framework {
 
         }
 
-        public function load(Array $rules)
+        public function load(array $rules)
         {
             foreach ($rules as $rule) {
                 $methods = explode(',', $rule[1]);
@@ -208,7 +207,7 @@ namespace Sohoa\Framework {
             file_put_contents($cacheFile, '<?php return ' . var_export($this->dump(), true) . ';');
         }
 
-        protected function _unroute($id, $pattern, Array $variables,
+        protected function _unroute($id, $pattern, array $variables,
                                     $allowEmpty = true)
         {
             $variables = array_map('rawurlencode', $variables);

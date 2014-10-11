@@ -13,7 +13,7 @@ namespace Sohoa\Framework\Dispatcher {
 
     class Basic extends SoDispatch
     {
-        protected function resolve(Array $rule, Router $router, Viewable $view, Framework $framework)
+        protected function resolve(array $rule, Router $router, Viewable $view, Framework $framework)
         {
 
             $called = null;
