@@ -17,10 +17,10 @@ class Value extends \atoum\test {
             ->variable($value->getMessage())->isNull()
 
             ->boolean($value->isValid(4))->isFalse()
-            ->variable($value->getMessage())->isIdenticalTo('The given value is not valid, need >= 5 and <= 2147483647 integer given 4')
+            ->variable($value->getMessage())->isIdenticalTo('The given value is not valid, need >= 5 and <= '.PHP_INT_MAX.' integer given 4')
 
             ->boolean($value->isValid(-100))->isFalse()
-            ->variable($value->getMessage())->isIdenticalTo('The given value is not valid, need >= 5 and <= 2147483647 integer given -100')
+            ->variable($value->getMessage())->isIdenticalTo('The given value is not valid, need >= 5 and <= '.PHP_INT_MAX.' integer given -100')
 
             ->boolean($value->isValid('string'))->isFalse()
             ->variable($value->getMessage())
@@ -40,7 +40,7 @@ class Value extends \atoum\test {
             ->variable($value->getMessage())->isNull()
 
             ->boolean($value->isValid(100))->isFalse()
-            ->variable($value->getMessage())->isIdenticalTo('The given value is not valid, need >= -2147483647 and <= 5 integer given 100')
+            ->variable($value->getMessage())->isIdenticalTo('The given value is not valid, need >= -'.PHP_INT_MAX.' and <= 5 integer given 100')
 
             ->boolean($value->isValid('string'))->isTrue() // String cast to int
             ->variable($value->getMessage())->isNull();

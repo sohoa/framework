@@ -1,7 +1,7 @@
 <?php
 namespace Sohoa\Framework\Validator  {
-    class Value  extends Validator  {
-
+    class Value  extends Validator
+    {
         protected function _valid($data, $arguments)
         {
             $this->data = intval($data);
@@ -14,7 +14,6 @@ namespace Sohoa\Framework\Validator  {
 
         protected function setMessage()
         {
-
             return sprintf('The given value is not valid, need >= %s and <= %s integer given %s' , $this->min , $this->max, $this->data);
         }
 

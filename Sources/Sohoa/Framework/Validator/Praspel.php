@@ -1,10 +1,10 @@
 <?php
 namespace Sohoa\Framework\Validator  {
-    class Praspel extends Validator {
-
+    class Praspel extends Validator
+    {
         protected function _valid($data, $arguments)
         {
-            if(count($arguments) === 1 and isset($arguments[0])){
+            if (count($arguments) === 1 and isset($arguments[0])) {
                 $argument       = $arguments[0];
                 $praspel        = \Hoa\Praspel\Praspel::interprete('@requires i: '.$argument.';');
                 $clause         = $praspel->getClause('requires');

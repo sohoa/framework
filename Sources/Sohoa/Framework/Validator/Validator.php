@@ -1,7 +1,7 @@
 <?php
 namespace Sohoa\Framework\Validator {
-    class Validator {
-
+    class Validator
+    {
         protected $_name = '';
         protected $_data = null;
         protected $_arguments = array();
@@ -44,8 +44,7 @@ namespace Sohoa\Framework\Validator {
             $arguments      = ($arguments === null) ?$this->getArguments() : $arguments;
             $valid          = $this->_valid($data, $arguments);
 
-            if($valid === false)
-            {
+            if ($valid === false) {
                 $this->_message = $this->setMessage();
             }
 
