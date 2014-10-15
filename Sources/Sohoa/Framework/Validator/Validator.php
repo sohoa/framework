@@ -40,17 +40,10 @@ namespace Sohoa\Framework\Validator {
         public function isValid($data = null, $arguments = null)
         {
             $this->_message = null;
-            if($data === null)
-            {
-               $data = $this->getData();
-            }
+            $data           = ($data === null) ? $this->getData() : $data;
+            $arguments      = ($arguments === null) ?$this->getArguments() : $arguments;
+            $valid          = $this->_valid($data, $arguments);
 
-            if($arguments === null)
-            {
-                $arguments = $this->getArguments();
-            }
-
-            $valid = $this->_valid($data, $arguments);
             if($valid === false)
             {
                 $this->_message = $this->setMessage();

@@ -43,8 +43,60 @@ class Validator extends \atoum\test
         $this
             ->if($o = $validator->getStack('foo')[3]['object'])
             ->object($o)->isInstanceOf('\Sohoa\Framework\Validator\Length')
-            ->variable($o->getData())->isIdenticalTo('hello')
+            ->string($o->getData())->isIdenticalTo('hello')
             ;
+    }
+
+    public function testChainValidator()
+    {
+        $validator = \Sohoa\Framework\Validator::get('foo');
+
+        $validator
+            ->foo
+                ->validator->required()
+                ->validator->length(5);
+
+        $this
+            ->boolean($validator->isValid(['foo' => 'h']))->isFalse()
+            ->array($validator->getErrors())
+                ->hasSize(1)
+                ->hasKey('foo')
+            ->string['foo'][0]['class']->isIdenticalTo('Sohoa\Framework\Validator\Length')
+            ->string['foo'][0]['message']->isIdenticalTo('The given value is not valid, need = 5 char given 1')
+        ;
+
+        $this
+            ->boolean($validator->isValid(['foo' => 'hello']))->isTrue()
+            ->array($validator->getErrors())->hasSize(0)
+        ;
+
+        $this
+            ->boolean($validator->isValid(['foo' => null]))->isFalse()
+            ->array($validator->getErrors())->hasSize(1)->hasKey('foo')
+            ->array($validator->getError('foo'))->hasSize(2)
+        ;
+    }
+
+    public function testComplexValidator()
+    {
+        $validator = \Sohoa\Framework\Validator::get('foo');
+
+        $validator
+            ->foo->length(0, 5);
+
+
+        $this
+            ->boolean($validator->isValid(['foo' => 'he']))->isTrue()
+            ->array($validator->getErrors())->hasSize(0)
+        ;
+
+        $this->boolean($validator->isValid(['foo' => null]))->isTrue();
+
+        $this
+            ->boolean($validator->isValid(['foo' => 'alibaba']))->isFalse()
+            ->array($validator->getErrors())->hasSize(1)->hasKey('foo')
+            ->array($validator->getError('foo'))->hasSize(1)
+        ;
 
     }
 
