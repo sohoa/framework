@@ -18,7 +18,7 @@ namespace Sohoa\Framework\Validator  {
                 $this->len = $arguments[0];
             }
             else {
-                throw new Exception("You need to use 1 or 2 arguments", 1);
+                throw new Exception("You need to use max 2 arguments", 1);
 
             }
 
