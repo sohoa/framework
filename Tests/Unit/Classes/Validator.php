@@ -100,4 +100,20 @@ class Validator extends \atoum\test
 
     }
 
+    public function testMultiValue()
+    {
+        $validator = \Sohoa\Framework\Validator::get('foo');
+
+        $validator
+            ->foo->length(0, 5)
+            ->bar->required();
+
+
+        $this
+            ->boolean($validator->isValid(['foo' => 'he', 'bar' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']))->isTrue()
+            ->array($validator->getErrors())->hasSize(0)
+        ;
+
+    }
+
 }
