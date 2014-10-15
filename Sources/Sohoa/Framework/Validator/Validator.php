@@ -5,7 +5,7 @@ namespace Sohoa\Framework\Validator {
         protected $_name = '';
         protected $_data = null;
         protected $_arguments = array();
-
+        private $_message = null;
 
         public function setName($name)
         {
@@ -44,11 +44,28 @@ namespace Sohoa\Framework\Validator {
                $data = $this->getData();
             }
 
-            return $this->_valid($data, $this->getArguments());
+            $valid = $this->_valid($data, $this->getArguments());
+            if($valid === false)
+            {
+                $this->_message = $this->setMessage();
+            }
+
+            return $valid;
         }
 
-        protected function _valid($data, $arguments) {
-            return false;
+        protected  function setMessage()
+        {
+            throw new Exception("You must implements your own function", 0);
+        }
+
+        public function getMessage()
+        {
+            return $this->_message;
+        }
+
+        protected function _valid($data, $arguments)
+        {
+             throw new Exception("You must implements your own function", 0);
         }
 
     }

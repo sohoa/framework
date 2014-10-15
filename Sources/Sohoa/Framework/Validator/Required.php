@@ -4,7 +4,12 @@ namespace Sohoa\Framework\Validator  {
 
         protected function _valid($data, $arguments)
         {
-            return (!empty($data) && $data !== null);
+            return (empty($data) !== true && $data !== null);
+        }
+
+        protected function setMessage()
+        {
+            return 'This field is required';
         }
 
     }
