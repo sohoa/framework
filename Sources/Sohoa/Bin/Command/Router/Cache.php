@@ -1,23 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Camael24
- * Date: 16/01/14
- * Time: 17:22
- */
 namespace Sohoa\Bin\Command\Router {
 
+    use Hoa\Console\Chrome\Text;
     use Sohoa\Framework\Framework;
     use Sohoa\Framework\Router;
+    use Hoa\Core\Core;
 
     class Cache extends \Hoa\Console\Dispatcher\Kit
     {
-
-        /**
-         * Options description.
-         *
-         * @var \Hoa\Core\Bin\Welcome array
-         */
         protected $options = array(
             array('generate', \Hoa\Console\GetOption::NO_ARGUMENT, 'g'),
             array('reset', \Hoa\Console\GetOption::NO_ARGUMENT, 'r'),
@@ -38,7 +28,8 @@ namespace Sohoa\Bin\Command\Router {
             $cache    = 'hoa://Application/Cache/Route.php';
             $route    = 'hoa://Application/Config/Route.php';
 
-            while (false !== $c = $this->getOption($v)) switch ($c) {
+            while (false !== $c = $this->getOption($v)) {
+                switch ($c) {
                 case 'g':
                     $generate = true;
                 case 'r':
@@ -49,36 +40,37 @@ namespace Sohoa\Bin\Command\Router {
                     return $this->usage();
                     break;
             }
-
-            if ($reset === true)
-                if (file_exists($cache)) {
-                    $result = unlink($cache);
-                    if ($result)
-                        echo 'Purge du cache [ok]' . "\n";
-                    else
-                        echo 'Purge du cache [fail]' . "\n";
-                } else {
-                    echo 'No cache found' . "\n";
-                }
-
-            if ($generate === true) {
-
-                $router       = new Router();
-                $this->router = $router;
-                $dir          = dirname($cache);
-                Framework::services('router', $router); // Fuck IOC
-
-                require_once $route;
-
-                if (is_dir($dir) === false)
-                    mkdir($dir);
-
-                $router->saveCache($cache);
-                echo 'Save your router result in ' . resolve($cache);
             }
 
-            if ($reset === false && $generate === false)
+            if ($reset === true) {
+                if (file_exists($cache)) {
+                    $result = unlink($cache);
+                    if ($result) {
+                        echo \Hoa\Console\Chrome\Text::colorize('[OK] Cache flush', 'foreground(green)')."\n";
+                    } else {
+                        echo \Hoa\Console\Chrome\Text::colorize('[!!] Cache flush', 'foreground(white) background(red)')."\n";
+                    }
+                } else {
+                    echo \Hoa\Console\Chrome\Text::colorize('No cache found', 'foreground(green)')."\n";
+                }
+            }
+
+            if ($generate === true) {
+                $core           = Core::getInstance();
+                $parameters     = $core->getParameters();
+                $cwd            = $parameters->getKeyword('cwd');
+                $parameters->setKeyword('cwd', $cwd.'/Public');
+                $framework      = new Framework();
+                $router         = $framework->getRouter();
+                $dir            = dirname($cache);
+
+                $router->saveCache($cache);
+                echo 'Save your router result in'.\Hoa\Console\Chrome\Text::colorize(resolve($cache), 'foreground(green)')."\n";
+            }
+
+            if ($reset === false && $generate === false) {
                 return $this->usage();
+            }
         }
 
         /**
@@ -89,14 +81,14 @@ namespace Sohoa\Bin\Command\Router {
          */
         public function usage()
         {
-            echo $this->stylize('Usage:', 'h1') . "\n";
-            echo '   Router:Cache ' . "\n\n";
+            echo \Hoa\Console\Chrome\Text::colorize('Usage:', 'fg(yellow)')."\n";
+            echo '   Router:Cache '."\n\n";
 
-            echo $this->stylize('Options:', 'h1'), "\n";
+            echo \Hoa\Console\Chrome\Text::colorize('Options:', 'fg(yellow)'), "\n";
             echo $this->makeUsageOptionsList(array(
                 'help'     => 'This help.',
                 'generate' => 'Generate Route cache',
-                'reset'    => 'Router cache'
+                'reset'    => 'Router cache',
             ));
 
             return;

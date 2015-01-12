@@ -10,14 +10,12 @@ namespace Sohoa\Framework\View {
     use Sohoa\Framework\Framework;
     use Sohoa\Framework\Kit;
 
-
     class Xyl extends \Hoa\Xyl\Xyl implements Soview
     {
         public $framework = null;
 
         public function setRouter(Router $router)
         {
-
         }
 
         public function setFramework(Framework $framework)
@@ -27,6 +25,5 @@ namespace Sohoa\Framework\View {
 
             return $this;
         }
-
     }
 }

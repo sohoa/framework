@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Camael24
- * Date: 16/01/14
- * Time: 17:22
- */
 namespace Sohoa\Bin\Command\Core {
 
     use Hoa\Console\Chrome\Text;
@@ -12,12 +6,6 @@ namespace Sohoa\Bin\Command\Core {
 
     class Welcome extends \Hoa\Console\Dispatcher\Kit
     {
-
-        /**
-         * Options description.
-         *
-         * @var \Hoa\Core\Bin\Welcome array
-         */
         protected $options = array(
             array('help', \Hoa\Console\GetOption::NO_ARGUMENT, 'h'),
             array('help', \Hoa\Console\GetOption::NO_ARGUMENT, '?'),
@@ -31,24 +19,26 @@ namespace Sohoa\Bin\Command\Core {
          */
         public function main()
         {
-
             $command = null;
 
-            while (false !== $c = $this->getOption($v)) switch ($c) {
+            while (false !== $c = $this->getOption($v)) {
+                switch ($c) {
 
-                case 'h':
-                case '?':
-                    return $this->usage();
-                    break;
+                    case 'h':
+                    case '?':
+                        return $this->usage();
+                        break;
+                }
             }
 
-            echo $this->stylize('List of Your application commands', 'h1'), "\n\n";
+            echo \Hoa\Console\Chrome\Text::colorize('List of Your application commands', 'fg(yellow)'), "\n\n"; //('List of Your application commands', 'h1'), "\n\n";
+
             $application = 'hoa://Application/Bin/Command';
             $this->listCommands($application);
 
-            echo "\n\n" . $this->stylize('List of Sohoa commands', 'h1'), "\n\n";
+            echo "\n\n".\Hoa\Console\Chrome\Text::colorize('List of Sohoa commands', 'fg(yellow)'), "\n\n";
 
-            $sohoa = realpath(__DIR__ . '/../');
+            $sohoa = realpath(__DIR__.'/../');
             $this->listCommands($sohoa);
 
             return;
@@ -56,8 +46,11 @@ namespace Sohoa\Bin\Command\Core {
 
         protected function listCommands($directory)
         {
-            $finder = new Finder();
+            if (is_dir($directory) === false) {
+                return array();
+            }
 
+            $finder = new Finder();
             $finder->in($directory)->name('#(.*)\.php#');
 
             $group  = array();
@@ -67,9 +60,7 @@ namespace Sohoa\Bin\Command\Core {
                 $description = '';
                 // Berk…
                 for ($i = count($lines) - 1; $i >= 0; --$i) {
-
-                    if (strpos($lines[$i] , '__halt_compiler();') === 0) {
-
+                    if (strpos($lines[$i], '__halt_compiler();') === 0) {
                         $description = trim(implode(
                             '',
                             array_slice($lines, $i + 1)
@@ -89,23 +80,21 @@ namespace Sohoa\Bin\Command\Core {
                  * @var \SplFileInfo $cmd
                  */
 
-                $category    = substr($cmd->getPath(), strrpos($cmd->getPath(), '\\') + 1, strlen($cmd->getPath()));
-                $command     = $cmd->getBasename('.php');
-                $description = $extact($cmd->getPathname());
-
+                $path                       = str_replace('\\', '/', $cmd->getPath());
+                $category                   = substr($path, strrpos($path, '/') + 1, strlen($path));
+                $command                    = $cmd->getBasename('.php');
+                $description                = $extact($cmd->getPathname());
                 $group[$category][$command] = $description;
-
             }
 
             foreach ($group as $category => $command) {
-                $out[] = $this->stylize($category, 'h2');
-                foreach ($command as $name => $description)
-                    $out[] = array('   ', $this->stylize($name, 'command') , $description);
-
+                $out[] = \Hoa\Console\Chrome\Text::colorize($category, 'fg(green)');
+                foreach ($command as $name => $description) {
+                    $out[] = array('   ', \Hoa\Console\Chrome\Text::colorize($name, 'fg(blue)'), $description);
+                }
             }
 
             echo Text::columnize($out);
-
         }
 
         /**
@@ -116,12 +105,12 @@ namespace Sohoa\Bin\Command\Core {
          */
         public function usage()
         {
-            echo $this->stylize('Usage:', 'h1') . "\n";
-            echo '   Welcome ' . "\n\n";
+            echo \Hoa\Console\Chrome\Text::colorize('Usage:', 'fg(yellow)')."\n";
+            echo '   Welcome '."\n\n";
 
-            echo $this->stylize('Options:', 'h1'), "\n";
+            echo \Hoa\Console\Chrome\Text::colorize('Options:', 'fg(yellow)'), "\n";
             echo $this->makeUsageOptionsList(array(
-                'help' => 'This help.'
+                'help' => 'This help.',
             ));
 
             return;

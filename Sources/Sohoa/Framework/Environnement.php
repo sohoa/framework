@@ -16,8 +16,8 @@ namespace Sohoa\Framework {
         public function __construct($framework, $environnement = 'production')
         {
             $this->_current   = strtolower($environnement);
-            $general          = static::$_path . 'Environnement.php';
-            $env              = static::$_path . ucfirst($environnement) . '/Application.php';
+            $general          = static::$_path.'Environnement.php';
+            $env              = static::$_path.ucfirst($environnement).'/Application.php';
             $this->_framework = $framework;
 
             if (file_exists($general)) {
@@ -48,9 +48,11 @@ namespace Sohoa\Framework {
 
         public function setVariables($array)
         {
-            if (is_array($array))
-                foreach ($array as $key => $value)
+            if (is_array($array)) {
+                foreach ($array as $key => $value) {
                     $this->offsetSet($key, $value);
+                }
+            }
 
             return $this;
         }

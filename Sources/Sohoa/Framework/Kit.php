@@ -10,7 +10,6 @@ namespace Sohoa\Framework {
 
         public function __construct(HRouter $router, Dispatcher $dispatcher, Viewable $view, Framework $framework)
         {
-
             $this->framework  = $framework;
             $this->router     = $router;
             $this->dispatcher = $dispatcher;
@@ -27,11 +26,10 @@ namespace Sohoa\Framework {
         public function __get($key)
         {
             if ($this->framework->hasKit($key) === false) {
-
-                $helperClassName = '\\Sohoa\\Framework\\Kit\\' . ucfirst($key);
+                $helperClassName = '\\Sohoa\\Framework\\Kit\\'.ucfirst($key);
 
                 if (!class_exists($helperClassName, true)) {
-                    $helperClassName = '\\Application\\Controller\\Kit\\' . ucfirst($key);
+                    $helperClassName = '\\Application\\Controller\\Kit\\'.ucfirst($key);
                 }
 
                 return $this->framework->kit($key, dnew($helperClassName));

@@ -7,8 +7,6 @@
 namespace Sohoa\Framework {
 
     use Hoa\View\Viewable;
-    use Hoa\Http\Response;
-    use Hoa\Router\Http;
 
     class View implements \Hoa\View\Viewable
     {
@@ -18,10 +16,11 @@ namespace Sohoa\Framework {
         protected $_router = null;
 
         public function __construct(
-            $in, \Hoa\Stream\IStream\Out $out, \Hoa\Router $router = null, \StdClass $data = null) {
-
-            if (null === $data)
+            $in, \Hoa\Stream\IStream\Out $out, \Hoa\Router $router = null, \StdClass $data = null)
+        {
+            if (null === $data) {
                 $data = new \StdClass();
+            }
 
             $this->_in = $in;
             $this->_out = $out;

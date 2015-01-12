@@ -2,14 +2,14 @@
 
 namespace Sohoa\Framework\Session {
     use Sohoa\Framework\ISession;
-    use \Hoa\Session\Session as HSession;
+    use Hoa\Session\Session as HSession;
 
     class Session extends HSession implements ISession
     {
         public function __construct($namespace = '_default', $cache = null,
                                     $cacheExpire = null)
         {
-            parent::__construct($namespace,$cache,$cacheExpire);
+            parent::__construct($namespace, $cache, $cacheExpire);
         }
 
         /**
