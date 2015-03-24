@@ -1,5 +1,5 @@
 <?php
-namespace Sohoa\Bin\Command\Generate {
+namespace Sohoa\Bin\Command\Generate;
 
     use Hoa\Console\Chrome\Text;
     use Hoa\Core\Core;
@@ -193,7 +193,6 @@ namespace Sohoa\Bin\Command\Generate {
             return;
         }
     }
-}
 
 __halt_compiler();
 Generate controller (Controller + View)
