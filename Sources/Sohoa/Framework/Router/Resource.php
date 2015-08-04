@@ -66,7 +66,7 @@ namespace Sohoa\Framework\Router {
             $uri                    = (isset($args['alias'])) ? $args['alias'] : $name;
             $routes                 = $this->_restRule;
             $variableName           = (isset($args['variable'])) ? $args['variable'] : strtolower($name).'_id';
-            $controller             =  ucfirst(strtolower($name));
+            $controller             = (isset($args['controller'])) ? $args['controller'] : ucfirst(strtolower($name));
             if (count($this->_resourceTree) === 0) {
                 if (isset($args['prefix'])) {
                     $prefix = $args['prefix'];
